@@ -25,33 +25,14 @@ let lastAdminMessageId = 0;
 
 function updateStatus(online) {
   isOnline = online;
-  const statusDots = document.querySelectorAll('.dot');
-  const statusTexts = document.querySelectorAll('.status-row span:not(.dot), .header-info .status');
-
-  statusDots.forEach(dot => {
-    if (online) {
-      dot.style.background = 'var(--online)';
-      dot.style.boxShadow = '0 0 0 4px rgba(236, 72, 153, 0.18)';
-    } else {
-      dot.style.background = '#94a3b8';
-      dot.style.boxShadow = '0 0 0 4px rgba(148, 163, 184, 0.18)';
-    }
+  document.querySelectorAll('.dot').forEach(dot => {
+    dot.classList.toggle('offline', !online);
   });
 
-  statusTexts.forEach(text => {
+  document.querySelectorAll('.status-row span:not(.dot), .header-info .status').forEach(text => {
     if (text.classList.contains('status')) {
       // Header status
-      text.innerHTML = `<span class="dot"></span> ${online ? 'Online' : 'Offline'}`;
-      const newDot = text.querySelector('.dot');
-      if (newDot) {
-        if (online) {
-          newDot.style.background = 'var(--online)';
-          newDot.style.boxShadow = '0 0 0 4px rgba(236, 72, 153, 0.18)';
-        } else {
-          newDot.style.background = '#94a3b8';
-          newDot.style.boxShadow = '0 0 0 4px rgba(148, 163, 184, 0.18)';
-        }
-      }
+      text.innerHTML = `<span class="dot${online ? '' : ' offline'}"></span> ${online ? 'Online' : 'Offline'}`;
     } else if (!text.classList.contains('dot')) {
       // Sidebar status text
       text.textContent = online ? 'Online' : 'Offline';

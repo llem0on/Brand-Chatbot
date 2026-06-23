@@ -143,10 +143,10 @@ function loadFAQs() {
           <td>${index + 1}</td>
           <td>${faq.question}</td>
           <td>${faq.category}</td>
-          <td>${faq.active ? '✅' : '❌'}</td>
+          <td>${faq.active ? '<span class="pill pill-active">Active</span>' : '<span class="pill pill-inactive">Inactive</span>'}</td>
           <td>
-            <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" onclick="editFAQ(${faq.id})">Edit</button>
-            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteFAQ(${faq.id})">Delete</button>
+            <button class="btn btn-secondary btn-sm" onclick="editFAQ(${faq.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteFAQ(${faq.id})">Delete</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -245,8 +245,8 @@ function loadCategories() {
           <td>${cat.name}</td>
           <td>${cat.description || ''}</td>
           <td>
-            <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" onclick="editCategory(${cat.id})">Edit</button>
-            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteCategory(${cat.id})">Delete</button>
+            <button class="btn btn-secondary btn-sm" onclick="editCategory(${cat.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCategory(${cat.id})">Delete</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -336,11 +336,11 @@ function loadProducts() {
             <td>${product.name}</td>
             <td>${categoryName}</td>
             <td>Rp${Number(product.price || 0).toLocaleString('id-ID')}</td>
-            <td><button class="btn btn-secondary" style="padding: 5px 10px;" onclick="openVariantModal(${product.id}, '${product.name.replace(/'/g, "\\'")}')">Kelola Varian</button></td>
-            <td>${product.active ? '✅' : '❌'}</td>
+            <td><button class="btn btn-secondary btn-sm" onclick="openVariantModal(${product.id}, '${product.name.replace(/'/g, "\\'")}')">Kelola Varian</button></td>
+            <td>${product.active ? '<span class="pill pill-active">Active</span>' : '<span class="pill pill-inactive">Inactive</span>'}</td>
             <td>
-              <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" onclick="editProduct(${product.id})">Edit</button>
-              <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteProduct(${product.id})">Delete</button>
+              <button class="btn btn-secondary btn-sm" onclick="editProduct(${product.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Delete</button>
             </td>
           `;
           tbody.appendChild(tr);
@@ -457,13 +457,13 @@ function loadPromotions() {
         const end = promo.end_date ? new Date(promo.end_date).toLocaleDateString('id-ID') : '-';
         tr.innerHTML = `
           <td>${promo.title}</td>
-          <td>${promo.type === 'event' ? '🎉 Event' : '🏷️ Promo'}</td>
+          <td><span class="pill pill-neutral">${promo.type === 'event' ? 'Event' : 'Promo'}</span></td>
           <td>${start}</td>
           <td>${end}</td>
-          <td>${promo.active ? '✅' : '❌'}</td>
+          <td>${promo.active ? '<span class="pill pill-active">Active</span>' : '<span class="pill pill-inactive">Inactive</span>'}</td>
           <td>
-            <button class="btn btn-secondary" style="padding: 5px 10px; margin-right: 5px;" onclick="editPromotion(${promo.id})">Edit</button>
-            <button class="btn btn-danger" style="padding: 5px 10px;" onclick="deletePromotion(${promo.id})">Delete</button>
+            <button class="btn btn-secondary btn-sm" onclick="editPromotion(${promo.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deletePromotion(${promo.id})">Delete</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -576,7 +576,7 @@ function loadConversations() {
         div.className = 'conversation-item' + (conv.user_id === activeConversationUserId ? ' active' : '');
         div.innerHTML = `
           <div class="conversation-user">${conv.user_id}</div>
-          <div class="conversation-channel">${conv.channel === 'whatsapp' ? '📱 WhatsApp' : '🌐 Web'}</div>
+          <div class="conversation-channel">${conv.channel === 'whatsapp' ? 'WhatsApp' : 'Web'}</div>
           <div class="conversation-summary">${conv.escalation_summary || 'Belum ada ringkasan'}</div>
         `;
         div.addEventListener('click', () => openConversation(conv));
@@ -675,11 +675,11 @@ function resolveConversation() {
 
 // Orders
 const ORDER_STATUS_LABELS = {
-  menunggu_pembayaran: '⏳ Menunggu Pembayaran',
-  sudah_bayar: '💰 Sudah Bayar',
-  dikirim: '🚚 Dikirim',
-  selesai: '✅ Selesai',
-  dibatalkan: '❌ Dibatalkan',
+  menunggu_pembayaran: 'Menunggu Pembayaran',
+  sudah_bayar: 'Sudah Bayar',
+  dikirim: 'Dikirim',
+  selesai: 'Selesai',
+  dibatalkan: 'Dibatalkan',
 };
 
 function loadOrders() {
@@ -821,7 +821,7 @@ function loadVariants() {
           <td>${variant.size}</td>
           <td>${variant.color}</td>
           <td><input type="number" value="${variant.stock}" style="width: 80px;" onchange="updateVariantStock(${variant.id}, this.value)" /></td>
-          <td><button class="btn btn-danger" style="padding: 5px 10px;" onclick="deleteVariant(${variant.id})">Delete</button></td>
+          <td><button class="btn btn-danger btn-sm" onclick="deleteVariant(${variant.id})">Delete</button></td>
         `;
         tbody.appendChild(tr);
       });

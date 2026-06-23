@@ -2,3 +2,4 @@
 data/
 uploads/
 *.db
+.claude/settings.local.json

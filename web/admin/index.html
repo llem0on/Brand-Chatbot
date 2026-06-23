@@ -4,7 +4,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - brand Bot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --zinc-50: #fafafa;
+      --zinc-100: #f4f4f5;
+      --zinc-200: #e4e4e7;
+      --zinc-300: #d4d4d8;
+      --zinc-400: #a1a1aa;
+      --zinc-500: #71717a;
+      --zinc-700: #3f3f46;
+      --zinc-900: #1c1b1f;
+
+      --rose-50: #fdf3f5;
+      --rose-100: #fbe3e9;
+      --rose-300: #d99cae;
+      --rose-500: #a8415f;
+      --rose-600: #8f3350;
+
+      --bg: var(--zinc-50);
+      --surface: #ffffff;
+      --text: var(--zinc-900);
+      --text-soft: var(--zinc-500);
+      --border: var(--zinc-200);
+      --accent: var(--rose-500);
+      --accent-soft: var(--rose-50);
+      --accent-strong: var(--rose-600);
+
+      --danger: #c2483f;
+      --danger-soft: #fbeae8;
+      --success: #2f7a52;
+      --success-soft: #eaf6ef;
+
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-card: 0 1px 2px rgba(28, 27, 31, 0.04), 0 8px 24px -12px rgba(28, 27, 31, 0.08);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -12,127 +52,230 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f5f5;
-      padding: 20px;
+      font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
     }
 
     header {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
+      background: var(--surface);
+      padding: 22px 24px;
+      border-radius: var(--radius-lg);
       margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
     }
 
     h1 {
-      color: #ec4899;
-      margin-bottom: 10px;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    header .subtitle {
+      color: var(--text-soft);
+      font-size: 13px;
+      margin-top: 4px;
     }
 
     .tabs {
       display: flex;
-      gap: 10px;
-      margin-top: 20px;
+      gap: 6px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
     .tab {
-      padding: 10px 20px;
-      background: #f0f0f0;
-      border: none;
-      border-radius: 6px;
+      padding: 9px 16px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      color: var(--text-soft);
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .tab:hover {
+      background: var(--zinc-100);
+      color: var(--text);
     }
 
     .tab.active {
-      background: #ec4899;
+      background: var(--accent);
       color: white;
+    }
+
+    .badge {
+      pointer-events: none;
+      opacity: 0.85;
     }
 
     .tab-content {
       display: none;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: var(--surface);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
     }
 
     .tab-content.active {
       display: block;
+      animation: rise 0.25s var(--ease-spring) backwards;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-content > h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .row-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .row-between h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .ml-auto {
+      margin-left: auto;
     }
 
     .auth-form {
-      max-width: 400px;
+      max-width: 380px;
       margin: 100px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: var(--surface);
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .auth-form h2 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 18px;
     }
 
     .auth-form input {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin-bottom: 15px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
       font-size: 14px;
+      font-family: inherit;
+      background: var(--zinc-50);
+      outline: none;
+      transition: border-color 0.2s var(--ease-spring);
+    }
+
+    .auth-form input:focus {
+      border-color: var(--rose-300);
+      background: var(--surface);
     }
 
     .btn {
-      padding: 10px 20px;
-      background: #ec4899;
+      padding: 9px 18px;
+      background: var(--accent);
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: background 0.2s var(--ease-spring), transform 0.15s var(--ease-spring);
     }
 
     .btn:hover {
-      background: #db2777;
+      background: var(--accent-strong);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-full {
+      width: 100%;
     }
 
     .btn-secondary {
-      background: #6b7280;
+      background: var(--zinc-700);
     }
 
     .btn-secondary:hover {
-      background: #4b5563;
+      background: var(--zinc-900);
     }
 
     .btn-danger {
-      background: #ef4444;
+      background: var(--danger);
     }
 
     .btn-danger:hover {
-      background: #dc2626;
+      background: #a53a32;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-sm + .btn-sm {
+      margin-left: 6px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
     }
 
     th, td {
       padding: 12px;
       text-align: left;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
     }
 
     th {
-      background: #f9fafb;
+      background: var(--zinc-50);
       font-weight: 600;
-      color: #374151;
+      color: var(--text-soft);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    tbody tr {
+      transition: background 0.15s var(--ease-spring);
+    }
+
+    tbody tr:hover {
+      background: var(--zinc-50);
+    }
+
+    select {
+      font-family: inherit;
     }
 
     .form-group {
@@ -141,49 +284,79 @@
 
     .form-group label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       font-weight: 500;
-      color: #374151;
+      font-size: 13px;
+      color: var(--text-soft);
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       font-size: 14px;
+      font-family: inherit;
+      background: var(--zinc-50);
+      outline: none;
+      transition: border-color 0.2s var(--ease-spring), background 0.2s var(--ease-spring);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--rose-300);
+      background: var(--surface);
     }
 
     .form-group textarea {
-      min-height: 100px;
+      min-height: 90px;
       resize: vertical;
+    }
+
+    .form-narrow {
+      max-width: 460px;
+    }
+
+    .inline-form-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      margin-top: 18px;
+    }
+
+    .inline-form-row .form-group {
+      margin-bottom: 0;
+      flex: 1;
     }
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
     }
 
     .stat-card {
-      background: linear-gradient(135deg, #ec4899, #f472a8);
-      color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      border-top: 2px solid var(--accent);
     }
 
     .stat-card h3 {
-      font-size: 14px;
-      margin-bottom: 10px;
-      opacity: 0.9;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-soft);
+      margin-bottom: 8px;
     }
 
     .stat-card .value {
-      font-size: 32px;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
     }
 
     .modal {
@@ -193,7 +366,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(28, 27, 31, 0.4);
       align-items: center;
       justify-content: center;
       z-index: 1000;
@@ -204,13 +377,18 @@
     }
 
     .modal-content {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      max-width: 500px;
+      background: var(--surface);
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      max-width: 480px;
       width: 90%;
       max-height: 80vh;
       overflow-y: auto;
+      animation: rise 0.25s var(--ease-spring) backwards;
+    }
+
+    .modal-content--wide {
+      max-width: 600px;
     }
 
     .modal-header {
@@ -220,79 +398,117 @@
       margin-bottom: 20px;
     }
 
+    .modal-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
     .close {
       cursor: pointer;
-      font-size: 24px;
-      color: #6b7280;
+      font-size: 22px;
+      color: var(--text-soft);
+      line-height: 1;
+      transition: color 0.15s var(--ease-spring);
+    }
+
+    .close:hover {
+      color: var(--text);
     }
 
     .error {
-      background: #fee2e2;
-      color: #dc2626;
-      padding: 10px;
-      border-radius: 6px;
+      background: var(--danger-soft);
+      color: var(--danger);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
       margin-bottom: 15px;
+      font-size: 13px;
     }
 
     .success {
-      background: #d1fae5;
-      color: #059669;
-      padding: 10px;
-      border-radius: 6px;
+      background: var(--success-soft);
+      color: var(--success);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
       margin-bottom: 15px;
+      font-size: 13px;
     }
 
     .hidden {
       display: none !important;
     }
 
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .pill-active {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .pill-inactive {
+      background: var(--zinc-100);
+      color: var(--text-soft);
+    }
+
+    .pill-neutral {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+
     .chat-layout {
       display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 20px;
+      grid-template-columns: 300px 1fr;
+      gap: 16px;
       height: 600px;
     }
 
     .chat-list {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       overflow-y: auto;
-      padding: 10px;
+      padding: 8px;
     }
 
     .conversation-item {
       padding: 12px;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      margin-bottom: 8px;
-      border: 1px solid #e5e7eb;
+      margin-bottom: 6px;
+      border: 1px solid transparent;
+      transition: all 0.15s var(--ease-spring);
     }
 
     .conversation-item:hover {
-      background: #f9fafb;
+      background: var(--zinc-50);
     }
 
     .conversation-item.active {
-      background: #fce7f3;
-      border-color: #ec4899;
+      background: var(--accent-soft);
+      border-color: var(--rose-300);
     }
 
     .conversation-user {
       font-weight: 600;
-      color: #374151;
       font-size: 13px;
       word-break: break-all;
     }
 
     .conversation-channel {
       font-size: 11px;
-      color: #6b7280;
+      color: var(--text-soft);
       margin: 4px 0;
     }
 
     .conversation-summary {
       font-size: 12px;
-      color: #6b7280;
+      color: var(--text-soft);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -302,8 +518,8 @@
     .chat-panel {
       display: flex;
       flex-direction: column;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
       overflow: hidden;
     }
 
@@ -312,29 +528,37 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #9ca3af;
+      color: var(--zinc-400);
+      font-size: 13px;
+    }
+
+    .chat-active-layout {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
     }
 
     .chat-active-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      padding: 15px;
-      border-bottom: 1px solid #e5e7eb;
-      background: #f9fafb;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--zinc-50);
     }
 
     .chat-summary {
-      font-size: 13px;
-      color: #6b7280;
+      font-size: 12px;
+      color: var(--text-soft);
       margin-top: 4px;
-      max-width: 500px;
+      max-width: 460px;
     }
 
     .chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 15px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -343,53 +567,59 @@
     .chat-bubble {
       max-width: 70%;
       padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      line-height: 1.4;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      line-height: 1.45;
     }
 
     .chat-bubble.user {
       align-self: flex-start;
-      background: #f3f4f6;
-      color: #111827;
+      background: var(--zinc-100);
+      color: var(--text);
     }
 
     .chat-bubble.bot {
       align-self: flex-start;
-      background: #fce7f3;
-      color: #831843;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
     }
 
     .chat-bubble.admin {
       align-self: flex-end;
-      background: #ec4899;
+      background: var(--accent);
       color: white;
     }
 
     .chat-reply-form {
       display: flex;
       gap: 10px;
-      padding: 15px;
-      border-top: 1px solid #e5e7eb;
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
     }
 
     .chat-reply-form textarea {
       flex: 1;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 14px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: inherit;
       resize: none;
       min-height: 44px;
+      outline: none;
+    }
+
+    .chat-reply-form textarea:focus {
+      border-color: var(--rose-300);
     }
   </style>
 </head>
 <body>
   <!-- Auth Form -->
   <div id="authForm" class="auth-form">
-    <h2 style="color: #ec4899; margin-bottom: 20px;">Admin Login</h2>
+    <h2>Admin Login</h2>
     <input type="password" id="tokenInput" placeholder="Masukkan Admin Token" />
-    <button class="btn" style="width: 100%;" onclick="login()">Login</button>
+    <button class="btn btn-full" onclick="login()">Login</button>
   </div>
 
   <!-- Main Admin Panel -->
@@ -397,7 +627,7 @@
     <div class="container">
       <header>
         <h1>Admin Panel - brand Bot</h1>
-        <p style="color: #6b7280;">Manage FAQs, Products, and Promotions</p>
+        <p class="subtitle">Manage FAQs, Products, and Promotions</p>
         <div class="tabs">
           <button class="tab active" onclick="switchTab('stats')">Dashboard</button>
           <button class="tab" onclick="switchTab('faqs')">FAQs</button>
@@ -407,14 +637,14 @@
           <button class="tab" onclick="switchTab('orders')">Orders</button>
           <button class="tab" onclick="switchTab('customers')">Customers</button>
           <button class="tab" onclick="switchTab('settings')">Settings</button>
-          <button class="tab" onclick="switchTab('chat')">Chat <span id="chatBadge" style="pointer-events: none;"></span></button>
-          <button class="btn btn-secondary" style="margin-left: auto;" onclick="logout()">Logout</button>
+          <button class="tab" onclick="switchTab('chat')">Chat <span id="chatBadge" class="badge"></span></button>
+          <button class="btn btn-secondary ml-auto" onclick="logout()">Logout</button>
         </div>
       </header>
 
       <!-- Stats Tab -->
       <div id="stats-tab" class="tab-content active">
-        <h2 style="margin-bottom: 20px;">Dashboard</h2>
+        <h2>Dashboard</h2>
         <div class="stats">
           <div class="stat-card">
             <h3>Total FAQs</h3>
@@ -445,7 +675,7 @@
 
       <!-- FAQs Tab -->
       <div id="faqs-tab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="row-between">
           <h2>Manage FAQs</h2>
           <button class="btn" onclick="openFAQModal()">+ Add FAQ</button>
         </div>
@@ -465,7 +695,7 @@
 
       <!-- Products Tab -->
       <div id="products-tab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="row-between">
           <h2>Manage Products</h2>
           <button class="btn" onclick="openProductModal()">+ Add Product</button>
         </div>
@@ -487,7 +717,7 @@
 
       <!-- Categories Tab -->
       <div id="categories-tab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="row-between">
           <h2>Manage Categories</h2>
           <button class="btn" onclick="openCategoryModal()">+ Add Category</button>
         </div>
@@ -505,7 +735,7 @@
 
       <!-- Promotions Tab -->
       <div id="promotions-tab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="row-between">
           <h2>Manage Promotions / Events</h2>
           <button class="btn" onclick="openPromotionModal()">+ Add Promotion</button>
         </div>
@@ -526,7 +756,7 @@
 
       <!-- Orders Tab -->
       <div id="orders-tab" class="tab-content">
-        <h2 style="margin-bottom: 20px;">Orders</h2>
+        <h2>Orders</h2>
         <table>
           <thead>
             <tr>
@@ -546,7 +776,7 @@
 
       <!-- Customers Tab -->
       <div id="customers-tab" class="tab-content">
-        <h2 style="margin-bottom: 20px;">Customers</h2>
+        <h2>Customers</h2>
         <table>
           <thead>
             <tr>
@@ -563,8 +793,8 @@
 
       <!-- Settings Tab -->
       <div id="settings-tab" class="tab-content">
-        <h2 style="margin-bottom: 20px;">Purchase Settings</h2>
-        <form id="settingsForm" style="max-width: 500px;">
+        <h2>Purchase Settings</h2>
+        <form id="settingsForm" class="form-narrow">
           <div id="settingsError" class="error hidden"></div>
           <div id="settingsSuccess" class="success hidden"></div>
 
@@ -615,18 +845,18 @@
 
       <!-- Chat Tab -->
       <div id="chat-tab" class="tab-content">
-        <h2 style="margin-bottom: 20px;">Eskalasi ke Admin</h2>
+        <h2>Eskalasi ke Admin</h2>
         <div class="chat-layout">
           <div id="conversationList" class="chat-list"></div>
           <div class="chat-panel">
             <div id="chatEmpty" class="chat-empty">Pilih percakapan di sebelah kiri</div>
-            <div id="chatActive" class="hidden" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+            <div id="chatActive" class="chat-active-layout hidden">
               <div class="chat-active-header">
                 <div>
                   <strong id="chatActiveUser"></strong>
                   <div id="chatActiveSummary" class="chat-summary"></div>
                 </div>
-                <button class="btn btn-secondary" onclick="resolveConversation()">Selesaikan</button>
+                <button class="btn btn-secondary btn-sm" onclick="resolveConversation()">Selesaikan</button>
               </div>
               <div id="chatMessages" class="chat-messages"></div>
               <form id="chatReplyForm" class="chat-reply-form">
@@ -738,7 +968,7 @@
 
   <!-- Variant Modal -->
   <div id="variantModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-content modal-content--wide">
       <div class="modal-header">
         <h2 id="variantModalTitle">Manage Variants</h2>
         <span class="close" onclick="closeVariantModal()">&times;</span>
@@ -755,16 +985,16 @@
         </thead>
         <tbody id="variantList"></tbody>
       </table>
-      <form id="variantForm" style="margin-top: 20px; display: flex; gap: 10px; align-items: flex-end;">
-        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+      <form id="variantForm" class="inline-form-row">
+        <div class="form-group">
           <label>Ukuran</label>
           <input type="text" id="variantSize" placeholder="M" required />
         </div>
-        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+        <div class="form-group">
           <label>Warna</label>
           <input type="text" id="variantColor" placeholder="Hitam" required />
         </div>
-        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+        <div class="form-group">
           <label>Stok</label>
           <input type="number" id="variantStock" value="0" required />
         </div>
