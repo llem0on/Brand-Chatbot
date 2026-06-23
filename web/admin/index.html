@@ -55,45 +55,76 @@
       font-family: "Outfit", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text);
-      padding: 24px;
     }
 
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
+    .admin-shell {
+      display: flex;
+      min-height: 100vh;
     }
 
-    header {
+    .admin-sidebar {
+      width: 240px;
+      flex-shrink: 0;
       background: var(--surface);
-      padding: 22px 24px;
-      border-radius: var(--radius-lg);
-      margin-bottom: 20px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
 
-    h1 {
-      font-size: 19px;
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px;
+    }
+
+    .admin-brand .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 15px;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .admin-brand h1 {
+      font-size: 15px;
       font-weight: 600;
       letter-spacing: -0.01em;
     }
 
-    header .subtitle {
+    .admin-brand .subtitle {
       color: var(--text-soft);
-      font-size: 13px;
-      margin-top: 4px;
+      font-size: 11px;
+    }
+
+    .admin-main {
+      flex: 1;
+      padding: 28px 32px;
+      max-width: 1100px;
+      overflow-y: auto;
     }
 
     .tabs {
       display: flex;
-      gap: 6px;
-      margin-top: 18px;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      overflow-y: auto;
     }
 
     .tab {
-      padding: 9px 16px;
+      padding: 10px 12px;
       background: transparent;
       border: 1px solid transparent;
       border-radius: var(--radius-sm);
@@ -102,6 +133,7 @@
       font-family: inherit;
       font-weight: 500;
       color: var(--text-soft);
+      text-align: left;
       transition: all 0.2s var(--ease-spring);
     }
 
@@ -111,8 +143,9 @@
     }
 
     .tab.active {
-      background: var(--accent);
-      color: white;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-weight: 600;
     }
 
     .badge {
@@ -612,6 +645,28 @@
     .chat-reply-form textarea:focus {
       border-color: var(--rose-300);
     }
+
+    @media (max-width: 900px) {
+      .admin-shell {
+        flex-direction: column;
+      }
+      .admin-sidebar {
+        position: static;
+        height: auto;
+        width: auto;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+      }
+      .tabs {
+        flex-direction: row;
+        flex: none;
+      }
+      .admin-main {
+        padding: 20px;
+        max-width: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -623,25 +678,30 @@
   </div>
 
   <!-- Main Admin Panel -->
-  <div id="adminPanel" class="hidden">
-    <div class="container">
-      <header>
-        <h1>Admin Panel - brand Bot</h1>
-        <p class="subtitle">Manage FAQs, Products, and Promotions</p>
-        <div class="tabs">
-          <button class="tab active" onclick="switchTab('stats')">Dashboard</button>
-          <button class="tab" onclick="switchTab('faqs')">FAQs</button>
-          <button class="tab" onclick="switchTab('products')">Products</button>
-          <button class="tab" onclick="switchTab('categories')">Categories</button>
-          <button class="tab" onclick="switchTab('promotions')">Promotions</button>
-          <button class="tab" onclick="switchTab('orders')">Orders</button>
-          <button class="tab" onclick="switchTab('customers')">Customers</button>
-          <button class="tab" onclick="switchTab('settings')">Settings</button>
-          <button class="tab" onclick="switchTab('chat')">Chat <span id="chatBadge" class="badge"></span></button>
-          <button class="btn btn-secondary ml-auto" onclick="logout()">Logout</button>
+  <div id="adminPanel" class="hidden admin-shell">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="brand-mark">B</div>
+        <div>
+          <h1>brand</h1>
+          <p class="subtitle">Admin Panel</p>
         </div>
-      </header>
+      </div>
+      <nav class="tabs">
+        <button class="tab active" onclick="switchTab('stats')">Dashboard</button>
+        <button class="tab" onclick="switchTab('faqs')">FAQs</button>
+        <button class="tab" onclick="switchTab('products')">Products</button>
+        <button class="tab" onclick="switchTab('categories')">Categories</button>
+        <button class="tab" onclick="switchTab('promotions')">Promotions</button>
+        <button class="tab" onclick="switchTab('orders')">Orders</button>
+        <button class="tab" onclick="switchTab('customers')">Customers</button>
+        <button class="tab" onclick="switchTab('settings')">Settings</button>
+        <button class="tab" onclick="switchTab('chat')">Chat <span id="chatBadge" class="badge"></span></button>
+      </nav>
+      <button class="btn btn-secondary btn-full" onclick="logout()">Logout</button>
+    </aside>
 
+    <main class="admin-main">
       <!-- Stats Tab -->
       <div id="stats-tab" class="tab-content active">
         <h2>Dashboard</h2>
@@ -867,7 +927,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 
   <!-- FAQ Modal -->
@@ -947,6 +1007,18 @@
         <div class="form-group">
           <label>Colors (comma separated)</label>
           <input type="text" id="productColors" placeholder="Hitam,Putih,Navy" />
+        </div>
+        <div class="form-group">
+          <label>Material</label>
+          <input type="text" id="productMaterial" placeholder="Cotton Combed" />
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="productGender">
+            <option value="Unisex">Unisex</option>
+            <option value="Pria">Pria</option>
+            <option value="Wanita">Wanita</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Stock</label>

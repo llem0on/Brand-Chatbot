@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil — brand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/site.css" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="site-nav-root"></div>
+
+  <main class="page page-narrow">
+    <h1>Profil Saya</h1>
+    <div class="card" style="padding:28px;">
+      <div id="profileLoading" class="muted">Memuat...</div>
+
+      <div id="profileContent" class="hidden">
+        <p class="muted" style="font-size:13px;">Email</p>
+        <p style="margin-bottom:16px; font-weight:600;" id="profileEmail"></p>
+
+        <p class="muted" style="font-size:13px;">Status Verifikasi</p>
+        <p style="margin-bottom:20px;" id="profileVerified"></p>
+
+        <button id="resendBtn" class="btn btn-secondary btn-full hidden" style="margin-bottom:10px;">Kirim Ulang Email Verifikasi</button>
+        <button id="logoutBtn" class="btn btn-full">Logout</button>
+      </div>
+
+      <div id="profileGuest" class="hidden">
+        <p class="muted" style="margin-bottom:16px;">Kamu belum login.</p>
+        <a href="/login.html" class="btn btn-full">Login</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="/session.js"></script>
+  <script src="/nav.js"></script>
+  <script src="/profile.js"></script>
+  <script src="/chat-widget.js"></script>
+</body>
+</html>

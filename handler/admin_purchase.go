@@ -12,7 +12,7 @@ import (
 // GetOrders returns all orders with customer/product/variant preloaded
 func GetOrders(c *gin.Context) {
 	var orders []models.Order
-	query := database.DB.Preload("Customer").Preload("Product").Preload("ProductVariant").Order("created_at DESC")
+	query := database.DB.Preload("Customer").Preload("Items.Product").Preload("Items.ProductVariant").Order("created_at DESC")
 
 	if status := c.Query("status"); status != "" {
 		query = query.Where("status = ?", status)

@@ -376,6 +376,8 @@ function openProductModal(productId = null) {
             document.getElementById('productPrice').value = product.price || 0;
             document.getElementById('productSizes').value = product.sizes || '';
             document.getElementById('productColors').value = product.colors || '';
+            document.getElementById('productMaterial').value = product.material || '';
+            document.getElementById('productGender').value = product.gender || 'Unisex';
             document.getElementById('productStock').value = product.stock || 0;
             document.getElementById('productImageUrl').value = product.image_url || '';
             document.getElementById('productActive').checked = product.active;
@@ -421,6 +423,8 @@ document.getElementById('productForm').addEventListener('submit', (e) => {
     price: parseInt(document.getElementById('productPrice').value) || 0,
     sizes: document.getElementById('productSizes').value,
     colors: document.getElementById('productColors').value,
+    material: document.getElementById('productMaterial').value,
+    gender: document.getElementById('productGender').value,
     stock: parseInt(document.getElementById('productStock').value) || 0,
     image_url: document.getElementById('productImageUrl').value,
     active: document.getElementById('productActive').checked,
@@ -691,8 +695,13 @@ function loadOrders() {
       data.forEach(order => {
         const tr = document.createElement('tr');
         const customerName = order.customer ? order.customer.name : '-';
-        const productName = order.product ? order.product.name : '-';
-        const variant = order.product_variant ? `${order.product_variant.size}/${order.product_variant.color}` : '-';
+        const items = order.items || [];
+        const productSummary = items.map(item => {
+          const name = item.product ? item.product.name : '-';
+          const variant = item.product_variant ? `${item.product_variant.size}/${item.product_variant.color}` : '-';
+          return `${name} (${variant}) x${item.quantity}`;
+        }).join('<br>') || '-';
+        const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
         const createdAt = new Date(order.created_at).toLocaleString('id-ID');
 
         const statusOptions = Object.keys(ORDER_STATUS_LABELS)
@@ -702,8 +711,8 @@ function loadOrders() {
         tr.innerHTML = `
           <td>${order.order_number}</td>
           <td>${customerName}</td>
-          <td>${productName} (${variant})</td>
-          <td>${order.quantity}</td>
+          <td>${productSummary}</td>
+          <td>${totalQty}</td>
           <td>Rp${Number(order.total_amount || 0).toLocaleString('id-ID')}</td>
           <td>${order.payment_method === 'qris' ? 'QRIS' : 'Transfer Bank'}</td>
           <td><select onchange="updateOrderStatus(${order.id}, this.value)">${statusOptions}</select></td>

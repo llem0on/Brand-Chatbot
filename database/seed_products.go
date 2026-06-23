@@ -20,18 +20,20 @@ type seedProduct struct {
 	Price        int
 	Sizes        string
 	Colors       string
+	Material     string
+	Gender       string
 	Stock        int
 }
 
 var initialProducts = []seedProduct{
-	{"Kaos", "KS-001", "Kaos Basic Tee", "Kaos cotton combed 30s, adem dan nyaman dipakai harian.", 89000, "S,M,L,XL", "Hitam,Putih,Navy", 50},
-	{"Kaos", "KS-002", "Kaos Graphic Tee", "Kaos dengan sablon grafis eksklusif brand.", 109000, "S,M,L,XL,XXL", "Hitam,Maroon", 30},
-	{"Hoodie", "HD-001", "Hoodie Basic", "Hoodie fleece tebal dengan kantung depan.", 219000, "M,L,XL", "Hitam,Abu-abu", 25},
-	{"Hoodie", "HD-002", "Hoodie Zipper", "Hoodie zipper dengan lining hangat di bagian dalam.", 259000, "M,L,XL", "Navy,Hitam", 20},
-	{"Jaket", "JK-001", "Jaket Bomber", "Jaket bomber water-resistant untuk dipakai outdoor.", 329000, "M,L,XL", "Hitam,Olive", 15},
-	{"Jaket", "JK-002", "Jaket Denim", "Jaket denim klasik dengan kancing logam.", 289000, "S,M,L", "Biru", 12},
-	{"Celana", "CL-001", "Celana Cargo", "Celana cargo dengan banyak kantung fungsional.", 199000, "S,M,L,XL", "Hitam,Khaki", 18},
-	{"Celana", "CL-002", "Celana Jogger", "Celana jogger nyaman untuk santai maupun olahraga.", 159000, "S,M,L,XL", "Hitam,Abu-abu,Navy", 22},
+	{"Kaos", "KS-001", "Kaos Basic Tee", "Kaos cotton combed 30s, adem dan nyaman dipakai harian.", 89000, "S,M,L,XL", "Hitam,Putih,Navy", "Cotton Combed", "Unisex", 50},
+	{"Kaos", "KS-002", "Kaos Graphic Tee", "Kaos dengan sablon grafis eksklusif brand.", 109000, "S,M,L,XL,XXL", "Hitam,Maroon", "Cotton Combed", "Unisex", 30},
+	{"Hoodie", "HD-001", "Hoodie Basic", "Hoodie fleece tebal dengan kantung depan.", 219000, "M,L,XL", "Hitam,Abu-abu", "Fleece", "Unisex", 25},
+	{"Hoodie", "HD-002", "Hoodie Zipper", "Hoodie zipper dengan lining hangat di bagian dalam.", 259000, "M,L,XL", "Navy,Hitam", "Fleece", "Pria", 20},
+	{"Jaket", "JK-001", "Jaket Bomber", "Jaket bomber water-resistant untuk dipakai outdoor.", 329000, "M,L,XL", "Hitam,Olive", "Polyester", "Pria", 15},
+	{"Jaket", "JK-002", "Jaket Denim", "Jaket denim klasik dengan kancing logam.", 289000, "S,M,L", "Biru", "Denim", "Unisex", 12},
+	{"Celana", "CL-001", "Celana Cargo", "Celana cargo dengan banyak kantung fungsional.", 199000, "S,M,L,XL", "Hitam,Khaki", "Polyester", "Pria", 18},
+	{"Celana", "CL-002", "Celana Jogger", "Celana jogger nyaman untuk santai maupun olahraga.", 159000, "S,M,L,XL", "Hitam,Abu-abu,Navy", "Cotton Combed", "Wanita", 22},
 }
 
 var initialPromotions = []struct {
@@ -93,11 +95,49 @@ func SeedProducts() error {
 			Price:       p.Price,
 			Sizes:       p.Sizes,
 			Colors:      p.Colors,
+			Material:    p.Material,
+			Gender:      p.Gender,
 			Stock:       p.Stock,
 			Active:      true,
 		}
 		if err := DB.Create(&product).Error; err != nil {
 			return err
+		}
+	}
+
+	return nil
+}
+
+// BackfillProductAttributes fills in Material/Gender for already-seeded
+// products that predate those columns, matched by Code. Never overwrites a
+// value an admin has already set.
+func BackfillProductAttributes() error {
+	infoByCode := make(map[string]seedProduct, len(initialProducts))
+	for _, p := range initialProducts {
+		infoByCode[p.Code] = p
+	}
+
+	var products []models.Product
+	if err := DB.Where("material IS NULL OR material = '' OR gender IS NULL OR gender = ''").Find(&products).Error; err != nil {
+		return err
+	}
+
+	for _, product := range products {
+		info, ok := infoByCode[product.Code]
+		if !ok {
+			continue
+		}
+		updates := map[string]interface{}{}
+		if product.Material == "" {
+			updates["material"] = info.Material
+		}
+		if product.Gender == "" {
+			updates["gender"] = info.Gender
+		}
+		if len(updates) > 0 {
+			if err := DB.Model(&models.Product{}).Where("id = ?", product.ID).Updates(updates).Error; err != nil {
+				return err
+			}
 		}
 	}
 

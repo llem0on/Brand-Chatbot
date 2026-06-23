@@ -298,15 +298,19 @@ func finalizeOrder(state *models.ConversationState, draft models.OrderDraft, set
 
 	orderSvc := service.NewOrderService()
 	order, err := orderSvc.CreateOrder(service.CreateOrderInput{
-		UserID:           state.UserID,
-		CustomerID:       customer.ID,
-		ProductID:        draft.ProductID,
-		ProductVariantID: variant.ID,
-		Quantity:         draft.Quantity,
-		UnitPrice:        product.Price,
-		ShippingCost:     settings.ShippingCost,
-		PaymentMethod:    draft.PaymentMethod,
-		Address:          draft.Address,
+		UserID:     state.UserID,
+		CustomerID: customer.ID,
+		Items: []service.OrderLineInput{
+			{
+				ProductID:        draft.ProductID,
+				ProductVariantID: variant.ID,
+				Quantity:         draft.Quantity,
+				UnitPrice:        product.Price,
+			},
+		},
+		ShippingCost:  settings.ShippingCost,
+		PaymentMethod: draft.PaymentMethod,
+		Address:       draft.Address,
 	})
 	if err != nil {
 		return "", err

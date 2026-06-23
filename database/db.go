@@ -36,6 +36,8 @@ func Init() error {
 	// Auto migrate
 	err = DB.AutoMigrate(
 		&models.FAQ{},
+		&models.User{},
+		&models.UserSession{},
 		&models.ConversationState{},
 		&models.ChatMessage{},
 		&models.ProductCategory{},
@@ -44,6 +46,8 @@ func Init() error {
 		&models.Promotion{},
 		&models.Customer{},
 		&models.Order{},
+		&models.OrderItem{},
+		&models.CartItem{},
 		&models.PurchaseSettings{},
 	)
 	if err != nil {
@@ -56,6 +60,9 @@ func Init() error {
 	}
 	if err := SeedProducts(); err != nil {
 		log.Printf("Warning: Failed to seed products: %v", err)
+	}
+	if err := BackfillProductAttributes(); err != nil {
+		log.Printf("Warning: Failed to backfill product attributes: %v", err)
 	}
 	if err := SeedPromotions(); err != nil {
 		log.Printf("Warning: Failed to seed promotions: %v", err)

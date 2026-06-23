@@ -33,6 +33,26 @@ func main() {
 	// Health check endpoint
 	r.GET("/health", handler.HealthCheck)
 
+	// Public storefront catalog (unauthenticated)
+	r.GET("/api/products", handler.GetPublicProducts)
+	r.GET("/api/products/filters", handler.GetProductFilterOptions)
+	r.GET("/api/settings/public", handler.GetPublicCheckoutSettings)
+
+	// Cart (anonymous via session_id, or account-scoped once logged in)
+	r.GET("/api/cart", handler.GetCart)
+	r.POST("/api/cart/items", handler.AddCartItem)
+	r.PUT("/api/cart/items/:id", handler.UpdateCartItem)
+	r.DELETE("/api/cart/items/:id", handler.RemoveCartItem)
+	r.POST("/api/cart/checkout", handler.Checkout)
+
+	// Storefront account auth
+	r.POST("/auth/register", handler.Register)
+	r.POST("/auth/login", handler.Login)
+	r.POST("/auth/logout", handler.Logout)
+	r.GET("/auth/me", handler.Me)
+	r.GET("/auth/verify-email", handler.VerifyEmail)
+	r.POST("/auth/resend-verification", handler.ResendVerification)
+
 	// Admin endpoints (protected)
 	admin := r.Group("/admin")
 	admin.Use(handler.AuthMiddleware())
@@ -81,11 +101,29 @@ func main() {
 		admin.PUT("/settings", handler.UpdateSettings)
 	}
 
-	// Static UI di folder ./web
-	r.StaticFile("/", "./web/index.html")
-	r.StaticFile("/index.html", "./web/index.html")
+	// Static pages - "/" is now the storefront Home page; chat is a floating
+	// bubble available on every page (see web/chat-widget.js)
+	r.StaticFile("/", "./web/home.html")
+	r.StaticFile("/home.html", "./web/home.html")
+	r.StaticFile("/order.html", "./web/order.html")
+	r.StaticFile("/about.html", "./web/about.html")
+	r.StaticFile("/login.html", "./web/login.html")
+	r.StaticFile("/register.html", "./web/register.html")
+	r.StaticFile("/verify-email.html", "./web/verify-email.html")
+	r.StaticFile("/profile.html", "./web/profile.html")
+
+	// Shared static assets
+	r.StaticFile("/site.css", "./web/site.css")
 	r.StaticFile("/style.css", "./web/style.css")
-	r.StaticFile("/app.js", "./web/app.js")
+	r.StaticFile("/session.js", "./web/session.js")
+	r.StaticFile("/nav.js", "./web/nav.js")
+	r.StaticFile("/chat-widget.js", "./web/chat-widget.js")
+	r.StaticFile("/home.js", "./web/home.js")
+	r.StaticFile("/order.js", "./web/order.js")
+	r.StaticFile("/login.js", "./web/login.js")
+	r.StaticFile("/register.js", "./web/register.js")
+	r.StaticFile("/verify-email.js", "./web/verify-email.js")
+	r.StaticFile("/profile.js", "./web/profile.js")
 
 	// Admin UI
 	r.Static("/admin-ui", "./web/admin")
@@ -95,7 +133,7 @@ func main() {
 		port = "8080"
 	}
 	log.Printf("Server jalan di :%s\n", port)
-	log.Printf("Buka http://localhost:%s untuk web chat\n", port)
+	log.Printf("Buka http://localhost:%s untuk storefront\n", port)
 	log.Printf("Buka http://localhost:%s/admin-ui untuk admin panel\n", port)
 	r.Run(":" + port)
 }

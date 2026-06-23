@@ -5,6 +5,7 @@ import "time"
 type ConversationState struct {
 	ID                uint       `gorm:"primaryKey" json:"id"`
 	UserID            string     `gorm:"uniqueIndex;not null;size:191" json:"user_id"`
+	AccountID         *uint      `gorm:"index" json:"account_id,omitempty"` // linked once the web visitor logs in
 	Channel           string     `gorm:"default:'web';size:20" json:"channel"`  // web, whatsapp
 	CurrentFlow       string     `gorm:"default:'new'" json:"current_flow"`     // new, chat, ordering
 	OrderStep         string     `gorm:"size:30" json:"order_step"`             // pilih_produk, pilih_varian, data_pembeli, pilih_bayar, konfirmasi, konfirmasi_batal
