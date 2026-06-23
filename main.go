@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 	"wa-ai-bot/database"
 	"wa-ai-bot/handler"
 
@@ -11,7 +12,7 @@ import (
 
 func main() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env")
+		log.Println("No .env file found, using environment variables")
 	}
 
 	// Initialize database
@@ -89,8 +90,12 @@ func main() {
 	// Admin UI
 	r.Static("/admin-ui", "./web/admin")
 
-	log.Println("Server jalan di :8080")
-	log.Println("Buka http://localhost:8080 untuk web chat")
-	log.Println("Buka http://localhost:8080/admin-ui untuk admin panel")
-	r.Run(":8080")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Printf("Server jalan di :%s\n", port)
+	log.Printf("Buka http://localhost:%s untuk web chat\n", port)
+	log.Printf("Buka http://localhost:%s/admin-ui untuk admin panel\n", port)
+	r.Run(":" + port)
 }
