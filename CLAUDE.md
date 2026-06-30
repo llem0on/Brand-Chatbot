@@ -12,7 +12,9 @@ Baca file yang relevan dari `truth/` **secara proaktif** sebelum mengerjakan tas
 | `truth/payment-system.md` | menyentuh payment proof, upload bukti, admin verify, CheckoutModal payment section |
 | `truth/otp-phone-verification.md` | menyentuh OTP, verifikasi HP, checkout phone step |
 | `truth/admin-panel.md` | menyentuh admin dashboard, auth ADMIN_TOKEN, apiFetch, routes admin |
-| `truth/local-dev-setup.md` | user minta run server, ada error MySQL/port/NextAuth, setup environment |
+| `truth/local-dev-setup.md` | user minta run server, ada error MySQL/port/NextAuth, setup environment, path be/ dan fe/ |
+| `truth/railway-deployment.md` | deploy ke Railway, env vars DB_*, port config, ADMIN_ORIGIN, NEXTAUTH_URL |
+| `truth/react-nextjs-gotchas.md` | infinite loop di admin panel, useEffect deps, SessionProvider polling, .next cache |
 | `truth/cloudinary-client.md` | menyentuh upload gambar atau Cloudinary |
 | `truth/conversation-state-machine.md` | menyentuh flow chat, escalation, dispatch webhook |
 | `truth/order-flow-state-machine.md` | menyentuh order flow, slot-filling, OrderStep, mergeExtraction |
@@ -119,8 +121,14 @@ Knowledge base di `truth/` — dikelola oleh Claude, diupdate saat ada perubahan
 - Gunakan `[[wikilinks]]` ke konsep terkait
 - Update index.md dan log.md setiap kali buat atau edit halaman
 
-### Trigger: "'store"
-Kalau user bilang "'store" (dengan apostrophe di depan) — baca topik yang sedang dibahas atau diselesaikan saat itu (bukan seluruh session), ekstrak knowledge yang penting dan akan berguna di masa depan, lalu simpan ke `truth/` sebagai halaman baru atau update halaman yang sudah ada. Setelah itu:
-1. Update `truth/index.md`
-2. Update `truth/log.md`
-3. Update tabel `<!-- TRUTH_INDEX_START -->` … `<!-- TRUTH_INDEX_END -->` di CLAUDE.md ini — tambah baris baru untuk file yang baru dibuat, atau perbarui deskripsi baris yang sudah ada.
+### End-of-session knowledge extraction: `/store-session`
+
+Jalankan `/store-session` di akhir sesi untuk menyimpan knowledge penting ke `truth/` — supaya sesi berikutnya tidak mulai dari nol.
+
+Skill ini otomatis:
+1. Scan conversation, ekstrak knowledge reusable (bug fixes, decisions, patterns, deployment gotchas)
+2. Buat atau update halaman di `truth/`
+3. Update `truth/index.md` dan `truth/log.md`
+4. Update tabel `<!-- TRUTH_INDEX_START -->` … `<!-- TRUTH_INDEX_END -->` di CLAUDE.md ini
+
+Trigger lama `'store` (apostrophe) masih bisa dipakai untuk quick-store topik spesifik yang sedang dibahas.

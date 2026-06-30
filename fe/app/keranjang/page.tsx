@@ -43,10 +43,10 @@ export default function KeranjangPage() {
 
           {/* header */}
           <div className="mb-12">
-            <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(203,180,167,0.88)", marginBottom: 10 }}>
+            <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-accent) 90%, transparent)", marginBottom: 10 }}>
               Keranjang Belanja
             </div>
-            <h1 className="font-serif" style={{ fontSize: "clamp(28px,4vw,46px)", color: "#EFE4DC", lineHeight: 1.05 }}>
+            <h1 className="font-serif" style={{ fontSize: "clamp(28px,4vw,46px)", color: "var(--color-ink)", lineHeight: 1.05 }}>
               {!mounted ? "Memuat..." : items.length === 0 ? "Keranjang Kosong" : `${items.length} Item`}
             </h1>
           </div>
@@ -54,13 +54,13 @@ export default function KeranjangPage() {
           {/* empty state */}
           {mounted && items.length === 0 && (
             <div style={{ textAlign: "center", paddingTop: 60, paddingBottom: 60 }}>
-              <div style={{ marginBottom: 24, color: "rgba(203,180,167,0.55)" }}>
+              <div style={{ marginBottom: 24, color: "rgba(200,183,158,0.55)" }}>
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" style={{ margin: "0 auto" }}>
                   <path d="M6 7h12l-1 13H7L6 7Z" strokeLinejoin="round" />
                   <path d="M9 7a3 3 0 0 1 6 0" strokeLinecap="round" />
                 </svg>
               </div>
-              <p style={{ fontSize: 13, color: "rgba(239,228,220,0.72)", marginBottom: 28 }}>
+              <p style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-ink) 72%, transparent)", marginBottom: 28 }}>
                 Belum ada produk di keranjang.
               </p>
               <Link
@@ -70,7 +70,7 @@ export default function KeranjangPage() {
                   letterSpacing: "0.3em",
                   textTransform: "uppercase",
                   color: "var(--color-accent)",
-                  border: "1px solid rgba(203,180,167,0.3)",
+                  border: "1px solid rgba(200,183,158,0.3)",
                   padding: "12px 28px",
                   transition: "all 0.2s ease",
                 }}
@@ -90,8 +90,8 @@ export default function KeranjangPage() {
                     display: "flex",
                     gap: 20,
                     padding: "24px 0",
-                    borderBottom: "1px solid rgba(203,180,167,0.07)",
-                    borderTop: i === 0 ? "1px solid rgba(203,180,167,0.07)" : "none",
+                    borderBottom: "1px solid rgba(200,183,158,0.07)",
+                    borderTop: i === 0 ? "1px solid rgba(200,183,158,0.07)" : "none",
                   }}
                 >
                   {/* image */}
@@ -111,20 +111,20 @@ export default function KeranjangPage() {
                   {/* info */}
                   <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                     <div>
-                      <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(203,180,167,0.78)", marginBottom: 6 }}>
+                      <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(200,183,158,0.75)", marginBottom: 6 }}>
                         {item.code}
                       </div>
-                      <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(16px,2vw,20px)", color: "#EFE4DC", lineHeight: 1.2, marginBottom: 8 }}>
+                      <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(16px,2vw,20px)", color: "var(--color-ink)", lineHeight: 1.2, marginBottom: 8 }}>
                         {item.name}
                       </div>
                       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                         {item.size && (
-                          <span style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(239,228,220,0.78)", border: "1px solid rgba(239,228,220,0.25)", padding: "3px 10px" }}>
+                          <span style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-ink) 78%, transparent)", border: "1px solid rgba(200,183,158,0.25)", padding: "3px 10px" }}>
                             {item.size}
                           </span>
                         )}
                         {item.color && (
-                          <span style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(239,228,220,0.78)", border: "1px solid rgba(239,228,220,0.25)", padding: "3px 10px" }}>
+                          <span style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-ink) 78%, transparent)", border: "1px solid rgba(200,183,158,0.25)", padding: "3px 10px" }}>
                             {item.color}
                           </span>
                         )}
@@ -136,12 +136,12 @@ export default function KeranjangPage() {
                       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <button
                           onClick={() => handleUpdateQty(item.variantId, item.quantity - 1)}
-                          style={{ width: 28, height: 28, border: "1px solid rgba(203,180,167,0.35)", color: "rgba(239,228,220,0.82)", background: "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center" }}
+                          style={{ width: 28, height: 28, border: "1px solid rgba(200,183,158,0.35)", color: "color-mix(in srgb, var(--color-ink) 82%, transparent)", background: "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center" }}
                         >−</button>
-                        <span style={{ fontSize: 15, color: "#EFE4DC", minWidth: 20, textAlign: "center" }}>{item.quantity}</span>
+                        <span style={{ fontSize: 15, color: "var(--color-ink)", minWidth: 20, textAlign: "center" }}>{item.quantity}</span>
                         <button
                           onClick={() => handleUpdateQty(item.variantId, item.quantity + 1)}
-                          style={{ width: 28, height: 28, border: "1px solid rgba(203,180,167,0.35)", color: "rgba(239,228,220,0.82)", background: "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center" }}
+                          style={{ width: 28, height: 28, border: "1px solid rgba(200,183,158,0.35)", color: "color-mix(in srgb, var(--color-ink) 82%, transparent)", background: "transparent", cursor: "pointer", fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center" }}
                         >+</button>
                       </div>
 
@@ -151,7 +151,7 @@ export default function KeranjangPage() {
                             {rupiah(item.price * item.quantity)}
                           </div>
                           {item.quantity > 1 && (
-                            <div style={{ fontSize: 10, color: "rgba(239,228,220,0.62)", marginTop: 2 }}>
+                            <div style={{ fontSize: 10, color: "color-mix(in srgb, var(--color-ink) 62%, transparent)", marginTop: 2 }}>
                               {rupiah(item.price)} / pcs
                             </div>
                           )}
@@ -159,9 +159,9 @@ export default function KeranjangPage() {
 
                         <button
                           onClick={() => handleRemove(item.variantId)}
-                          style={{ color: "rgba(239,228,220,0.55)", background: "transparent", border: "none", cursor: "pointer", transition: "color 0.2s ease", padding: 4 }}
+                          style={{ color: "color-mix(in srgb, var(--color-ink) 55%, transparent)", background: "transparent", border: "none", cursor: "pointer", transition: "color 0.2s ease", padding: 4 }}
                           onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(210,80,80,0.85)"; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(239,228,220,0.55)"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "color-mix(in srgb, var(--color-ink) 55%, transparent)"; }}
                           aria-label="Hapus"
                         >
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.3">
@@ -179,17 +179,17 @@ export default function KeranjangPage() {
               <div style={{ paddingTop: 32, marginTop: 8 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 340, marginLeft: "auto" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-                    <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(239,228,220,0.78)" }}>
+                    <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-ink) 78%, transparent)" }}>
                       Subtotal ({totalQty} item)
                     </span>
-                    <span style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(20px,2.4vw,28px)", color: "#EFE4DC" }}>
+                    <span style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(20px,2.4vw,28px)", color: "var(--color-ink)" }}>
                       {rupiah(total)}
                     </span>
                   </div>
 
-                  <div style={{ height: 1, background: "rgba(203,180,167,0.08)", margin: "8px 0" }} />
+                  <div style={{ height: 1, background: "rgba(200,183,158,0.08)", margin: "8px 0" }} />
 
-                  <p style={{ fontSize: 11, color: "rgba(239,228,220,0.65)", lineHeight: 1.7, marginBottom: 12 }}>
+                  <p style={{ fontSize: 11, color: "color-mix(in srgb, var(--color-ink) 65%, transparent)", lineHeight: 1.7, marginBottom: 12 }}>
                     Ongkos kirim dan detail pembayaran akan dikonfirmasi setelah checkout via WhatsApp.
                   </p>
 
@@ -198,17 +198,17 @@ export default function KeranjangPage() {
                     style={{
                       width: "100%",
                       padding: "16px 24px",
-                      border: "1px solid rgba(165,106,108,0.55)",
-                      color: "#EFE4DC",
-                      background: "rgba(165,106,108,0.12)",
+                      border: "1px solid rgba(200,183,158,0.45)",
+                      color: "var(--color-ink)",
+                      background: "rgba(200,183,158,0.1)",
                       fontSize: 9,
                       letterSpacing: "0.3em",
                       textTransform: "uppercase",
                       cursor: "pointer",
                       transition: "background 0.3s ease, box-shadow 0.3s ease",
                     }}
-                    onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "rgba(165,106,108,0.26)"; t.style.boxShadow = "0 0 28px rgba(165,106,108,0.3)"; }}
-                    onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "rgba(165,106,108,0.12)"; t.style.boxShadow = "none"; }}
+                    onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "rgba(200,183,158,0.22)"; t.style.boxShadow = "0 0 28px rgba(200,183,158,0.2)"; }}
+                    onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "rgba(200,183,158,0.1)"; t.style.boxShadow = "none"; }}
                   >
                     Lanjut Checkout
                   </button>
@@ -221,7 +221,7 @@ export default function KeranjangPage() {
                       fontSize: 8,
                       letterSpacing: "0.28em",
                       textTransform: "uppercase",
-                      color: "rgba(203,180,167,0.72)",
+                      color: "rgba(200,183,158,0.7)",
                       paddingTop: 12,
                       transition: "color 0.2s ease",
                     }}

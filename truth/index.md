@@ -8,7 +8,9 @@
 - [Admin Panel](admin-panel.md) — pages, auth (ADMIN_TOKEN Bearer), API layer (apiFetch), ports :3000/:8080
 
 ## Dev & Ops
-- [Local Dev Setup](local-dev-setup.md) — cara run backend+frontend, MySQL port gotcha, Turbopack 404 issue, Google OAuth setup
+- [Local Dev Setup](local-dev-setup.md) — cara run be/ dan fe/, MySQL port gotcha, .next cache gotcha, Google OAuth setup
+- [Railway Deployment](railway-deployment.md) — env vars mapping Railway MySQL → DB_*, port 8080 backend, CORS/ADMIN_ORIGIN, build commands
+- [React / Next.js Gotchas](react-nextjs-gotchas.md) — useEffect [router] infinite loop, SessionProvider polling fix, .next cache setelah rename
 
 ## Infrastructure & Integrations
 - [Cloudinary Client](cloudinary-client.md) — signed server-side image upload, returns HTTPS URL

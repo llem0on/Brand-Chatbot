@@ -107,10 +107,10 @@ export default function CartModal({
     letterSpacing: "0.16em",
     textTransform: "uppercase" as const,
     padding: "7px 16px",
-    border: active ? "1px solid rgba(203,180,167,0.8)" : "1px solid rgba(203,180,167,0.12)",
-    color: active ? "var(--color-accent)" : "rgba(239,228,220,0.78)",
-    background: active ? "rgba(165,106,108,0.13)" : "transparent",
-    boxShadow: active ? "0 0 12px rgba(165,106,108,0.2)" : "none",
+    border: active ? "1px solid rgba(200,183,158,0.8)" : "1px solid rgba(200,183,158,0.12)",
+    color: active ? "#C8B79E" : "rgba(252,250,246,0.7)",
+    background: active ? "rgba(200,183,158,0.12)" : "transparent",
+    boxShadow: active ? "0 0 12px rgba(200,183,158,0.15)" : "none",
     cursor: "pointer",
     transition: "all 0.2s ease",
   });
@@ -127,9 +127,9 @@ export default function CartModal({
       <div
         className="absolute inset-0"
         style={{
-          backdropFilter: "blur(18px) brightness(0.35)",
-          WebkitBackdropFilter: "blur(18px) brightness(0.35)",
-          background: "rgba(75,29,36,0.5)",
+          backdropFilter: "blur(18px) brightness(0.3)",
+          WebkitBackdropFilter: "blur(18px) brightness(0.3)",
+          background: "rgba(42,12,18,0.6)",
         }}
       />
 
@@ -137,9 +137,9 @@ export default function CartModal({
       <div
         className="relative z-10 w-full max-w-lg"
         style={{
-          background: "rgba(75,29,36,0.95)",
-          border: "1px solid rgba(203,180,167,0.15)",
-          boxShadow: "0 0 60px rgba(165,106,108,0.15), 0 32px 96px rgba(0,0,0,0.8)",
+          background: "rgba(75,29,36,0.97)",
+          border: "1px solid rgba(200,183,158,0.12)",
+          boxShadow: "0 0 60px rgba(200,183,158,0.08), 0 32px 96px rgba(0,0,0,0.8)",
           backdropFilter: "blur(8px)",
           animation: "hero-overlay-in 0.38s cubic-bezier(0.16,1,0.3,1) both",
         }}
@@ -147,15 +147,15 @@ export default function CartModal({
         {/* top bar */}
         <div
           className="flex items-center justify-between px-5 py-3"
-          style={{ borderBottom: "1px solid rgba(203,180,167,0.08)" }}
+          style={{ borderBottom: "1px solid rgba(200,183,158,0.08)" }}
         >
-          <span className="text-[8px] tracking-[0.35em] uppercase" style={{ color: "rgba(203,180,167,0.88)" }}>
+          <span className="text-[8px] tracking-[0.35em] uppercase" style={{ color: "rgba(200,183,158,0.85)" }}>
             Tambah ke Keranjang
           </span>
           <button
             onClick={onClose}
             className="hover:text-accent transition-colors"
-            style={{ color: "rgba(239,228,220,0.72)" }}
+            style={{ color: "rgba(252,250,246,0.6)" }}
             aria-label="Tutup"
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -186,7 +186,7 @@ export default function CartModal({
             </div>
             <div>
               <div className="font-serif text-xl text-ink mb-2">{product.name}</div>
-              <div className="text-[11px] tracking-wider" style={{ color: "rgba(239,228,220,0.75)" }}>
+              <div className="text-[11px] tracking-wider" style={{ color: "rgba(252,250,246,0.7)" }}>
                 {selSize} / {selColor} · {qty} pcs · {rupiah(product.price * qty)}
               </div>
               <div className="text-xs mt-3" style={{ color: "rgba(100,210,140,0.7)" }}>
@@ -196,7 +196,7 @@ export default function CartModal({
             <button
               onClick={onClose}
               className="mt-2 text-[9px] tracking-[0.3em] uppercase hover:text-accent transition-colors"
-              style={{ color: "rgba(203,180,167,0.75)" }}
+              style={{ color: "rgba(200,183,158,0.75)" }}
             >
               Tutup
             </button>
@@ -229,7 +229,7 @@ export default function CartModal({
                 <div>
                   <div
                     className="text-[7px] tracking-[0.3em] uppercase mb-2"
-                    style={{ color: "rgba(203,180,167,0.82)" }}
+                    style={{ color: "rgba(200,183,158,0.8)" }}
                   >
                     Ukuran
                   </div>
@@ -248,7 +248,7 @@ export default function CartModal({
                 <div>
                   <div
                     className="text-[7px] tracking-[0.3em] uppercase mb-2"
-                    style={{ color: "rgba(203,180,167,0.82)" }}
+                    style={{ color: "rgba(200,183,158,0.8)" }}
                   >
                     Warna
                   </div>
@@ -266,7 +266,7 @@ export default function CartModal({
               <div>
                 <div
                   className="text-[7px] tracking-[0.3em] uppercase mb-2"
-                  style={{ color: "rgba(203,180,167,0.82)" }}
+                  style={{ color: "rgba(200,183,158,0.8)" }}
                 >
                   Jumlah
                 </div>
@@ -275,8 +275,8 @@ export default function CartModal({
                     onClick={() => setQty(Math.max(1, qty - 1))}
                     style={{
                       width: 28, height: 28,
-                      border: "1px solid rgba(203,180,167,0.12)",
-                      color: "rgba(239,228,220,0.8)",
+                      border: "1px solid rgba(200,183,158,0.12)",
+                      color: "rgba(252,250,246,0.75)",
                       cursor: "pointer", background: "transparent", fontSize: 14,
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}
@@ -286,8 +286,8 @@ export default function CartModal({
                     onClick={() => setQty(qty + 1)}
                     style={{
                       width: 28, height: 28,
-                      border: "1px solid rgba(203,180,167,0.12)",
-                      color: "rgba(239,228,220,0.8)",
+                      border: "1px solid rgba(200,183,158,0.12)",
+                      color: "rgba(252,250,246,0.75)",
                       cursor: "pointer", background: "transparent", fontSize: 14,
                       display: "flex", alignItems: "center", justifyContent: "center",
                     }}
@@ -308,7 +308,7 @@ export default function CartModal({
               {/* total + CTA */}
               <div className="flex items-center justify-between gap-3 pt-1">
                 <div>
-                  <div className="text-[7px] tracking-[0.2em] uppercase mb-1" style={{ color: "rgba(203,180,167,0.82)" }}>Total</div>
+                  <div className="text-[7px] tracking-[0.2em] uppercase mb-1" style={{ color: "rgba(200,183,158,0.8)" }}>Total</div>
                   <div className="text-accent text-base font-light">{rupiah(product.price * qty)}</div>
                 </div>
 
@@ -316,9 +316,9 @@ export default function CartModal({
                   onClick={() => { setState("idle"); setErrorMsg(""); handleAdd(); }}
                   style={{
                     padding: "12px 20px",
-                    border: "1px solid rgba(165,106,108,0.55)",
-                    color: "#EFE4DC",
-                    background: "rgba(165,106,108,0.12)",
+                    border: "1px solid rgba(200,183,158,0.45)",
+                    color: "#FCFAF6",
+                    background: "rgba(200,183,158,0.1)",
                     fontSize: 9,
                     letterSpacing: "0.28em",
                     textTransform: "uppercase",
@@ -326,10 +326,10 @@ export default function CartModal({
                     transition: "background 0.25s ease",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(165,106,108,0.24)";
+                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.22)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(165,106,108,0.12)";
+                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.1)";
                   }}
                 >
                   Tambah

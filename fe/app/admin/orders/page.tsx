@@ -19,7 +19,7 @@ function RejectModal({ onConfirm, onCancel }: { onConfirm: (reason: string) => v
   const [reason, setReason] = useState("");
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}>
-      <div className="w-full max-w-md p-6 rounded-lg" style={{ background: "#FDFAF7", border: "1px solid #CBB4A7" }}>
+      <div className="w-full max-w-md p-6 rounded-lg" style={{ background: "#F7F3EC", border: "1px solid #D8CFC4" }}>
         <h3 className="font-serif text-lg text-ink mb-4">Tolak Pembayaran</h3>
         <p className="text-sm text-ink/60 mb-3">Alasan penolakan (akan dilihat oleh customer):</p>
         <textarea
@@ -83,7 +83,7 @@ export default function OrdersPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-serif text-3xl text-ink">Pesanan</h1>
         {needsVerify.length > 0 && (
-          <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(124,42,53,0.1)", color: "#7C2A35", border: "1px solid rgba(124,42,53,0.25)" }}>
+          <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(75,29,36,0.1)", color: "#4B1D24", border: "1px solid rgba(75,29,36,0.25)" }}>
             {needsVerify.length} menunggu verifikasi
           </span>
         )}
@@ -98,15 +98,15 @@ export default function OrdersPage() {
             className="px-4 py-2 text-xs tracking-widest uppercase transition-colors"
             style={{
               paddingBottom: "10px",
-              borderBottom: tab === key ? "2px solid #7C2A35" : "2px solid transparent",
-              color: tab === key ? "#7C2A35" : "#A56A6C",
+              borderBottom: tab === key ? "2px solid #4B1D24" : "2px solid transparent",
+              color: tab === key ? "#4B1D24" : "#A89A8C",
               background: "transparent",
               cursor: "pointer",
             }}
           >
             {label}
             {key === "needs_verify" && needsVerify.length > 0 && (
-              <span className="ml-2 px-1.5 py-0.5 text-[10px] rounded-full" style={{ background: "rgba(124,42,53,0.15)", color: "#7C2A35" }}>
+              <span className="ml-2 px-1.5 py-0.5 text-[10px] rounded-full" style={{ background: "rgba(75,29,36,0.15)", color: "#4B1D24" }}>
                 {needsVerify.length}
               </span>
             )}
@@ -155,7 +155,7 @@ export default function OrdersPage() {
                         <button
                           onClick={() => setRejectingId(order.id)}
                           className="text-xs px-2.5 py-1 rounded transition-colors"
-                          style={{ background: "rgba(124,42,53,0.08)", color: "#7C2A35", border: "1px solid rgba(124,42,53,0.3)" }}
+                          style={{ background: "rgba(75,29,36,0.08)", color: "#4B1D24", border: "1px solid rgba(75,29,36,0.3)" }}
                         >
                           Tolak
                         </button>
@@ -198,7 +198,7 @@ export default function OrdersPage() {
                   <p className="text-xs text-ink/60">Pembayaran: {order.payment_method}</p>
                   <p className="text-xs text-ink/60">Ongkir: Rp{order.shipping_cost.toLocaleString("id-ID")}</p>
                   {order.rejection_reason && (
-                    <p className="text-xs mt-2" style={{ color: "#7C2A35" }}>
+                    <p className="text-xs mt-2" style={{ color: "#4B1D24" }}>
                       Alasan penolakan: {order.rejection_reason}
                     </p>
                   )}

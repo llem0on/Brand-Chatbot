@@ -1,7 +1,7 @@
 {
   "version": 1,
   "skills": {
-    "design-taste-frontend-v1": {
+"design-taste-frontend-v1": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
       "skillPath": "skills/taste-skill-v1/SKILL.md",

@@ -8,21 +8,27 @@ interface ThemeCtx { theme: Theme; toggle: () => void; }
 const Ctx = createContext<ThemeCtx>({ theme: "dark", toggle: () => {} });
 
 const DARK: Record<string, string> = {
-  "--color-bg":           "#4B1D24",
-  "--color-ink":          "#EFE4DC",
-  "--color-accent":       "#CBB4A7",
-  "--color-accent-strong":"#A56A6C",
-  "--color-surface":      "#EFE4DC",
-  "--color-section":      "#3A1520",
+  "--color-bg":           "#4B1D24",   // Garnet
+  "--color-ink":          "#FCFAF6",   // Porcelain
+  "--color-accent":       "#C8B79E",   // Champagne
+  "--color-accent-strong":"#C8B79E",   // Champagne — CTA on dark bg
+  "--color-surface":      "#5C2530",   // wine card surface
+  "--color-section":      "#3A1520",   // deep section
+  "--color-muted":        "#B0A090",   // muted on garnet
+  "--color-border":       "#6B2A34",   // dark garnet border
+  "--dot-color":          "rgba(200,183,158,0.22)", // beige dots on garnet
 };
 
 const LIGHT: Record<string, string> = {
-  "--color-bg":           "#EFE4DC",
-  "--color-ink":          "#4B1D24",
-  "--color-accent":       "#A56A6C",
-  "--color-accent-strong":"#7C2A35",
-  "--color-surface":      "#FDFAF7",
-  "--color-section":      "#E6D9CE",
+  "--color-bg":           "#EFE4DC",   // warm cream
+  "--color-ink":          "#2A2422",   // Espresso
+  "--color-accent":       "#C8B79E",   // Champagne
+  "--color-accent-strong":"#4B1D24",   // Garnet — CTA on light bg
+  "--color-surface":      "#E8DAD0",   // slightly deeper cream
+  "--color-section":      "#DDD0C4",   // warm oat
+  "--color-muted":        "#8C7B6E",   // warm muted text
+  "--color-border":       "#D0C3B5",   // warm border
+  "--dot-color":          "#D4909E",   // rose pink dots on cream
 };
 
 function apply(theme: Theme) {

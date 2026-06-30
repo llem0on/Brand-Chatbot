@@ -1,22 +1,40 @@
 ---
 type: ops
 created: 2026-06-29
-sources: .env, frontend/.env.local, next.config.ts, frontend/lib/auth.ts
-tags: [local-dev, mysql, nextauth, turbopack, google-oauth]
+updated: 2026-06-30
+sources: be/.env, fe/.env.local, fe/next.config.ts, fe/lib/auth.ts
+tags: [local-dev, mysql, nextauth, turbopack, google-oauth, folder-structure]
 ---
 
 # Local Development Setup
+
+## Folder structure (sejak 2026-06-30)
+
+Project dipecah jadi dua subfolder:
+- `be/` — Go backend (main.go, handler/, models/, database/, dll)
+- `fe/` — Next.js frontend (app/, components/, lib/, dll)
+
+File `.env` ada di `be/.env` (dibaca `godotenv.Load()` dari working dir).
+File `fe/.env.local` untuk Next.js frontend.
 
 ## Dua proses yang harus jalan bersamaan
 
 | Proses | Dir | Command | Port |
 |---|---|---|---|
-| Backend (Go/Gin) | repo root | `go run main.go` | 8080 |
-| Frontend (Next.js) | `frontend/` | `npm run dev` | 3000 |
+| Backend (Go/Gin) | `be/` | `go run main.go` | 8080 |
+| Frontend (Next.js) | `fe/` | `npm run dev` | 3000 |
+
+## .next cache
+
+Kalau Next.js berperilaku aneh (Turbopack panic, infinite loop, stale build), hapus dulu:
+```bash
+rm -rf fe/.next
+```
+Wajib dilakukan setelah rename/pindah folder — `.next` berisi path lama yang di-hardcode.
 
 ## Prerequisite: MySQL
 
-Backend butuh MySQL/MariaDB. Konfigurasi di `.env` root:
+Backend butuh MySQL/MariaDB. Konfigurasi di `be/.env`:
 
 ```
 DB_HOST=127.0.0.1
@@ -33,7 +51,7 @@ Start MySQL: `brew services start mysql`
 
 ## Google OAuth (NextAuth v5)
 
-Frontend pakai NextAuth v5 (`next-auth@5.0.0-beta.31`) dengan Google provider. Config di `frontend/.env.local`:
+Frontend pakai NextAuth v5 (`next-auth@5.0.0-beta.31`) dengan Google provider. Config di `fe/.env.local`:
 
 ```
 NEXTAUTH_URL=http://localhost:3000
@@ -48,7 +66,7 @@ Redirect URI yang harus didaftarkan di Google Cloud Console:
 http://localhost:3000/api/auth/callback/google
 ```
 
-Route handler ada di `frontend/app/api/auth/[...nextauth]/route.ts`, dikonfigurasi di `frontend/lib/auth.ts`.
+Route handler ada di `fe/app/api/auth/[...nextauth]/route.ts`, dikonfigurasi di `fe/lib/auth.ts`.
 
 ## Known Issue: Turbopack Lazy Compile → 404 saat pertama kali
 

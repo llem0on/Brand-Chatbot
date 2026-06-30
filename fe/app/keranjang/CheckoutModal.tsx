@@ -155,9 +155,9 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    background: "rgba(239,228,220,0.04)",
-    border: "1px solid rgba(203,180,167,0.14)",
-    color: "#EFE4DC",
+    background: "rgba(252,250,246,0.05)",
+    border: "1px solid rgba(200,183,158,0.14)",
+    color: "#FCFAF6",
     padding: "11px 14px",
     fontSize: 13,
     outline: "none",
@@ -169,7 +169,7 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
     fontSize: 7,
     letterSpacing: "0.3em",
     textTransform: "uppercase",
-    color: "rgba(203,180,167,0.4)",
+    color: "rgba(200,183,158,0.4)",
     marginBottom: 7,
     display: "block",
   };
@@ -177,9 +177,9 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
   const btnStyle = (active: boolean): React.CSSProperties => ({
     flex: 1, padding: "11px 12px", fontSize: 10, letterSpacing: "0.14em",
     textTransform: "uppercase", cursor: "pointer", transition: "all 0.2s ease",
-    border: active ? "1px solid rgba(203,180,167,0.7)" : "1px solid rgba(203,180,167,0.13)",
-    color: active ? "var(--color-accent)" : "rgba(239,228,220,0.38)",
-    background: active ? "rgba(165,106,108,0.12)" : "transparent",
+    border: active ? "1px solid rgba(200,183,158,0.7)" : "1px solid rgba(200,183,158,0.13)",
+    color: active ? "#C8B79E" : "rgba(252,250,246,0.55)",
+    background: active ? "rgba(200,183,158,0.12)" : "transparent",
   });
 
   return (
@@ -187,18 +187,18 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 z-[70] flex items-center justify-center p-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="absolute inset-0" style={{ backdropFilter: "blur(18px) brightness(0.3)", WebkitBackdropFilter: "blur(18px) brightness(0.3)", background: "rgba(6,4,6,0.55)" }} />
+      <div className="absolute inset-0" style={{ backdropFilter: "blur(18px) brightness(0.3)", WebkitBackdropFilter: "blur(18px) brightness(0.3)", background: "rgba(42,10,16,0.55)" }} />
 
       <div
         className="relative z-10 w-full flex flex-col"
-        style={{ maxWidth: 520, maxHeight: "90vh", background: "rgba(13,9,12,0.98)", border: "1px solid rgba(203,180,167,0.13)", boxShadow: "0 0 80px rgba(165,106,108,0.12), 0 32px 80px rgba(0,0,0,0.85)" }}
+        style={{ maxWidth: 520, maxHeight: "90vh", background: "rgba(42,10,16,0.98)", border: "1px solid rgba(200,183,158,0.13)", boxShadow: "0 0 80px rgba(200,183,158,0.12), 0 32px 80px rgba(0,0,0,0.85)" }}
       >
         {/* header */}
-        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(203,180,167,0.08)" }}>
-          <span style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(203,180,167,0.5)" }}>
+        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(200,183,158,0.08)" }}>
+          <span style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(200,183,158,0.5)" }}>
             {phase === "success" ? "Pesanan Diterima" : phase === "phone" ? "Nomor HP" : "Checkout"}
           </span>
-          <button onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(239,228,220,0.3)", padding: 4 }} aria-label="Tutup">
+          <button onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(252,250,246,0.5)", padding: 4 }} aria-label="Tutup">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
               <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
             </svg>
@@ -216,18 +216,18 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
             <div>
               <div className="font-serif text-2xl text-ink mb-2">Bukti Terkirim!</div>
               <div style={{ fontFamily: "var(--font-serif)", fontSize: 15, color: "var(--color-accent)", marginBottom: 8 }}>{result.order_number}</div>
-              <div style={{ fontSize: 11, color: "rgba(239,228,220,0.35)", letterSpacing: "0.06em", lineHeight: 1.7 }}>
+              <div style={{ fontSize: 11, color: "rgba(252,250,246,0.55)", letterSpacing: "0.06em", lineHeight: 1.7 }}>
                 Bukti pembayaran kamu sedang diverifikasi admin.<br />
                 Cek status pesanan di halaman Pesanan Saya.
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, width: "100%" }}>
               <button onClick={() => { onClose(); router.push("/pesanan"); }}
-                style={{ flex: 1, padding: "13px", border: "1px solid rgba(165,106,108,0.55)", color: "#EFE4DC", background: "rgba(165,106,108,0.14)", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", cursor: "pointer" }}>
+                style={{ flex: 1, padding: "13px", border: "1px solid rgba(200,183,158,0.55)", color: "var(--color-ink)", background: "rgba(200,183,158,0.14)", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", cursor: "pointer" }}>
                 Lihat Pesanan
               </button>
               <button onClick={onClose}
-                style={{ flex: 1, padding: "13px", border: "1px solid rgba(203,180,167,0.12)", color: "rgba(239,228,220,0.5)", background: "transparent", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", cursor: "pointer" }}>
+                style={{ flex: 1, padding: "13px", border: "1px solid rgba(200,183,158,0.12)", color: "rgba(252,250,246,0.65)", background: "transparent", fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", cursor: "pointer" }}>
                 Tutup
               </button>
             </div>
@@ -238,8 +238,8 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
         {phase === "phone" && (
           <div className="px-6 py-10 flex flex-col gap-6">
             <div>
-              <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: "#EFE4DC", marginBottom: 8 }}>Nomor WhatsApp kamu</div>
-              <div style={{ fontSize: 11, color: "rgba(239,228,220,0.3)", lineHeight: 1.7 }}>Diperlukan untuk konfirmasi pesanan dan pengiriman.</div>
+              <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: "var(--color-ink)", marginBottom: 8 }}>Nomor WhatsApp kamu</div>
+              <div style={{ fontSize: 11, color: "rgba(252,250,246,0.5)", lineHeight: 1.7 }}>Diperlukan untuk konfirmasi pesanan dan pengiriman.</div>
             </div>
             <div>
               <label style={labelStyle}>No. WhatsApp / HP</label>
@@ -248,15 +248,15 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => { setPhoneInput(e.target.value); setErrorMsg(""); }}
                 onKeyDown={(e) => { if (e.key === "Enter") handlePhoneContinue(); }}
                 placeholder="08xxxxxxxxxx" type="tel" autoFocus style={inputStyle}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(203,180,167,0.45)"; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(203,180,167,0.14)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(200,183,158,0.45)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(200,183,158,0.14)"; }}
               />
               {errorMsg && <div style={{ marginTop: 8, fontSize: 11, color: "rgba(210,100,100,0.85)" }}>{errorMsg}</div>}
             </div>
             <button onClick={handlePhoneContinue}
-              style={{ width: "100%", padding: "15px", border: "1px solid rgba(165,106,108,0.55)", color: "#EFE4DC", background: "rgba(165,106,108,0.14)", fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase", cursor: "pointer" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(165,106,108,0.26)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(165,106,108,0.14)"; }}>
+              style={{ width: "100%", padding: "15px", border: "1px solid rgba(200,183,158,0.55)", color: "var(--color-ink)", background: "rgba(200,183,158,0.14)", fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase", cursor: "pointer" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.26)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.14)"; }}>
               Lanjut
             </button>
           </div>
@@ -267,45 +267,45 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
           <div className="overflow-y-auto flex-1">
 
             {/* order summary */}
-            <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(203,180,167,0.06)" }}>
-              <div style={{ fontSize: 7, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(203,180,167,0.35)", marginBottom: 10 }}>Ringkasan ({items.length} item)</div>
+            <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)" }}>
+              <div style={{ fontSize: 7, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginBottom: 10 }}>Ringkasan ({items.length} item)</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 {items.map((item) => (
                   <div key={item.variantId} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                     <div>
-                      <span style={{ fontSize: 12, color: "rgba(239,228,220,0.7)" }}>{item.name}</span>
-                      {(item.size || item.color) && <span style={{ fontSize: 9, color: "rgba(239,228,220,0.3)", marginLeft: 8 }}>{[item.size, item.color].filter(Boolean).join(" / ")}</span>}
-                      <span style={{ fontSize: 9, color: "rgba(239,228,220,0.3)", marginLeft: 6 }}>×{item.quantity}</span>
+                      <span style={{ fontSize: 12, color: "rgba(252,250,246,0.85)" }}>{item.name}</span>
+                      {(item.size || item.color) && <span style={{ fontSize: 9, color: "rgba(252,250,246,0.5)", marginLeft: 8 }}>{[item.size, item.color].filter(Boolean).join(" / ")}</span>}
+                      <span style={{ fontSize: 9, color: "rgba(252,250,246,0.5)", marginLeft: 6 }}>×{item.quantity}</span>
                     </div>
-                    <span style={{ fontSize: 12, color: "rgba(203,180,167,0.7)", flexShrink: 0, marginLeft: 12 }}>{rupiah(item.price * item.quantity)}</span>
+                    <span style={{ fontSize: 12, color: "rgba(200,183,158,0.7)", flexShrink: 0, marginLeft: 12 }}>{rupiah(item.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
               {settings && (
-                <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(203,180,167,0.07)", display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(239,228,220,0.35)" }}>
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(200,183,158,0.07)", display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(252,250,246,0.55)" }}>
                   <span>Ongkir</span><span>{shipping > 0 ? rupiah(shipping) : "Gratis"}</span>
                 </div>
               )}
-              <div style={{ marginTop: 6, display: "flex", justifyContent: "space-between", fontSize: 14, color: "#EFE4DC" }}>
+              <div style={{ marginTop: 6, display: "flex", justifyContent: "space-between", fontSize: 14, color: "var(--color-ink)" }}>
                 <span>Total</span><span className="font-serif text-accent">{rupiah(total)}</span>
               </div>
             </div>
 
             {/* phone chip */}
-            <div className="px-6 py-4" style={{ borderBottom: "1px solid rgba(203,180,167,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div className="px-6 py-4" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div>
-                <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(203,180,167,0.35)", marginBottom: 4 }}>No. WhatsApp</div>
-                <div style={{ fontSize: 13, color: "#EFE4DC" }}>{phone}</div>
+                <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginBottom: 4 }}>No. WhatsApp</div>
+                <div style={{ fontSize: 13, color: "var(--color-ink)" }}>{phone}</div>
               </div>
               <button onClick={() => { setErrorMsg(""); setPhase("phone"); }}
-                style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(203,180,167,0.5)", background: "transparent", border: "1px solid rgba(203,180,167,0.12)", padding: "5px 12px", cursor: "pointer" }}>
+                style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(200,183,158,0.5)", background: "transparent", border: "1px solid rgba(200,183,158,0.12)", padding: "5px 12px", cursor: "pointer" }}>
                 Ubah
               </button>
             </div>
 
             {/* payment method + instructions */}
             {settings && (settings.enable_bank_transfer || settings.enable_qris) && (
-              <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(203,180,167,0.06)", display: "flex", flexDirection: "column", gap: 14 }}>
+              <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)", display: "flex", flexDirection: "column", gap: 14 }}>
                 <div>
                   <label style={labelStyle}>Metode Pembayaran</label>
                   <div style={{ display: "flex", gap: 8 }}>
@@ -320,12 +320,12 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
 
                 {/* payment instructions */}
                 {payment === "transfer_bank" && settings.enable_bank_transfer && settings.bank_account_number && (
-                  <div style={{ background: "rgba(239,228,220,0.02)", border: "1px solid rgba(203,180,167,0.08)", padding: "12px 14px", display: "flex", flexDirection: "column", gap: 3 }}>
-                    <div style={{ fontSize: 11, color: "rgba(239,228,220,0.4)" }}>Transfer ke:</div>
-                    <div style={{ fontSize: 13, color: "#EFE4DC" }}>{settings.bank_name}</div>
+                  <div style={{ background: "rgba(252,250,246,0.03)", border: "1px solid rgba(200,183,158,0.08)", padding: "12px 14px", display: "flex", flexDirection: "column", gap: 3 }}>
+                    <div style={{ fontSize: 11, color: "rgba(252,250,246,0.6)" }}>Transfer ke:</div>
+                    <div style={{ fontSize: 13, color: "var(--color-ink)" }}>{settings.bank_name}</div>
                     <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: "var(--color-accent)", letterSpacing: "0.06em" }}>{settings.bank_account_number}</div>
-                    <div style={{ fontSize: 11, color: "rgba(239,228,220,0.4)" }}>a.n. {settings.bank_account_holder}</div>
-                    <div style={{ marginTop: 4, fontSize: 12, color: "#EFE4DC" }}>
+                    <div style={{ fontSize: 11, color: "rgba(252,250,246,0.6)" }}>a.n. {settings.bank_account_holder}</div>
+                    <div style={{ marginTop: 4, fontSize: 12, color: "var(--color-ink)" }}>
                       Nominal: <span style={{ color: "var(--color-accent)", fontFamily: "var(--font-serif)" }}>{rupiah(total)}</span>
                     </div>
                   </div>
@@ -333,11 +333,11 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
 
                 {payment === "qris" && settings.enable_qris && settings.qris_image_url && (
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    <div style={{ fontSize: 11, color: "rgba(239,228,220,0.4)" }}>Scan QR berikut:</div>
+                    <div style={{ fontSize: 11, color: "rgba(252,250,246,0.6)" }}>Scan QR berikut:</div>
                     <div style={{ position: "relative", width: 160, height: 160, background: "#fff" }}>
                       <Image src={settings.qris_image_url} alt="QRIS" fill sizes="160px" className="object-contain" />
                     </div>
-                    <div style={{ fontSize: 12, color: "#EFE4DC" }}>
+                    <div style={{ fontSize: 12, color: "var(--color-ink)" }}>
                       Nominal: <span style={{ color: "var(--color-accent)", fontFamily: "var(--font-serif)" }}>{rupiah(total)}</span>
                     </div>
                   </div>
@@ -346,16 +346,16 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
             )}
 
             {/* proof upload — mandatory */}
-            <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(203,180,167,0.06)" }}>
+            <div className="px-6 py-5" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)" }}>
               <label style={labelStyle}>
                 Bukti Pembayaran <span style={{ color: "rgba(210,100,100,0.7)" }}>*</span>
               </label>
               <label style={{ display: "block", cursor: "pointer" }}>
                 <div style={{
-                  border: "1px dashed rgba(203,180,167,0.25)", padding: "14px 16px",
+                  border: "1px dashed rgba(200,183,158,0.25)", padding: "14px 16px",
                   textAlign: "center", fontSize: 11,
-                  color: proofFile ? "rgba(239,228,220,0.7)" : "rgba(239,228,220,0.3)",
-                  background: proofFile ? "rgba(165,106,108,0.06)" : "transparent",
+                  color: proofFile ? "rgba(252,250,246,0.85)" : "rgba(252,250,246,0.5)",
+                  background: proofFile ? "rgba(200,183,158,0.06)" : "transparent",
                   transition: "all 0.2s",
                 }}>
                   {proofFile ? proofFile.name : "Pilih foto struk / screenshot transfer"}
@@ -378,15 +378,15 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
                 disabled={phase === "submitting" || sessionStatus === "loading"}
                 style={{
                   width: "100%", padding: "16px",
-                  border: "1px solid rgba(165,106,108,0.55)", color: "#EFE4DC",
-                  background: phase === "submitting" ? "rgba(165,106,108,0.06)" : "rgba(165,106,108,0.14)",
+                  border: "1px solid rgba(200,183,158,0.55)", color: "var(--color-ink)",
+                  background: phase === "submitting" ? "rgba(200,183,158,0.06)" : "rgba(200,183,158,0.14)",
                   fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase",
                   cursor: (phase === "submitting" || sessionStatus === "loading") ? "default" : "pointer",
                   opacity: (phase === "submitting" || sessionStatus === "loading") ? 0.6 : 1,
                   transition: "background 0.25s ease",
                 }}
-                onMouseEnter={(e) => { if (phase !== "submitting") (e.currentTarget as HTMLButtonElement).style.background = "rgba(165,106,108,0.26)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = phase === "submitting" ? "rgba(165,106,108,0.06)" : "rgba(165,106,108,0.14)"; }}
+                onMouseEnter={(e) => { if (phase !== "submitting") (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.26)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = phase === "submitting" ? "rgba(200,183,158,0.06)" : "rgba(200,183,158,0.14)"; }}
               >
                 {phase === "submitting" ? "Memproses..." : `Pesan & Kirim Bukti · ${rupiah(total)}`}
               </button>

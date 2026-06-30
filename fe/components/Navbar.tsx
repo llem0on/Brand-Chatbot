@@ -24,8 +24,21 @@ function UserMenu() {
     return (
       <Link
         href="/login"
-        className="text-[8px] tracking-[0.28em] uppercase hover:text-accent transition-colors"
-        style={{ color: "rgba(239,228,220,0.85)" }}
+        className="text-[9px] tracking-[0.28em] uppercase transition-all"
+        style={{
+          color: "var(--color-ink)",
+          border: "1px solid color-mix(in srgb, var(--color-accent) 70%, transparent)",
+          padding: "6px 16px",
+          fontWeight: 500,
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.background = "color-mix(in srgb, var(--color-accent) 12%, transparent)";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--color-accent)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 70%, transparent)";
+        }}
       >
         Masuk
       </Link>
@@ -45,10 +58,10 @@ function UserMenu() {
             alt={session.user.name ?? "User"}
             width={28}
             height={28}
-            style={{ borderRadius: "50%", border: "1px solid rgba(203,180,167,0.3)" }}
+            style={{ borderRadius: "50%", border: "1px solid rgba(200,183,158,0.3)" }}
           />
         ) : (
-          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(165,106,108,0.25)", border: "1px solid rgba(203,180,167,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "rgba(200,183,158,0.15)", border: "1px solid rgba(200,183,158,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ fontSize: 11, color: "var(--color-accent)", fontWeight: 500 }}>
               {(session.user?.name ?? "U")[0].toUpperCase()}
             </span>
@@ -69,18 +82,18 @@ function UserMenu() {
               right: 0,
               minWidth: 200,
               background: "rgba(75,29,36,0.97)",
-              border: "1px solid rgba(203,180,167,0.12)",
+              border: "1px solid rgba(200,183,158,0.12)",
               backdropFilter: "blur(12px)",
               zIndex: 50,
               boxShadow: "0 16px 48px rgba(0,0,0,0.6)",
             }}
           >
             {/* user info */}
-            <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(203,180,167,0.07)" }}>
-              <div style={{ fontSize: 12, color: "#EFE4DC", fontWeight: 500, marginBottom: 2 }}>
+            <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(200,183,158,0.08)" }}>
+              <div style={{ fontSize: 12, color: "#FCFAF6", fontWeight: 500, marginBottom: 2 }}>
                 {session.user?.name}
               </div>
-              <div style={{ fontSize: 10, color: "rgba(239,228,220,0.65)" }}>
+              <div style={{ fontSize: 10, color: "rgba(252,250,246,0.55)" }}>
                 {session.user?.email}
               </div>
             </div>
@@ -90,26 +103,26 @@ function UserMenu() {
               <Link
                 href="/pesanan"
                 onClick={() => setOpen(false)}
-                style={{ display: "block", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(239,228,220,0.82)", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(239,228,220,0.82)"; }}
+                style={{ display: "block", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(252,250,246,0.75)", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
                 Pesanan Saya
               </Link>
               <Link
                 href="/keranjang"
                 onClick={() => setOpen(false)}
-                style={{ display: "block", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(239,228,220,0.82)", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-accent)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(239,228,220,0.82)"; }}
+                style={{ display: "block", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(252,250,246,0.75)", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
                 Keranjang
               </Link>
               <button
                 onClick={() => { setOpen(false); signOut({ callbackUrl: "/" }); }}
-                style={{ width: "100%", textAlign: "left", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(239,228,220,0.82)", background: "transparent", border: "none", cursor: "pointer", transition: "color 0.2s ease" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(210,100,100,0.9)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(239,228,220,0.82)"; }}
+                style={{ width: "100%", textAlign: "left", padding: "10px 16px", fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(252,250,246,0.75)", background: "transparent", border: "none", cursor: "pointer", transition: "color 0.2s ease" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(210,100,100,0.85)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
                 Keluar
               </button>
@@ -129,8 +142,7 @@ function ThemeToggle() {
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
       style={{
         background: "transparent",
-        border: "1px solid rgba(var(--color-accent-rgb, 203,180,167), 0.35)",
-        borderColor: "color-mix(in srgb, var(--color-accent) 40%, transparent)",
+        border: "1px solid color-mix(in srgb, var(--color-accent) 40%, transparent)",
         padding: "5px 10px",
         display: "flex",
         alignItems: "center",

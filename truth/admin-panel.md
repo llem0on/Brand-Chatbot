@@ -4,10 +4,10 @@ description: Admin dashboard architecture — pages, auth, API layer, ports
 type: reference
 created: 2026-06-29
 sources:
-  - frontend/app/admin/layout.tsx
-  - frontend/app/admin/*/page.tsx
-  - frontend/components/admin/AdminShell.tsx
-  - frontend/lib/api.ts
+  - fe/app/admin/layout.tsx
+  - fe/app/admin/*/page.tsx
+  - fe/components/admin/AdminShell.tsx
+  - fe/lib/api.ts
   - main.go
 tags: [admin, frontend, auth, api]
 ---
@@ -18,17 +18,17 @@ tags: [admin, frontend, auth, api]
 
 | Service | Port | Command |
 |---|---|---|
-| Go backend | 8080 | `go run main.go` (dari repo root) |
-| Next.js frontend | 3000 | `cd frontend && npm run dev` |
+| Go backend | 8080 | `cd be && go run main.go` |
+| Next.js frontend | 3000 | `cd fe && npm run dev` |
 
 ## Auth
 
 Semua route `/admin/*` di Go backend dilindungi `handler.AuthMiddleware()` — header `Authorization: Bearer <ADMIN_TOKEN>`.
 
 Frontend:
-- `frontend/lib/api.ts` → `apiFetch()` otomatis inject token dari `localStorage["admin_token"]`
+- `fe/lib/api.ts` → `apiFetch()` otomatis inject token dari `localStorage["admin_token"]`
 - Kalau 401, hapus token dan redirect ke `/admin/login`
-- Login page: `frontend/app/admin/login/page.tsx`
+- Login page: `fe/app/admin/login/page.tsx`
 
 Token diset dari env var `ADMIN_TOKEN` di `.env` (repo root).
 
@@ -50,13 +50,13 @@ Token diset dari env var `ADMIN_TOKEN` di `.env` (repo root).
 
 ## Layout
 
-`frontend/app/admin/layout.tsx` — kalau path adalah `/admin/login`, render tanpa shell. Selain itu wrap semua dengan `<AdminShell>`.
+`fe/app/admin/layout.tsx` — kalau path adalah `/admin/login`, render tanpa shell. Selain itu wrap semua dengan `<AdminShell>`.
 
-`AdminShell` (`frontend/components/admin/AdminShell.tsx`) — sidebar + header wrapper.
+`AdminShell` (`fe/components/admin/AdminShell.tsx`) — sidebar + header wrapper.
 
 ## API Layer
 
-`frontend/lib/api.ts` exports:
+`fe/lib/api.ts` exports:
 - `apiFetch<T>(path, options)` — semua request ke Go backend, auto-inject Bearer token
 - `uploadAdminImage(file)` — POST multipart ke `/admin/upload-image` → Cloudinary
 - `getAdminToken()` — baca dari localStorage
@@ -77,7 +77,7 @@ Admin panel pakai warm palette dari user:
 Design pattern: **dark wine sidebar + cream content area** — keduanya dari palette yang sama, jadi cohesive.
 
 ### CSS Architecture
-- `@theme` (tanpa `inline`) di `frontend/app/globals.css` — KRITIS! `@theme inline` bake nilai langsung ke utility class, blokir CSS var cascade. Tanpa `inline`, Tailwind emit `var()` reference sehingga `.admin-theme` override cascade ke semua child komponen.
+- `@theme` (tanpa `inline`) di `fe/app/globals.css` — KRITIS! `@theme inline` bake nilai langsung ke utility class, blokir CSS var cascade. Tanpa `inline`, Tailwind emit `var()` reference sehingga `.admin-theme` override cascade ke semua child komponen.
 - `.admin-theme` di `AdminShell.tsx` + login page — override CSS vars:
   ```css
   .admin-theme {
@@ -91,11 +91,11 @@ Design pattern: **dark wine sidebar + cream content area** — keduanya dari pal
 - Login page: split layout — left panel `#4B1D24` (dark), right panel `#EFE4DC` (cream)
 
 ### Files
-- `frontend/app/globals.css` — `@theme` + `.admin-theme` CSS var overrides + button/input overrides
-- `frontend/components/admin/AdminShell.tsx` — `admin-theme` class + explicit `background: #EFE4DC`
-- `frontend/components/admin/AdminSidebar.tsx` — explicit inline palette styles
-- `frontend/components/admin/Modal.tsx` — explicit inline palette styles
-- `frontend/app/admin/login/page.tsx` — split dark/light layout
+- `fe/app/globals.css` — `@theme` + `.admin-theme` CSS var overrides + button/input overrides
+- `fe/components/admin/AdminShell.tsx` — `admin-theme` class + explicit `background: #EFE4DC`
+- `fe/components/admin/AdminSidebar.tsx` — explicit inline palette styles
+- `fe/components/admin/Modal.tsx` — explicit inline palette styles
+- `fe/app/admin/login/page.tsx` — split dark/light layout
 
 ## Go Backend Admin Routes
 

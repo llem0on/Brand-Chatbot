@@ -257,7 +257,7 @@ export default function ProductsPage() {
             />
             {uploading && (
               <p className="text-xs text-ink/60 mt-2 flex items-center gap-1.5">
-                <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#A56A6C", animation: "pulse 1s ease infinite" }} />
+                <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#A89A8C", animation: "pulse 1s ease infinite" }} />
                 Mengupload ke Cloudinary...
               </p>
             )}

@@ -39,7 +39,7 @@ export default function LoginPage() {
           width: 480,
           height: 480,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(165,106,108,0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(200,183,158,0.08) 0%, transparent 70%)",
           top: "50%",
           left: "50%",
           transform: "translate(-50%,-50%)",
@@ -56,42 +56,42 @@ export default function LoginPage() {
           BRAND
         </a>
 
-        {/* card */}
+        {/* card — uses surface so it adapts to theme */}
         <div
           style={{
             width: "100%",
-            border: "1px solid rgba(203,180,167,0.3)",
+            border: "1px solid var(--color-border)",
             padding: "40px 36px",
-            background: "#EFE4DC",
-            boxShadow: "0 8px 48px rgba(75,29,36,0.45), 0 2px 12px rgba(75,29,36,0.25)",
+            background: "var(--color-surface)",
+            boxShadow: "0 8px 48px rgba(42,36,34,0.35), 0 2px 12px rgba(42,36,34,0.18)",
             transition: "box-shadow 0.4s ease",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLDivElement).style.boxShadow =
-              "0 16px 80px rgba(75,29,36,0.7), 0 4px 24px rgba(75,29,36,0.4), 0 0 160px rgba(165,106,108,0.45), 0 0 280px rgba(203,180,167,0.2)";
+              "0 16px 80px rgba(42,36,34,0.5), 0 4px 24px rgba(42,36,34,0.28), 0 0 120px rgba(200,183,158,0.15)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLDivElement).style.boxShadow =
-              "0 8px 48px rgba(75,29,36,0.45), 0 2px 12px rgba(75,29,36,0.25)";
+              "0 8px 48px rgba(42,36,34,0.35), 0 2px 12px rgba(42,36,34,0.18)";
           }}
         >
           {/* label */}
-          <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(75,29,36,0.45)", marginBottom: 10 }}>
+          <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 10 }}>
             Masuk ke Akun
           </div>
 
           <h1
             className="font-serif"
-            style={{ fontSize: "clamp(22px,3vw,28px)", color: "#4B1D24", lineHeight: 1.1, marginBottom: 8 }}
+            style={{ fontSize: "clamp(22px,3vw,28px)", color: "var(--color-ink)", lineHeight: 1.1, marginBottom: 8 }}
           >
             Selamat Datang
           </h1>
 
-          <p style={{ fontSize: 12, color: "rgba(75,29,36,0.55)", lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ fontSize: 12, color: "var(--color-muted)", lineHeight: 1.7, marginBottom: 32 }}>
             Login untuk menyimpan keranjang, riwayat pesanan, dan akses lebih cepat.
           </p>
 
-          <div style={{ height: 1, background: "rgba(75,29,36,0.1)", marginBottom: 28 }} />
+          <div style={{ height: 1, background: "var(--color-border)", marginBottom: 28 }} />
 
           {/* Google login button */}
           <button
@@ -103,9 +103,9 @@ export default function LoginPage() {
               justifyContent: "center",
               gap: 12,
               padding: "14px 20px",
-              border: "1px solid rgba(75,29,36,0.2)",
-              background: "rgba(75,29,36,0.04)",
-              color: "#4B1D24",
+              border: "1px solid var(--color-border)",
+              background: "transparent",
+              color: "var(--color-ink)",
               fontSize: 11,
               letterSpacing: "0.14em",
               cursor: "pointer",
@@ -113,13 +113,13 @@ export default function LoginPage() {
             }}
             onMouseEnter={(e) => {
               const t = e.currentTarget;
-              t.style.background = "rgba(75,29,36,0.1)";
-              t.style.borderColor = "rgba(75,29,36,0.4)";
+              t.style.background = "rgba(200,183,158,0.12)";
+              t.style.borderColor = "#C8B79E";
             }}
             onMouseLeave={(e) => {
               const t = e.currentTarget;
-              t.style.background = "rgba(75,29,36,0.04)";
-              t.style.borderColor = "rgba(75,29,36,0.2)";
+              t.style.background = "transparent";
+              t.style.borderColor = "var(--color-border)";
             }}
           >
             {/* Google G logo */}
@@ -132,7 +132,7 @@ export default function LoginPage() {
             Lanjutkan dengan Google
           </button>
 
-          <p style={{ fontSize: 10, color: "rgba(75,29,36,0.35)", textAlign: "center", marginTop: 24, lineHeight: 1.65 }}>
+          <p style={{ fontSize: 10, color: "var(--color-muted)", textAlign: "center", marginTop: 24, lineHeight: 1.65, opacity: 0.7 }}>
             Dengan masuk, kamu menyetujui syarat dan ketentuan kami.
           </p>
         </div>
@@ -140,9 +140,9 @@ export default function LoginPage() {
         {/* back link */}
         <a
           href="/"
-          style={{ fontSize: 8, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(203,180,167,0.3)", marginTop: 28, transition: "color 0.2s ease" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(203,180,167,0.7)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(203,180,167,0.3)"; }}
+          style={{ fontSize: 8, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginTop: 28, transition: "color 0.2s ease" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(200,183,158,0.35)"; }}
         >
           ← Kembali ke Beranda
         </a>

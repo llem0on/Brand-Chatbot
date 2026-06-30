@@ -1,5 +1,10 @@
 # Log
 
+## [2026-06-30] store-session | Folder restructure, Railway deployment, React gotchas
+Updated: local-dev-setup.md, admin-panel.md (path frontend/ → be/ dan fe/)
+Created: railway-deployment.md — Railway MySQL env mapping, port config, CORS vars
+Created: react-nextjs-gotchas.md — useEffect [router] infinite loop fix, SessionProvider polling fix, .next cache gotcha
+
 ## [2026-06-29] update | Admin Panel — Warm Palette Theme
 Sources: frontend/app/globals.css, frontend/components/admin/AdminShell.tsx, AdminSidebar.tsx, Modal.tsx
 Updated: truth/admin-panel.md
