@@ -104,50 +104,51 @@ func RemoveCartItem(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "removed"})
 }
 
-type checkoutRequest struct {
-	SessionID     string `json:"session_id" binding:"required"`
-	Name          string `json:"name" binding:"required"`
-	Phone         string `json:"phone" binding:"required"`
-	Address       string `json:"address" binding:"required"`
-	PaymentMethod string `json:"payment_method" binding:"required"`
+type checkoutLineReq struct {
+	ProductVariantID uint `json:"product_variant_id" binding:"required"`
+	Quantity         int  `json:"quantity" binding:"required,min=1"`
 }
 
-// Checkout requires a logged-in, email-verified account and converts the
-// caller's cart into a multi-item Order, validating stock per line first.
-func Checkout(c *gin.Context) {
-	user := CurrentUser(c)
-	if user == nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Silakan login dulu untuk checkout"})
-		return
-	}
-	if !user.EmailVerified {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Verifikasi email kamu dulu sebelum checkout"})
-		return
-	}
+type checkoutRequest struct {
+	Name          string            `json:"name" binding:"required"`
+	Phone         string            `json:"phone" binding:"required"`
+	Address       string            `json:"address" binding:"required"`
+	PaymentMethod string            `json:"payment_method" binding:"required"`
+	Items         []checkoutLineReq `json:"items" binding:"required,min=1"`
+	Email         string            `json:"email"` // optional — set when user is logged in via Google
+}
 
+// Checkout accepts cart items from the request body (stored client-side in localStorage),
+// validates stock, and creates an Order. No login required — identified by phone number.
+func Checkout(c *gin.Context) {
 	var req checkoutRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Nama, no HP, alamat, dan metode pembayaran wajib diisi"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Nama, no HP, alamat, metode pembayaran, dan items wajib diisi"})
 		return
 	}
 
-	cartSvc := service.NewCartService()
-	items, err := cartSvc.GetCart(req.SessionID, &user.ID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	// Resolve each variant, validate stock, and build order lines in one pass
+	type resolvedLine struct {
+		service.OrderLineInput
 	}
-	if len(items) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Cart kamu kosong"})
-		return
-	}
-
-	for _, item := range items {
-		if item.ProductVariant.Stock < item.Quantity {
-			c.JSON(http.StatusConflict, gin.H{"error": fmt.Sprintf("Stok %s (%s/%s) tidak cukup, tersisa %d",
-				item.Product.Name, item.ProductVariant.Size, item.ProductVariant.Color, item.ProductVariant.Stock)})
+	lines := make([]service.OrderLineInput, 0, len(req.Items))
+	for _, line := range req.Items {
+		var variant models.ProductVariant
+		if err := database.DB.Preload("Product").First(&variant, line.ProductVariantID).Error; err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("Varian produk ID %d tidak ditemukan", line.ProductVariantID)})
 			return
 		}
+		if variant.Stock < line.Quantity {
+			c.JSON(http.StatusConflict, gin.H{"error": fmt.Sprintf("Stok %s (%s/%s) tidak cukup, tersisa %d",
+				variant.Product.Name, variant.Size, variant.Color, variant.Stock)})
+			return
+		}
+		lines = append(lines, service.OrderLineInput{
+			ProductID:        variant.ProductID,
+			ProductVariantID: variant.ID,
+			Quantity:         line.Quantity,
+			UnitPrice:        variant.Product.Price,
+		})
 	}
 
 	settingsSvc := service.NewSettingsService()
@@ -157,27 +158,26 @@ func Checkout(c *gin.Context) {
 		return
 	}
 
+	// For Google OAuth users, identify by email so each account gets its own
+	// customer record regardless of the dummy phone value.
+	customerUserID := req.Phone
+	if req.Email != "" {
+		customerUserID = req.Email
+	}
+
 	customerSvc := service.NewCustomerService()
-	customer, err := customerSvc.GetOrCreate(req.SessionID, req.Name, req.Phone, req.Address)
+	customer, err := customerSvc.GetOrCreate(customerUserID, req.Name, req.Phone, req.Address)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	database.DB.Model(&models.Customer{}).Where("id = ?", customer.ID).Update("account_id", user.ID)
-
-	lines := make([]service.OrderLineInput, 0, len(items))
-	for _, item := range items {
-		lines = append(lines, service.OrderLineInput{
-			ProductID:        item.ProductID,
-			ProductVariantID: item.ProductVariantID,
-			Quantity:         item.Quantity,
-			UnitPrice:        item.Product.Price,
-		})
+	if req.Email != "" && customer.Email != req.Email {
+		database.DB.Model(customer).Update("email", req.Email)
 	}
 
 	orderSvc := service.NewOrderService()
 	order, err := orderSvc.CreateOrder(service.CreateOrderInput{
-		UserID:        req.SessionID,
+		UserID:        customerUserID,
 		CustomerID:    customer.ID,
 		Items:         lines,
 		ShippingCost:  settings.ShippingCost,
@@ -189,12 +189,60 @@ func Checkout(c *gin.Context) {
 		return
 	}
 
-	cartSvc.ClearCart(req.SessionID, &user.ID)
-
 	c.JSON(http.StatusCreated, gin.H{
-		"order_number":         order.OrderNumber,
-		"total_amount":         order.TotalAmount,
-		"payment_instructions": buildPaymentInstructions(req.PaymentMethod, *settings),
+		"order_number":           order.OrderNumber,
+		"total_amount":           order.TotalAmount,
+		"shipping_cost":          settings.ShippingCost,
+		"payment_instructions":   buildPaymentInstructions(req.PaymentMethod, *settings),
 		"payment_deadline_hours": settings.PaymentDeadlineHours,
 	})
+}
+
+// GetOrdersByEmail returns all orders for a customer identified by email.
+// Called only from the Next.js /api/my-orders server route (session-gated).
+func GetOrdersByEmail(c *gin.Context) {
+	email := c.Query("email")
+	if email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "email wajib diisi"})
+		return
+	}
+
+	var customer models.Customer
+	if err := database.DB.Where("email = ?", email).First(&customer).Error; err != nil {
+		c.JSON(http.StatusOK, []models.Order{})
+		return
+	}
+
+	var orders []models.Order
+	database.DB.Where("customer_id = ?", customer.ID).
+		Preload("Items.Product").
+		Preload("Items.ProductVariant").
+		Order("created_at DESC").
+		Find(&orders)
+
+	c.JSON(http.StatusOK, orders)
+}
+
+// GetOrdersByPhone returns all orders for a customer identified by phone number.
+func GetOrdersByPhone(c *gin.Context) {
+	phone := c.Query("phone")
+	if phone == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "phone wajib diisi"})
+		return
+	}
+
+	var customer models.Customer
+	if err := database.DB.Where("phone = ?", phone).First(&customer).Error; err != nil {
+		c.JSON(http.StatusOK, []models.Order{})
+		return
+	}
+
+	var orders []models.Order
+	database.DB.Where("customer_id = ?", customer.ID).
+		Preload("Items.Product").
+		Preload("Items.ProductVariant").
+		Order("created_at DESC").
+		Find(&orders)
+
+	c.JSON(http.StatusOK, orders)
 }

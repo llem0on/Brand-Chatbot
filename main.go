@@ -21,6 +21,7 @@ func main() {
 	}
 
 	r := gin.Default()
+	r.Use(handler.CORSMiddleware())
 
 	// WhatsApp webhook
 	r.GET("/webhook", handler.Verify)
@@ -44,6 +45,9 @@ func main() {
 	r.PUT("/api/cart/items/:id", handler.UpdateCartItem)
 	r.DELETE("/api/cart/items/:id", handler.RemoveCartItem)
 	r.POST("/api/cart/checkout", handler.Checkout)
+	r.GET("/api/orders/by-phone", handler.GetOrdersByPhone)
+	r.GET("/api/orders/by-email", handler.GetOrdersByEmail)
+	r.POST("/api/orders/:orderNumber/payment-proof", handler.UploadPaymentProof)
 
 	// Storefront account auth
 	r.POST("/auth/register", handler.Register)
@@ -68,6 +72,9 @@ func main() {
 		admin.POST("/categories", handler.CreateCategory)
 		admin.PUT("/categories/:id", handler.UpdateCategory)
 		admin.DELETE("/categories/:id", handler.DeleteCategory)
+
+		// Image upload (e.g. product photos), proxied to Cloudinary
+		admin.POST("/upload-image", handler.UploadImage)
 
 		// Product management
 		admin.GET("/products", handler.GetProducts)
@@ -96,44 +103,17 @@ func main() {
 		// Purchase flow: orders, customers, settings
 		admin.GET("/orders", handler.GetOrders)
 		admin.PUT("/orders/:id/status", handler.UpdateOrderStatus)
+		admin.POST("/orders/:id/verify-payment", handler.VerifyPayment)
 		admin.GET("/customers", handler.GetCustomers)
 		admin.GET("/settings", handler.GetSettings)
 		admin.PUT("/settings", handler.UpdateSettings)
 	}
-
-	// Static pages - "/" is now the storefront Home page; chat is a floating
-	// bubble available on every page (see web/chat-widget.js)
-	r.StaticFile("/", "./web/home.html")
-	r.StaticFile("/home.html", "./web/home.html")
-	r.StaticFile("/order.html", "./web/order.html")
-	r.StaticFile("/about.html", "./web/about.html")
-	r.StaticFile("/login.html", "./web/login.html")
-	r.StaticFile("/register.html", "./web/register.html")
-	r.StaticFile("/verify-email.html", "./web/verify-email.html")
-	r.StaticFile("/profile.html", "./web/profile.html")
-
-	// Shared static assets
-	r.StaticFile("/site.css", "./web/site.css")
-	r.StaticFile("/style.css", "./web/style.css")
-	r.StaticFile("/session.js", "./web/session.js")
-	r.StaticFile("/nav.js", "./web/nav.js")
-	r.StaticFile("/chat-widget.js", "./web/chat-widget.js")
-	r.StaticFile("/home.js", "./web/home.js")
-	r.StaticFile("/order.js", "./web/order.js")
-	r.StaticFile("/login.js", "./web/login.js")
-	r.StaticFile("/register.js", "./web/register.js")
-	r.StaticFile("/verify-email.js", "./web/verify-email.js")
-	r.StaticFile("/profile.js", "./web/profile.js")
-
-	// Admin UI
-	r.Static("/admin-ui", "./web/admin")
 
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 	log.Printf("Server jalan di :%s\n", port)
-	log.Printf("Buka http://localhost:%s untuk storefront\n", port)
-	log.Printf("Buka http://localhost:%s/admin-ui untuk admin panel\n", port)
+	log.Printf("API: http://localhost:%s | Admin UI: http://localhost:3000/admin\n", port)
 	r.Run(":" + port)
 }

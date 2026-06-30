@@ -14,9 +14,11 @@ type Order struct {
 	TotalAmount   int         `json:"total_amount"`
 	PaymentMethod string      `gorm:"size:30" json:"payment_method"` // transfer_bank, qris
 	Address       string      `gorm:"type:text" json:"address"`
-	Status        string      `gorm:"default:'menunggu_pembayaran';size:30" json:"status"`
-	CreatedAt     time.Time   `json:"created_at"`
-	UpdatedAt     time.Time   `json:"updated_at"`
+	Status           string    `gorm:"default:'menunggu_pembayaran';size:30" json:"status"`
+	PaymentProofURL  string    `gorm:"type:text" json:"payment_proof_url"`
+	RejectionReason  string    `gorm:"type:text" json:"rejection_reason"`
+	CreatedAt        time.Time `json:"created_at"`
+	UpdatedAt        time.Time `json:"updated_at"`
 }
 
 // OrderItem is a single product+variant line within an Order.

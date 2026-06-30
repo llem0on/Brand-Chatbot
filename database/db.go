@@ -64,6 +64,9 @@ func Init() error {
 	if err := BackfillProductAttributes(); err != nil {
 		log.Printf("Warning: Failed to backfill product attributes: %v", err)
 	}
+	if err := BackfillProductImages(); err != nil {
+		log.Printf("Warning: Failed to backfill product images: %v", err)
+	}
 	if err := SeedPromotions(); err != nil {
 		log.Printf("Warning: Failed to seed promotions: %v", err)
 	}

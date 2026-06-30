@@ -85,7 +85,7 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Create(&product).Error; err != nil {
+	if err := database.DB.Omit("Category", "Variants").Create(&product).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -113,7 +113,7 @@ func UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	if err := database.DB.Save(&product).Error; err != nil {
+	if err := database.DB.Omit("Category", "Variants").Save(&product).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

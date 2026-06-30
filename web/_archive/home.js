@@ -36,7 +36,7 @@ function buildProductCard(product) {
 
   const variants = (product.variants || []).filter((v) => v.stock > 0);
   const variantOptions = variants.length
-    ? variants.map((v) => `<option value="${v.id}">${v.size} / ${v.color} (stok ${v.stock})</option>`).join('')
+    ? variants.map((v) => `<option value="${v.id}">${v.size} / ${v.color}</option>`).join('')
     : '<option value="">Stok kosong</option>';
 
   card.innerHTML = `

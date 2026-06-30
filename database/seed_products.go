@@ -1,9 +1,15 @@
 package database
 
 import (
+	"math/rand"
 	"time"
 	"wa-ai-bot/models"
 )
+
+var seedProductImages = []string{
+	"https://res.cloudinary.com/dgufnfnvv/image/upload/v1782788497/products/md9fwiryktvszgprbmsj.png",
+	"https://res.cloudinary.com/dgufnfnvv/image/upload/v1782788510/products/swipjrn90ue33a2z2u0e.png",
+}
 
 var initialCategories = []models.ProductCategory{
 	{Name: "Kaos", Description: "Kaos lengan pendek berbagai motif"},
@@ -141,6 +147,23 @@ func BackfillProductAttributes() error {
 		}
 	}
 
+	return nil
+}
+
+// BackfillProductImages assigns one of the seed product images randomly to any
+// product that currently has no image_url set. Safe to call on every startup.
+func BackfillProductImages() error {
+	var products []models.Product
+	if err := DB.Where("image_url IS NULL OR image_url = ''").Find(&products).Error; err != nil {
+		return err
+	}
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for _, p := range products {
+		url := seedProductImages[rng.Intn(len(seedProductImages))]
+		if err := DB.Model(&models.Product{}).Where("id = ?", p.ID).Update("image_url", url).Error; err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
