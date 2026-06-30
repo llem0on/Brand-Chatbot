@@ -23,22 +23,22 @@ Baca file yang relevan dari `truth/` **secara proaktif** sebelum mengerjakan tas
 
 This is a two-process project:
 
-**Backend** — Go (Gin + GORM) at the repo root. Handles all business logic, the WhatsApp webhook, the web chat API, and the admin REST API. Runs on port 8080 by default.
+**Backend** — Go (Gin + GORM) in `be/`. Handles all business logic, the WhatsApp webhook, the web chat API, and the admin REST API. Runs on port 8080 by default.
 
-**Frontend** — Next.js 16 / React 19 / Tailwind 4 in `frontend/`. Admin dashboard SPA. Runs on port 3000 in dev. Communicates with the backend via `NEXT_PUBLIC_API_BASE_URL` (defaults to `http://localhost:8080`).
+**Frontend** — Next.js 16 / React 19 / Tailwind 4 in `fe/`. Admin dashboard SPA. Runs on port 3000 in dev. Communicates with the backend via `NEXT_PUBLIC_API_BASE_URL` (defaults to `http://localhost:8080`).
 
 The old plain-HTML frontend lives in `web/_archive/` — it is dead code; do not touch it.
 
 ## Development Commands
 
-### Backend
+### Backend (`cd be` first)
 ```bash
 go mod tidy          # install/sync deps
 go run main.go       # start server (auto-migrates DB and seeds on first run)
 go build ./...       # compile check (no test suite exists yet)
 ```
 
-### Frontend (`cd frontend` first)
+### Frontend (`cd fe` first)
 ```bash
 npm install
 npm run dev          # dev server on :3000
@@ -46,7 +46,7 @@ npm run build        # production build
 npm run lint         # ESLint
 ```
 
-## Environment Variables (`.env` in repo root)
+## Environment Variables (`.env` in `be/`)
 
 | Variable | Purpose |
 |---|---|
@@ -57,9 +57,9 @@ npm run lint         # ESLint
 | `PHONE_NUMBER_ID / ACCESS_TOKEN / VERIFY_TOKEN` | WhatsApp Cloud API (optional) |
 | `CLOUDINARY_*` | Image uploads via Cloudinary |
 
-Frontend uses `frontend/.env.local` with `NEXT_PUBLIC_API_BASE_URL`.
+Frontend uses `fe/.env.local` with `NEXT_PUBLIC_API_BASE_URL`.
 
-## Backend Code Structure
+## Backend Code Structure (`be/`)
 
 **`main.go`** — route registration only; no business logic.
 
@@ -95,11 +95,11 @@ A `ConversationState` row (keyed by `user_id`) tracks where a conversation is:
 
 ## Admin API Authentication
 
-All `/admin/*` routes require `Authorization: Bearer <ADMIN_TOKEN>`. The frontend stores this in `localStorage` under key `admin_token` (`frontend/lib/api.ts`) and redirects to `/admin/login` on 401.
+All `/admin/*` routes require `Authorization: Bearer <ADMIN_TOKEN>`. The frontend stores this in `localStorage` under key `admin_token` (`fe/lib/api.ts`) and redirects to `/admin/login` on 401.
 
-## Frontend Structure
+## Frontend Structure (`fe/`)
 
-`frontend/app/` uses the Next.js App Router. All admin pages are under `frontend/app/admin/`. Shared UI primitives are in `frontend/components/admin/` (`AdminShell`, `AdminSidebar`, `DataTable`, `Modal`). API calls go through `frontend/lib/api.ts` (`apiFetch`).
+`fe/app/` uses the Next.js App Router. All admin pages are under `fe/app/admin/`. Shared UI primitives are in `fe/components/admin/` (`AdminShell`, `AdminSidebar`, `DataTable`, `Modal`). API calls go through `fe/lib/api.ts` (`apiFetch`).
 
 > **Note:** This project uses Next.js 16 / React 19, which have breaking changes from prior versions. Read `node_modules/next/dist/docs/` before writing Next.js–specific code.
 
