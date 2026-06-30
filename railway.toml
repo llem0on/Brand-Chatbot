@@ -1,5 +1,0 @@
-[build]
-buildCommand = "cd be && go build -o ../server ."
-
-[deploy]
-startCommand = "./server"
