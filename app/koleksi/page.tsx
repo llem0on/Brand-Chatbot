@@ -74,15 +74,15 @@ function HeroCard({
 
   const shadow = isLight
     ? highlighted
-      ? "0 0 0 1px rgba(75,29,36,0.5), 0 0 42px rgba(124,42,53,0.25), 0 24px 60px rgba(75,29,36,0.2)"
+      ? "0 0 0 1px rgba(42,36,34,0.5), 0 0 42px rgba(42,36,34,0.2), 0 24px 60px rgba(75,29,36,0.2)"
       : hovered
-      ? "0 0 0 1px rgba(75,29,36,0.3), 0 0 28px rgba(124,42,53,0.18), 0 16px 40px rgba(75,29,36,0.15)"
-      : "0 0 0 1px rgba(75,29,36,0.12), 0 8px 24px rgba(75,29,36,0.1)"
+      ? "0 0 0 1px rgba(42,36,34,0.3), 0 0 28px rgba(75,29,36,0.15), 0 16px 40px rgba(42,36,34,0.15)"
+      : "0 0 0 1px rgba(42,36,34,0.12), 0 8px 24px rgba(42,36,34,0.1)"
     : highlighted
-    ? "0 0 0 1px rgba(203,180,167,0.9), 0 0 42px rgba(165,106,108,0.5), 0 0 100px rgba(165,106,108,0.18), 0 24px 60px rgba(0,0,0,0.7)"
+    ? "0 0 0 1px rgba(200,183,158,0.9), 0 0 42px rgba(168,154,140,0.5), 0 0 100px rgba(168,154,140,0.18), 0 24px 60px rgba(0,0,0,0.7)"
     : hovered
-    ? "0 0 0 1px rgba(203,180,167,0.5), 0 0 40px rgba(203,180,167,0.4), 0 0 16px rgba(165,106,108,0.3), 0 16px 40px rgba(0,0,0,0.55)"
-    : "0 0 0 1px rgba(203,180,167,0.25), 0 8px 24px rgba(0,0,0,0.5)";
+    ? "0 0 0 1px rgba(200,183,158,0.5), 0 0 40px rgba(200,183,158,0.4), 0 0 16px rgba(168,154,140,0.3), 0 16px 40px rgba(0,0,0,0.55)"
+    : "0 0 0 1px rgba(200,183,158,0.25), 0 8px 24px rgba(0,0,0,0.5)";
 
   return (
     <div
@@ -125,8 +125,8 @@ function HeroCard({
               }}
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center" style={{ background: "#EFE4DC" }}>
-              <span className="text-[9px] tracking-widest uppercase" style={{ color: "rgba(75,29,36,0.3)" }}>No Image</span>
+            <div className="absolute inset-0 flex items-center justify-center" style={{ background: "var(--color-surface)" }}>
+              <span className="text-[9px] tracking-widest uppercase" style={{ color: "color-mix(in srgb, var(--color-ink) 30%, transparent)" }}>No Image</span>
             </div>
           )}
 
@@ -162,7 +162,7 @@ function HeroCard({
             >
               <div
                 className="text-[7px] tracking-[0.25em] uppercase mb-0.5"
-                style={{ color: isLight ? "rgba(75,29,36,0.6)" : "rgba(203,180,167,0.8)" }}
+                style={{ color: isLight ? "rgba(42,36,34,0.6)" : "rgba(200,183,158,0.8)" }}
               >
                 {product.code}
               </div>
@@ -183,8 +183,8 @@ function HeroCard({
                   key={c}
                   className="text-[7px] tracking-widest uppercase border px-1.5 py-0.5"
                   style={{
-                    color: isLight ? "rgba(75,29,36,0.72)" : "rgba(239,228,220,0.65)",
-                    borderColor: isLight ? "rgba(75,29,36,0.25)" : "rgba(239,228,220,0.2)",
+                    color: isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.65)",
+                    borderColor: isLight ? "rgba(42,36,34,0.25)" : "rgba(252,250,246,0.2)",
                   }}
                 >
                   {c}
@@ -210,24 +210,24 @@ function HeroCard({
               }}
               className="flex-1 text-center text-[8px] tracking-[0.25em] uppercase py-2"
               style={{
-                border: isLight ? "1px solid rgba(124,42,53,0.55)" : "1px solid rgba(165,106,108,0.6)",
-                color: isLight ? "#4B1D24" : "#EFE4DC",
-                background: isLight ? "rgba(124,42,53,0.12)" : "rgba(165,106,108,0.28)",
+                border: isLight ? "1px solid rgba(42,36,34,0.5)" : "1px solid rgba(168,154,140,0.55)",
+                color: isLight ? "#4B1D24" : "#FCFAF6",
+                background: isLight ? "rgba(75,29,36,0.1)" : "rgba(168,154,140,0.25)",
                 backdropFilter: "blur(6px)",
                 transition: "background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
                 t.style.background = isLight ? "rgba(124,42,53,0.85)" : "rgba(124,42,53,0.9)";
-                t.style.borderColor = isLight ? "rgba(124,42,53,1)" : "rgba(165,106,108,1)";
-                t.style.color = "#EFE4DC";
-                t.style.boxShadow = "0 0 18px rgba(165,106,108,0.5)";
+                t.style.borderColor = isLight ? "rgba(42,36,34,1)" : "rgba(168,154,140,1)";
+                t.style.color = "#FCFAF6";
+                t.style.boxShadow = "0 0 18px rgba(168,154,140,0.5)";
               }}
               onMouseLeave={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(124,42,53,0.12)" : "rgba(165,106,108,0.28)";
-                t.style.borderColor = isLight ? "rgba(124,42,53,0.55)" : "rgba(165,106,108,0.6)";
-                t.style.color = isLight ? "#4B1D24" : "#EFE4DC";
+                t.style.background = isLight ? "rgba(75,29,36,0.1)" : "rgba(168,154,140,0.25)";
+                t.style.borderColor = isLight ? "rgba(42,36,34,0.5)" : "rgba(168,154,140,0.55)";
+                t.style.color = isLight ? "#4B1D24" : "#FCFAF6";
                 t.style.boxShadow = "none";
               }}
             >
@@ -240,24 +240,24 @@ function HeroCard({
               }}
               className="flex-1 text-center text-[8px] tracking-[0.25em] uppercase py-2"
               style={{
-                border: isLight ? "1px solid rgba(75,29,36,0.25)" : "1px solid rgba(203,180,167,0.25)",
-                color: isLight ? "rgba(75,29,36,0.72)" : "rgba(239,228,220,0.72)",
+                border: isLight ? "1px solid rgba(42,36,34,0.25)" : "1px solid rgba(200,183,158,0.25)",
+                color: isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.72)",
                 background: isLight ? "rgba(239,228,220,0.6)" : "rgba(75,29,36,0.55)",
                 backdropFilter: "blur(6px)",
                 transition: "background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(75,29,36,0.88)" : "rgba(75,29,36,0.92)";
-                t.style.borderColor = isLight ? "rgba(75,29,36,0.7)" : "rgba(203,180,167,0.7)";
-                t.style.color = "#EFE4DC";
-                t.style.boxShadow = "0 0 14px rgba(75,29,36,0.6)";
+                t.style.background = isLight ? "rgba(42,36,34,0.88)" : "rgba(75,29,36,0.92)";
+                t.style.borderColor = isLight ? "rgba(42,36,34,0.7)" : "rgba(200,183,158,0.7)";
+                t.style.color = "#FCFAF6";
+                t.style.boxShadow = isLight ? "0 0 14px rgba(42,36,34,0.6)" : "0 0 14px rgba(75,29,36,0.6)";
               }}
               onMouseLeave={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
                 t.style.background = isLight ? "rgba(239,228,220,0.6)" : "rgba(75,29,36,0.55)";
-                t.style.borderColor = isLight ? "rgba(75,29,36,0.25)" : "rgba(203,180,167,0.25)";
-                t.style.color = isLight ? "rgba(75,29,36,0.72)" : "rgba(239,228,220,0.72)";
+                t.style.borderColor = isLight ? "rgba(42,36,34,0.25)" : "rgba(200,183,158,0.25)";
+                t.style.color = isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.72)";
                 t.style.boxShadow = "none";
               }}
             >
@@ -316,7 +316,7 @@ function FilterSidebar({
       <div className="flex items-center justify-between">
         <span
           className="text-[9px] tracking-[0.38em] uppercase font-semibold"
-          style={{ color: isLight ? "rgba(75,29,36,0.7)" : "#CBB4A7" }}
+          style={{ color: isLight ? "var(--color-ink)" : "#C8B79E" }}
         >
           Filter
         </span>
@@ -324,7 +324,7 @@ function FilterSidebar({
           <button
             onClick={() => onChange(emptyFilters())}
             className="text-[8px] tracking-wider uppercase transition-colors"
-            style={{ color: isLight ? "rgba(75,29,36,0.55)" : "rgba(203,180,167,0.65)" }}
+            style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(200,183,158,0.7)" }}
           >
             Reset
           </button>
@@ -336,8 +336,8 @@ function FilterSidebar({
           <div
             className="text-[8px] tracking-[0.3em] uppercase mb-3 pb-2 font-semibold"
             style={{
-              color: isLight ? "rgba(75,29,36,0.65)" : "rgba(203,180,167,0.75)",
-              borderBottom: isLight ? "2px solid rgba(75,29,36,0.2)" : "2px solid rgba(203,180,167,0.4)",
+              color: isLight ? "rgba(42,36,34,0.65)" : "rgba(200,183,158,0.85)",
+              borderBottom: isLight ? "2px solid rgba(42,36,34,0.15)" : "2px solid rgba(200,183,158,0.35)",
             }}
           >
             {label}
@@ -351,14 +351,14 @@ function FilterSidebar({
                     className="w-3.5 h-3.5 flex-shrink-0 flex items-center justify-center transition-all duration-200"
                     style={{
                       border: checked
-                        ? isLight ? "1px solid rgba(75,29,36,0.85)" : "1px solid rgba(203,180,167,0.85)"
-                        : isLight ? "1px solid rgba(75,29,36,0.35)" : "1px solid rgba(203,180,167,0.55)",
-                      background: checked ? (isLight ? "rgba(124,42,53,0.18)" : "rgba(165,106,108,0.25)") : "transparent",
-                      boxShadow: checked ? "0 0 6px rgba(165,106,108,0.28)" : "none",
+                        ? isLight ? "1px solid rgba(42,36,34,0.8)" : "1px solid rgba(200,183,158,0.85)"
+                        : isLight ? "1px solid rgba(42,36,34,0.3)" : "1px solid rgba(200,183,158,0.5)",
+                      background: checked ? (isLight ? "rgba(42,36,34,0.12)" : "rgba(200,183,158,0.18)") : "transparent",
+                      boxShadow: checked ? "0 0 6px rgba(168,154,140,0.25)" : "none",
                     }}
                   >
                     {checked && (
-                      <div className="w-1.5 h-1.5" style={{ background: isLight ? "#7C2A35" : "#CBB4A7" }} />
+                      <div className="w-1.5 h-1.5" style={{ background: isLight ? "#4B1D24" : "#C8B79E" }} />
                     )}
                   </div>
                   <input
@@ -371,8 +371,8 @@ function FilterSidebar({
                     className="text-[13px] tracking-wide transition-colors duration-200"
                     style={{
                       color: checked
-                        ? isLight ? "#7C2A35" : "#CBB4A7"
-                        : isLight ? "rgba(75,29,36,0.78)" : "rgba(239,228,220,0.9)",
+                        ? isLight ? "#4B1D24" : "#C8B79E"
+                        : isLight ? "rgba(42,36,34,0.75)" : "rgba(252,250,246,0.82)",
                     }}
                   >
                     {opt}
@@ -444,7 +444,7 @@ export default function KoleksiPage() {
       <main
         className="min-h-screen pt-28 pb-24 px-5 md:px-8"
         style={{
-          backgroundImage: "radial-gradient(rgba(203,180,167,0.07) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(var(--color-border) 0.5px, transparent 0.5px)",
           backgroundSize: "36px 36px",
         }}
       >
@@ -453,7 +453,7 @@ export default function KoleksiPage() {
           <div className="mb-10">
             <div
               className="text-[8px] tracking-[0.45em] uppercase mb-3"
-              style={{ color: isLight ? "rgba(75,29,36,0.72)" : "rgba(203,180,167,0.92)" }}
+              style={{ color: "var(--color-muted)" }}
             >
               {loading ? "Memuat koleksi..." : `${filteredProducts.length} item tersedia`}
             </div>
@@ -463,7 +463,7 @@ export default function KoleksiPage() {
               </h1>
               <div
                 className="mb-1 text-[8px] tracking-[0.3em] uppercase hidden md:block"
-                style={{ color: isLight ? "rgba(75,29,36,0.55)" : "rgba(239,228,220,0.72)" }}
+                style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(252,250,246,0.72)" }}
               >
                 — select your character
               </div>
@@ -472,8 +472,8 @@ export default function KoleksiPage() {
               className="mt-3 h-px max-w-xs"
               style={{
                 background: isLight
-                  ? "linear-gradient(to right, rgba(75,29,36,0.35), transparent)"
-                  : "linear-gradient(to right, rgba(203,180,167,0.55), transparent)",
+                  ? "linear-gradient(to right, rgba(42,36,34,0.3), transparent)"
+                  : "linear-gradient(to right, rgba(200,183,158,0.5), transparent)",
               }}
             />
           </div>
@@ -496,7 +496,7 @@ export default function KoleksiPage() {
                 <div className="flex items-center justify-center h-72">
                   <div
                     className="text-[9px] tracking-[0.38em] uppercase animate-pulse"
-                    style={{ color: isLight ? "rgba(75,29,36,0.55)" : "rgba(203,180,167,0.72)" }}
+                    style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(200,183,158,0.7)" }}
                   >
                     Memuat...
                   </div>
@@ -505,7 +505,7 @@ export default function KoleksiPage() {
                 <div className="flex flex-col items-center justify-center h-72 gap-3">
                   <div
                     className="text-[9px] tracking-[0.3em] uppercase"
-                    style={{ color: isLight ? "rgba(75,29,36,0.55)" : "rgba(239,228,220,0.65)" }}
+                    style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(252,250,246,0.65)" }}
                   >
                     Tidak ada produk ditemukan
                   </div>
@@ -513,7 +513,7 @@ export default function KoleksiPage() {
                     <button
                       onClick={() => setFilters(emptyFilters())}
                       className="text-[9px] tracking-widest uppercase hover:text-accent transition-colors"
-                      style={{ color: isLight ? "rgba(75,29,36,0.38)" : "rgba(203,180,167,0.38)" }}
+                      style={{ color: isLight ? "rgba(42,36,34,0.38)" : "rgba(200,183,158,0.4)" }}
                     >
                       Reset Filter
                     </button>

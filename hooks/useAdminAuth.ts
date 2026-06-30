@@ -16,8 +16,9 @@ export function useAdminAuth() {
       router.replace("/admin/login");
       return;
     }
-    queueMicrotask(() => setReady(true));
-  }, [router]);
+    setReady(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { ready };
 }

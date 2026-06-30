@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
 @theme {
+  /* Dark defaults (Garnet base) */
   --color-bg: #4B1D24;
-  --color-ink: #EFE4DC;
-  --color-accent: #CBB4A7;
-  --color-accent-strong: #A56A6C;
-  --color-surface: #EFE4DC;
+  --color-ink: #FCFAF6;
+  --color-accent: #C8B79E;
+  --color-accent-strong: #C8B79E;
+  --color-surface: #5C2530;
   --color-section: #3A1520;
+  --color-muted: #B0A090;
+  --color-border: #6B2A34;
+  --dot-color: rgba(200,183,158,0.22);
 
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
@@ -17,87 +21,68 @@
    Uses @theme (no inline) so Tailwind emits var() references that cascade.
    ----------------------------------------------------------------------- */
 .admin-theme {
-  --color-bg:            #EFE4DC;   /* cream page background */
-  --color-surface:       #FDFAF7;   /* near-white for cards / tables */
-  --color-ink:           #4B1D24;   /* deep wine text */
-  --color-section:       #E6D9CE;   /* slightly darker cream for dividers */
-  --color-accent:        #A56A6C;   /* mauve — muted accent */
-  --color-accent-strong: #7C2A35;   /* deep red — primary accent */
-  --color-border:        #CBB4A7;   /* warm beige for borders */
+  --color-bg:            #FCFAF6;   /* Porcelain — page background */
+  --color-surface:       #F7F3EC;   /* Ivory — cards / tables */
+  --color-ink:           #2A2422;   /* Espresso — text */
+  --color-section:       #EDE6DA;   /* Oat — dividers / rows */
+  --color-accent:        #C8B79E;   /* Champagne — muted accent */
+  --color-accent-strong: #4B1D24;   /* Garnet — primary CTA */
+  --color-border:        #D8CFC4;   /* Greige — borders */
+  --color-muted:         #A89A8C;   /* Taupe — labels / captions */
 }
 
 /* ── Admin buttons ── */
 .admin-theme .admin-btn {
-  background: #7C2A35;
-  border-color: #7C2A35;
-  color: #EFE4DC;
-}
-.admin-theme .admin-btn:hover {
   background: #4B1D24;
   border-color: #4B1D24;
+  color: #FCFAF6;
+}
+.admin-theme .admin-btn:hover {
+  background: #3A1520;
+  border-color: #3A1520;
 }
 
 .admin-theme .admin-btn-outline {
-  border-color: rgba(124, 42, 53, 0.4);
-  color: #7C2A35;
+  border-color: rgba(75, 29, 36, 0.35);
+  color: #4B1D24;
 }
 .admin-theme .admin-btn-outline:hover {
-  background: rgba(124, 42, 53, 0.08);
+  background: rgba(75, 29, 36, 0.07);
 }
 
-/* Danger button — legible on cream backgrounds */
+/* Danger button */
 .admin-theme .admin-btn-danger {
-  color: #7C2A35;
-  border-color: rgba(124, 42, 53, 0.4);
+  color: #4B1D24;
+  border-color: rgba(75, 29, 36, 0.35);
 }
 .admin-theme .admin-btn-danger:hover {
-  background: rgba(124, 42, 53, 0.1);
+  background: rgba(75, 29, 36, 0.08);
 }
 
 /* ── Admin inputs ── */
 .admin-theme .admin-input {
-  background: #FDFAF7;
-  border-color: #CBB4A7;
-  color: #4B1D24;
+  background: #F7F3EC;
+  border-color: #D8CFC4;
+  color: #2A2422;
 }
 .admin-theme .admin-input:focus {
-  border-color: #7C2A35;
+  border-color: #4B1D24;
 }
 .admin-theme select.admin-input option {
-  background: #FDFAF7;
-  color: #4B1D24;
+  background: #F7F3EC;
+  color: #2A2422;
 }
 
 /* ── Admin label ── */
 .admin-theme .admin-label {
-  color: #A56A6C;
+  color: #A89A8C;
 }
 
-/* ── Light theme overrides ────────────────────────────────────────────────
-   Targets hardcoded rgba(75,29,36,…) / rgba(239,228,220,…) used in
-   inline styles throughout the storefront components.
+/* ── Theme overrides ──────────────────────────────────────────────────────
+   Helpers for components that need theme-aware adjustments.
    ─────────────────────────────────────────────────────────────────────── */
 
-/* Page-level backgrounds */
-[data-theme="light"] .page-bg {
-  background: #EFE4DC;
-}
-
-/* CartModal dark panel → cream */
-[data-theme="light"] .cart-modal-panel {
-  background: #FDFAF7 !important;
-  border-color: rgba(75,29,36,0.15) !important;
-}
-[data-theme="light"] .cart-modal-panel * {
-  color: inherit;
-}
-
-/* Keranjang / Pesanan item rows */
-[data-theme="light"] .item-row {
-  border-color: rgba(75,29,36,0.12) !important;
-}
-
-/* ProductCinema base (the solid flash-prevention bg) */
+/* ProductCinema base (flash-prevention bg) */
 [data-theme="light"] .cinema-base {
   background: #EFE4DC !important;
 }
@@ -124,6 +109,17 @@ body {
   background: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--dot-color) 1.5px, transparent 1.5px);
+  background-size: 40px 40px;
+  filter: blur(0.7px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 @layer components {

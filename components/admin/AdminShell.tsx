@@ -11,7 +11,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div className="admin-theme flex min-h-screen text-ink" style={{ background: "#EFE4DC" }}>
+    <div className="admin-theme flex min-h-screen text-ink" style={{ background: "#FCFAF6" }}>
       <AdminSidebar />
       <main className="flex-1 px-10 py-9 max-w-6xl">{children}</main>
     </div>

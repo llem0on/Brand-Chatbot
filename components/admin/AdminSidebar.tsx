@@ -22,11 +22,11 @@ export default function AdminSidebar() {
   return (
     <aside
       className="w-60 shrink-0 h-screen sticky top-0 flex flex-col"
-      style={{ background: "#4B1D24", borderRight: "1px solid rgba(203,180,167,0.15)" }}
+      style={{ background: "#4B1D24", borderRight: "1px solid rgba(200,183,158,0.12)" }}
     >
       <div className="px-6 py-7">
-        <p className="font-serif text-xl tracking-[0.1em]" style={{ color: "#EFE4DC" }}>BRAND</p>
-        <p className="text-[11px] tracking-[0.15em] uppercase mt-1" style={{ color: "#A56A6C" }}>Admin Panel</p>
+        <p className="font-serif text-xl tracking-[0.1em]" style={{ color: "#FCFAF6" }}>BRAND</p>
+        <p className="text-[11px] tracking-[0.15em] uppercase mt-1" style={{ color: "#A89A8C" }}>Admin Panel</p>
       </div>
 
       <nav className="flex-1 px-3 space-y-0.5">
@@ -39,18 +39,18 @@ export default function AdminSidebar() {
               className="block px-3 py-2.5 rounded-md text-sm tracking-wide transition-colors"
               style={
                 active
-                  ? { background: "#7C2A35", color: "#EFE4DC" }
-                  : { color: "#CBB4A7" }
+                  ? { background: "rgba(200,183,158,0.18)", color: "#FCFAF6", borderLeft: "2px solid #C8B79E" }
+                  : { color: "#C8B79E", borderLeft: "2px solid transparent" }
               }
               onMouseEnter={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLAnchorElement).style.color = "#EFE4DC";
-                  (e.currentTarget as HTMLAnchorElement).style.background = "rgba(203,180,167,0.08)";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#FCFAF6";
+                  (e.currentTarget as HTMLAnchorElement).style.background = "rgba(200,183,158,0.08)";
                 }
               }}
               onMouseLeave={(e) => {
                 if (!active) {
-                  (e.currentTarget as HTMLAnchorElement).style.color = "#CBB4A7";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E";
                   (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
                 }
               }}
@@ -65,13 +65,13 @@ export default function AdminSidebar() {
         <button
           onClick={logoutAdmin}
           className="w-full px-3 py-2.5 rounded-md text-sm transition-colors text-left"
-          style={{ color: "#A56A6C" }}
+          style={{ color: "#A89A8C" }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#EFE4DC";
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(203,180,167,0.08)";
+            (e.currentTarget as HTMLButtonElement).style.color = "#FCFAF6";
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.08)";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.color = "#A56A6C";
+            (e.currentTarget as HTMLButtonElement).style.color = "#A89A8C";
             (e.currentTarget as HTMLButtonElement).style.background = "transparent";
           }}
         >

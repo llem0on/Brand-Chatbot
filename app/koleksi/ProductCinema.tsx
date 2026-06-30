@@ -60,9 +60,9 @@ function fi(delay: number): React.CSSProperties {
 
 // Section label
 function SLabel({ n, name, delay = 0, dark = false }: { n: number; name: string; delay?: number; dark?: boolean }) {
-  const c1 = dark ? "rgba(75,29,36,0.42)" : "rgba(203,180,167,0.45)";
-  const c2 = dark ? "rgba(75,29,36,0.2)" : "rgba(203,180,167,0.25)";
-  const c3 = dark ? "rgba(75,29,36,0.75)" : "rgba(203,180,167,0.75)";
+  const c1 = dark ? "rgba(252,250,246,0.4)" : "rgba(200,183,158,0.45)";
+  const c2 = dark ? "rgba(252,250,246,0.2)" : "rgba(200,183,158,0.25)";
+  const c3 = dark ? "rgba(252,250,246,0.7)" : "rgba(200,183,158,0.75)";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 14, ...fi(delay) }}>
       <span style={{ fontSize: 11, letterSpacing: "0.32em", textTransform: "uppercase", color: c1 }}>
@@ -133,7 +133,7 @@ function SceneIntro({
       >
         <SLabel n={1} name="Intro" delay={0} />
 
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(44px,7vw,108px)", lineHeight: 0.93, color: "#EFE4DC", marginTop: 26, maxWidth: 680, ...fi(0.08) }}>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(44px,7vw,108px)", lineHeight: 0.93, color: "#FCFAF6", marginTop: 26, maxWidth: 680, ...fi(0.08) }}>
           {product.name}
         </div>
 
@@ -143,19 +143,19 @@ function SceneIntro({
 
         <div style={{ display: "flex", gap: 8, marginTop: 22, flexWrap: "wrap", ...fi(0.3) }}>
           {product.category && (
-            <span style={{ fontSize: 8, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(203,180,167,0.58)", border: "1px solid rgba(203,180,167,0.16)", padding: "5px 14px" }}>
+            <span style={{ fontSize: 8, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(200,183,158,0.58)", border: "1px solid rgba(200,183,158,0.16)", padding: "5px 14px" }}>
               {product.category.name}
             </span>
           )}
           {product.gender && (
-            <span style={{ fontSize: 8, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(239,228,220,0.28)", border: "1px solid rgba(239,228,220,0.07)", padding: "5px 14px" }}>
+            <span style={{ fontSize: 8, letterSpacing: "0.26em", textTransform: "uppercase", color: "rgba(252,250,246,0.4)", border: "1px solid rgba(252,250,246,0.12)", padding: "5px 14px" }}>
               {product.gender}
             </span>
           )}
         </div>
 
         {product.code && (
-          <div style={{ fontSize: 8, letterSpacing: "0.32em", textTransform: "uppercase", color: "rgba(203,180,167,0.2)", marginTop: 36, ...fi(0.4) }}>
+          <div style={{ fontSize: 8, letterSpacing: "0.32em", textTransform: "uppercase", color: "rgba(200,183,158,0.2)", marginTop: 36, ...fi(0.4) }}>
             {product.code}
           </div>
         )}
@@ -181,29 +181,29 @@ function SceneMaterial({ product, img }: { product: Product; img: string | null 
             style={{ filter: "brightness(0.22) saturate(0.5)", transform: "scale(1.08)" }}
           />
         )}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to left, rgba(239,228,220,0.1) 0%, rgba(239,228,220,0.88) 52%, #EFE4DC 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(165,106,108,0.09) 0%, transparent 65%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to left, rgba(239,228,220,0.05) 0%, rgba(239,228,220,0.9) 52%, #EFE4DC 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(200,183,158,0.07) 0%, transparent 65%)" }} />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, padding: "0 8vw", maxWidth: 580 }}>
         <SLabel n={2} name="Material" delay={0} dark />
 
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(36px,5vw,72px)", lineHeight: 1.05, color: "#4B1D24", marginTop: 22, ...fi(0.08) }}>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(36px,5vw,72px)", lineHeight: 1.05, color: "#2A2422", marginTop: 22, ...fi(0.08) }}>
           {product.material || "Premium Cotton"}
         </div>
 
-        <div style={{ fontSize: 13, color: "rgba(75,29,36,0.6)", letterSpacing: "0.12em", marginTop: 8, ...fi(0.16) }}>
+        <div style={{ fontSize: 13, color: "rgba(42,36,34,0.6)", letterSpacing: "0.12em", marginTop: 8, ...fi(0.16) }}>
           {MOCK.materialSubtitle}
         </div>
 
-        <div style={{ height: 1, background: "rgba(75,29,36,0.12)", margin: "24px 0", ...fi(0.22) }} />
+        <div style={{ height: 1, background: "rgba(42,36,34,0.12)", margin: "24px 0", ...fi(0.22) }} />
 
-        <div style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(75,29,36,0.7)", maxWidth: 420, ...fi(0.26) }}>
+        <div style={{ fontSize: 15, lineHeight: 1.9, color: "rgba(42,36,34,0.7)", maxWidth: 420, ...fi(0.26) }}>
           {MOCK.materialDesc}
         </div>
 
         <div style={{ marginTop: 28 }}>
-          <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(75,29,36,0.5)", marginBottom: 16, ...fi(0.32) }}>
+          <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(42,36,34,0.5)", marginBottom: 16, ...fi(0.32) }}>
             ◆ Perawatan
           </div>
           {MOCK.materialCare.map((c, i) => (
@@ -213,12 +213,12 @@ function SceneMaterial({ product, img }: { product: Product; img: string | null 
                 display: "flex",
                 gap: 14,
                 padding: "12px 0",
-                borderBottom: i < MOCK.materialCare.length - 1 ? "1px solid rgba(75,29,36,0.1)" : "none",
+                borderBottom: i < MOCK.materialCare.length - 1 ? "1px solid rgba(42,36,34,0.1)" : "none",
                 ...fi(0.36 + i * 0.07),
               }}
             >
-              <span style={{ color: "rgba(124,42,53,0.7)", fontSize: 10, marginTop: 3, flexShrink: 0 }}>—</span>
-              <span style={{ fontSize: 14, color: "rgba(75,29,36,0.72)", lineHeight: 1.7 }}>{c}</span>
+              <span style={{ color: "rgba(168,154,140,0.8)", fontSize: 10, marginTop: 3, flexShrink: 0 }}>—</span>
+              <span style={{ fontSize: 14, color: "rgba(42,36,34,0.72)", lineHeight: 1.7 }}>{c}</span>
             </div>
           ))}
         </div>
@@ -244,23 +244,23 @@ function SceneCraft({ img }: { img: string | null }) {
             style={{ filter: "brightness(0.28) saturate(0.5)", transform: "scale(1.3) translateY(-8%)", transformOrigin: "center 25%" }}
           />
         )}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(239,228,220,0.1) 0%, rgba(239,228,220,0.9) 55%, #EFE4DC 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%, rgba(165,106,108,0.1) 0%, transparent 60%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(239,228,220,0.05) 0%, rgba(239,228,220,0.92) 55%, #EFE4DC 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 50%, rgba(200,183,158,0.07) 0%, transparent 60%)" }} />
       </div>
 
       {/* content — right */}
       <div style={{ position: "relative", zIndex: 1, padding: "0 8vw 0 42%", width: "100%" }}>
         <SLabel n={3} name="Craftsmanship" delay={0} dark />
 
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(30px,4vw,58px)", lineHeight: 1.1, color: "#4B1D24", marginTop: 22, maxWidth: 400, ...fi(0.08) }}>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(30px,4vw,58px)", lineHeight: 1.1, color: "#2A2422", marginTop: 22, maxWidth: 400, ...fi(0.08) }}>
           {MOCK.craftHeadline}
         </div>
 
-        <div style={{ fontSize: 14, color: "rgba(75,29,36,0.6)", letterSpacing: "0.1em", marginTop: 8, ...fi(0.16) }}>
+        <div style={{ fontSize: 14, color: "rgba(42,36,34,0.6)", letterSpacing: "0.1em", marginTop: 8, ...fi(0.16) }}>
           {MOCK.craftSub}
         </div>
 
-        <div style={{ height: 1, background: "rgba(75,29,36,0.12)", margin: "24px 0", ...fi(0.22) }} />
+        <div style={{ height: 1, background: "rgba(42,36,34,0.12)", margin: "24px 0", ...fi(0.22) }} />
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 24px" }}>
           {MOCK.craftPoints.map((pt, i) => (
@@ -268,12 +268,12 @@ function SceneCraft({ img }: { img: string | null }) {
               key={i}
               style={{
                 padding: "14px 0",
-                borderBottom: "1px solid rgba(75,29,36,0.1)",
+                borderBottom: "1px solid rgba(42,36,34,0.1)",
                 ...fi(0.28 + i * 0.09),
               }}
             >
-              <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "rgba(75,29,36,0.5)", marginBottom: 6 }}>{pt.n}</div>
-              <div style={{ fontSize: 14, lineHeight: 1.65, color: "rgba(75,29,36,0.78)" }}>{pt.label}</div>
+              <div style={{ fontSize: 10, letterSpacing: "0.28em", color: "rgba(42,36,34,0.5)", marginBottom: 6 }}>{pt.n}</div>
+              <div style={{ fontSize: 14, lineHeight: 1.65, color: "rgba(42,36,34,0.78)" }}>{pt.label}</div>
             </div>
           ))}
         </div>
@@ -299,8 +299,8 @@ function SceneDesign({ product, img }: { product: Product; img: string | null })
             style={{ filter: "brightness(0.18) saturate(0.5)", transform: "scale(1.06)" }}
           />
         )}
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, rgba(75,29,36,0.15) 0%, rgba(75,29,36,0.92) 100%)" }} />
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 45%, rgba(165,106,108,0.16) 0%, transparent 52%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, rgba(75,29,36,0.1) 0%, rgba(75,29,36,0.95) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 45%, rgba(200,183,158,0.1) 0%, transparent 52%)" }} />
       </div>
 
       {/* bg watermark number */}
@@ -310,7 +310,7 @@ function SceneDesign({ product, img }: { product: Product; img: string | null })
           position: "absolute",
           fontFamily: "var(--font-serif)",
           fontSize: "clamp(180px,28vw,340px)",
-          color: "rgba(239,228,220,0.018)",
+          color: "rgba(252,250,246,0.022)",
           userSelect: "none",
           pointerEvents: "none",
           lineHeight: 1,
@@ -323,18 +323,18 @@ function SceneDesign({ product, img }: { product: Product; img: string | null })
       <div style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "0 10vw", maxWidth: 680, width: "100%" }}>
         <SLabel n={4} name="Design" delay={0} />
 
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(36px,6vw,84px)", lineHeight: 0.98, color: "#EFE4DC", marginTop: 24, letterSpacing: "0.02em", ...fi(0.08) }}>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(36px,6vw,84px)", lineHeight: 0.98, color: "#FCFAF6", marginTop: 24, letterSpacing: "0.02em", ...fi(0.08) }}>
           {MOCK.designHeadline}
         </div>
 
-        <div style={{ width: 44, height: 1, background: "rgba(165,106,108,0.45)", margin: "28px auto", ...fi(0.2) }} />
+        <div style={{ width: 44, height: 1, background: "rgba(200,183,158,0.35)", margin: "28px auto", ...fi(0.2) }} />
 
-        <div style={{ fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.95, color: "rgba(239,228,220,0.65)", ...fi(0.28) }}>
+        <div style={{ fontSize: "clamp(14px,1.6vw,17px)", lineHeight: 1.95, color: "rgba(252,250,246,0.78)", ...fi(0.28) }}>
           {product.description || MOCK.designStory}
         </div>
 
         <div style={{ marginTop: 34, ...fi(0.38) }}>
-          <span style={{ fontSize: 9, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(203,180,167,0.55)", border: "1px solid rgba(203,180,167,0.2)", padding: "7px 22px" }}>
+          <span style={{ fontSize: 9, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(200,183,158,0.7)", border: "1px solid rgba(200,183,158,0.2)", padding: "7px 22px" }}>
             {MOCK.designSeason}
           </span>
         </div>
@@ -375,10 +375,10 @@ function SceneYours({
     letterSpacing: "0.16em",
     textTransform: "uppercase" as const,
     padding: "8px 18px",
-    border: active ? "1px solid rgba(75,29,36,0.7)" : "1px solid rgba(75,29,36,0.18)",
-    color: active ? "#4B1D24" : "rgba(75,29,36,0.55)",
+    border: active ? "1px solid rgba(42,36,34,0.65)" : "1px solid rgba(42,36,34,0.2)",
+    color: active ? "#2A2422" : "rgba(42,36,34,0.5)",
     background: active ? "rgba(75,29,36,0.08)" : "transparent",
-    boxShadow: active ? "0 0 14px rgba(75,29,36,0.1)" : "none",
+    boxShadow: active ? "0 0 14px rgba(42,36,34,0.1)" : "none",
     cursor: "pointer",
     transition: "all 0.2s ease",
   });
@@ -397,25 +397,25 @@ function SceneYours({
             style={{ filter: "brightness(0.07) saturate(0.4)", transform: "scale(1.04)" }}
           />
         )}
-        <div style={{ position: "absolute", inset: 0, background: "rgba(239,228,220,0.96)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "#EFE4DC" }} />
       </div>
 
       <div style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: 520, padding: "0 8vw" }}>
         <SLabel n={5} name="Make It Yours" delay={0} dark />
 
-        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(30px,4vw,54px)", lineHeight: 1.1, color: "#4B1D24", marginTop: 20, ...fi(0.08) }}>
+        <div style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(30px,4vw,54px)", lineHeight: 1.1, color: "#2A2422", marginTop: 20, ...fi(0.08) }}>
           {product.name}
         </div>
 
-        <div style={{ fontSize: "clamp(18px,2vw,26px)", color: "#7C2A35", marginTop: 10, fontWeight: 300, ...fi(0.16) }}>
+        <div style={{ fontSize: "clamp(18px,2vw,26px)", color: "#4B1D24", marginTop: 10, fontWeight: 300, ...fi(0.16) }}>
           {rupiah(product.price * qty)}
         </div>
 
-        <div style={{ height: 1, background: "rgba(75,29,36,0.12)", margin: "20px 0", ...fi(0.22) }} />
+        <div style={{ height: 1, background: "rgba(42,36,34,0.12)", margin: "20px 0", ...fi(0.22) }} />
 
         {sizes.length > 0 && (
           <div style={{ marginBottom: 16, ...fi(0.26) }}>
-            <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(75,29,36,0.5)", marginBottom: 10 }}>◆ Ukuran</div>
+            <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(42,36,34,0.5)", marginBottom: 10 }}>◆ Ukuran</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {sizes.map((sz) => (
                 <button key={sz} onClick={() => setSelSize(sz)} style={chip(sz === selSize)}>{sz}</button>
@@ -426,7 +426,7 @@ function SceneYours({
 
         {colors.length > 0 && (
           <div style={{ marginBottom: 16, ...fi(0.32) }}>
-            <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(75,29,36,0.5)", marginBottom: 10 }}>◆ Warna</div>
+            <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(42,36,34,0.5)", marginBottom: 10 }}>◆ Warna</div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {colors.map((col) => (
                 <button key={col} onClick={() => setSelColor(col)} style={chip(col === selColor)}>{col}</button>
@@ -436,27 +436,27 @@ function SceneYours({
         )}
 
         <div style={{ marginBottom: 16, ...fi(0.38) }}>
-          <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(75,29,36,0.5)", marginBottom: 10 }}>◆ Jumlah</div>
+          <div style={{ fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(42,36,34,0.5)", marginBottom: 10 }}>◆ Jumlah</div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             {(["-", "+"] as const).map((sign) => (
               <button
                 key={sign}
                 onClick={() => setQty(sign === "+" ? qty + 1 : Math.max(1, qty - 1))}
-                style={{ width: 36, height: 36, border: "1px solid rgba(75,29,36,0.22)", color: "rgba(75,29,36,0.65)", background: "transparent", cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{ width: 36, height: 36, border: "1px solid rgba(42,36,34,0.25)", color: "rgba(42,36,34,0.65)", background: "transparent", cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" }}
               >
                 {sign}
               </button>
             ))}
-            <span style={{ fontSize: 24, color: "#4B1D24", minWidth: 32, textAlign: "center" }}>{qty}</span>
+            <span style={{ fontSize: 24, color: "#2A2422", minWidth: 32, textAlign: "center" }}>{qty}</span>
           </div>
         </div>
 
         <div style={{ ...fi(0.44) }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(75,29,36,0.5)" }}>Ketersediaan</span>
+            <span style={{ fontSize: 9, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(42,36,34,0.5)" }}>Ketersediaan</span>
             <span style={{ fontSize: 11, color: "rgba(75,29,36,0.65)" }}>{product.stock > 0 ? `${product.stock} pcs` : "HABIS"}</span>
           </div>
-          <div style={{ height: 2, background: "rgba(75,29,36,0.1)", borderRadius: 2, marginBottom: 16 }}>
+          <div style={{ height: 2, background: "rgba(42,36,34,0.1)", borderRadius: 2, marginBottom: 16 }}>
             <div style={{ height: "100%", width: `${stockPct}%`, background: stockColor, borderRadius: 2, boxShadow: `0 0 8px ${stockColor}` }} />
           </div>
         </div>
@@ -467,17 +467,17 @@ function SceneYours({
             style={{
               width: "100%",
               padding: "18px 24px",
-              border: "1px solid rgba(75,29,36,0.45)",
-              color: "#EFE4DC",
-              background: "#7C2A35",
+              border: "1px solid rgba(75,29,36,0.5)",
+              color: "#FCFAF6",
+              background: "#4B1D24",
               fontSize: 13,
               letterSpacing: "0.28em",
               textTransform: "uppercase",
               cursor: "pointer",
               transition: "background 0.3s ease, box-shadow 0.3s ease",
             }}
-            onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "#4B1D24"; t.style.boxShadow = "0 4px 24px rgba(75,29,36,0.35)"; }}
-            onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "#7C2A35"; t.style.boxShadow = "none"; }}
+            onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "#2A2422"; t.style.boxShadow = "0 4px 24px rgba(75,29,36,0.4)"; }}
+            onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "#4B1D24"; t.style.boxShadow = "none"; }}
           >
             Beli Sekarang
           </button>
@@ -500,13 +500,13 @@ function NavDots({ current, total, onGo }: { current: number; total: number; onG
           style={{
             width: 2,
             height: i === current ? 20 : 6,
-            background: i === current ? "#7C2A35" : "rgba(75,29,36,0.25)",
+            background: i === current ? "#C8B79E" : "rgba(252,250,246,0.25)",
             border: "none",
             cursor: "pointer",
             padding: 0,
             transition: "height 0.35s cubic-bezier(0.16,1,0.3,1), background 0.35s ease",
             borderRadius: 2,
-            boxShadow: i === current ? "0 0 8px rgba(165,106,108,0.55)" : "none",
+            boxShadow: i === current ? "0 0 8px rgba(200,183,158,0.5)" : "none",
           }}
         />
       ))}
@@ -527,11 +527,11 @@ export default function ProductCinema({
 }) {
   // Per-scene transition config (values for the scene you're LEAVING)
   const SCENE_CONFIG = [
-    { anim: "iris-bottom",  ms: 840, ease: "cubic-bezier(0.76,0,0.24,1)", color: "radial-gradient(ellipse at 50% 110%,#7C2A35 0%,#1A0810 70%)" },
-    { anim: "iris-left",    ms: 760, ease: "cubic-bezier(0.4,0,0.2,1)",   color: "radial-gradient(ellipse at -5% 50%,#CBB4A7 0%,#EFE4DC 100%)" },
-    { anim: "iris-corner",  ms: 720, ease: "cubic-bezier(0.55,0,0.2,1)",  color: "radial-gradient(ellipse at 105% 0%,#A56A6C 0%,#CBB4A7 70%,#EFE4DC 100%)" },
+    { anim: "iris-bottom",  ms: 840, ease: "cubic-bezier(0.76,0,0.24,1)", color: "radial-gradient(ellipse at 50% 110%,#4B1D24 0%,#1A0810 70%)" },
+    { anim: "iris-left",    ms: 760, ease: "cubic-bezier(0.4,0,0.2,1)",   color: "radial-gradient(ellipse at -5% 50%,#C8B79E 0%,#EFE4DC 100%)" },
+    { anim: "iris-corner",  ms: 720, ease: "cubic-bezier(0.55,0,0.2,1)",  color: "radial-gradient(ellipse at 105% 0%,#A89A8C 0%,#C8B79E 70%,#EFE4DC 100%)" },
     { anim: "scene-slash",  ms: 980, ease: "cubic-bezier(0.9,0,0.1,1)",   color: "linear-gradient(105deg,#0D0508 0%,#3A1520 50%,#4B1D24 100%)" },
-    { anim: "iris-center",  ms: 740, ease: "cubic-bezier(0.6,0,0.3,1)",   color: "radial-gradient(ellipse at 50% 50%,#A56A6C 0%,#EFE4DC 100%)" },
+    { anim: "iris-center",  ms: 740, ease: "cubic-bezier(0.6,0,0.3,1)",   color: "radial-gradient(ellipse at 50% 50%,#A89A8C 0%,#EFE4DC 100%)" },
   ];
 
   const [idx, setIdx] = useState(0);
@@ -740,7 +740,7 @@ export default function ProductCinema({
           onClick={goPrev}
           disabled={idx === 0 || exiting}
           style={{
-            color: idx === 0 ? "rgba(75,29,36,0.15)" : "rgba(75,29,36,0.5)",
+            color: idx === 0 ? "rgba(75,29,36,0.15)" : "rgba(42,36,34,0.5)",
             transition: "color 0.25s ease",
             background: "transparent",
             border: "none",
@@ -761,7 +761,7 @@ export default function ProductCinema({
           onClick={goNext}
           disabled={idx === TOTAL - 1 || exiting}
           style={{
-            color: idx === TOTAL - 1 ? "rgba(75,29,36,0.15)" : "rgba(75,29,36,0.5)",
+            color: idx === TOTAL - 1 ? "rgba(75,29,36,0.15)" : "rgba(42,36,34,0.5)",
             transition: "color 0.25s ease",
             background: "transparent",
             border: "none",
