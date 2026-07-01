@@ -37,6 +37,7 @@ func main() {
 	// Public storefront catalog (unauthenticated)
 	r.GET("/api/products", handler.GetPublicProducts)
 	r.GET("/api/products/filters", handler.GetProductFilterOptions)
+	r.GET("/api/filter-values", handler.GetFilterValues)
 	r.GET("/api/settings/public", handler.GetPublicCheckoutSettings)
 
 	// Cart (anonymous via session_id, or account-scoped once logged in)
@@ -107,6 +108,12 @@ func main() {
 		admin.GET("/customers", handler.GetCustomers)
 		admin.GET("/settings", handler.GetSettings)
 		admin.PUT("/settings", handler.UpdateSettings)
+
+		// Filter value management (localized filter options)
+		admin.GET("/filter-values", handler.AdminListFilterValues)
+		admin.POST("/filter-values", handler.AdminCreateFilterValue)
+		admin.PUT("/filter-values/:id", handler.AdminUpdateFilterValue)
+		admin.DELETE("/filter-values/:id", handler.AdminDeleteFilterValue)
 	}
 
 	port := os.Getenv("PORT")

@@ -15,6 +15,7 @@ type Product struct {
 	Material    string          `gorm:"size:100;index" json:"material"` // e.g. "Cotton Combed 30s"
 	Gender      string          `gorm:"size:30;index" json:"gender"`    // Pria, Wanita, Unisex
 	Stock       int             `gorm:"default:0" json:"stock"`
+	DiscountPct int             `gorm:"default:0" json:"discount_pct"` // 0 = no discount, 1-99 = percent off
 	ImageURL    string          `gorm:"type:text" json:"image_url"`
 	Active      bool            `gorm:"default:true" json:"active"`
 	Variants    []ProductVariant `gorm:"foreignKey:ProductID" json:"variants,omitempty"`

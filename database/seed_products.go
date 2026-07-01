@@ -11,6 +11,24 @@ var seedProductImages = []string{
 	"https://res.cloudinary.com/dgufnfnvv/image/upload/v1782788510/products/swipjrn90ue33a2z2u0e.png",
 }
 
+var additionalProducts = []struct {
+	seedProduct
+	ImageURL string
+}{
+	{seedProduct{"Kaos", "KS-003", "Kaos Oversized", "Kaos oversized boxy fit, cocok untuk tampilan kasual modern.", 129000, "S,M,L,XL", "Hitam,Krem,Coklat", "Cotton Combed", "Unisex", 40}, seedProductImages[0]},
+	{seedProduct{"Kaos", "KS-004", "Kaos Stripe", "Kaos stripe two-tone dengan potongan relaxed.", 99000, "S,M,L,XL", "Hitam,Navy,Maroon", "Cotton Combed", "Unisex", 35}, seedProductImages[1]},
+	{seedProduct{"Kaos", "KS-005", "Kaos Polo", "Kaos polo pique premium dengan kancing tiga.", 149000, "S,M,L,XL,XXL", "Putih,Hitam,Navy", "Cotton Pique", "Pria", 28}, seedProductImages[0]},
+	{seedProduct{"Hoodie", "HD-003", "Hoodie Crop", "Hoodie crop fit dengan tali serut, pas untuk wanita.", 199000, "XS,S,M,L", "Lavender,Krem,Hitam", "Fleece", "Wanita", 20}, seedProductImages[1]},
+	{seedProduct{"Hoodie", "HD-004", "Hoodie Oversize", "Hoodie oversize double-layer untuk cuaca dingin.", 269000, "M,L,XL,XXL", "Charcoal,Olive,Krem", "Fleece", "Unisex", 18}, seedProductImages[0]},
+	{seedProduct{"Hoodie", "HD-005", "Hoodie Varsity", "Hoodie varsity dengan aksen kontras di lengan.", 239000, "S,M,L,XL", "Navy,Hitam", "Fleece", "Pria", 15}, seedProductImages[1]},
+	{seedProduct{"Jaket", "JK-003", "Jaket Coach", "Jaket coach tipis windproof, mudah dilipat.", 319000, "S,M,L,XL", "Hitam,Olive,Biru", "Polyester", "Unisex", 12}, seedProductImages[0]},
+	{seedProduct{"Jaket", "JK-004", "Jaket Windbreaker", "Jaket windbreaker warna-warna bold untuk tampilan sporty.", 279000, "S,M,L,XL", "Kuning,Merah,Hitam", "Polyester", "Unisex", 10}, seedProductImages[1]},
+	{seedProduct{"Jaket", "JK-005", "Jaket Flannel", "Jaket flannel hangat motif kotak-kotak klasik.", 249000, "S,M,L", "Merah,Hijau", "Flannel", "Wanita", 14}, seedProductImages[0]},
+	{seedProduct{"Celana", "CL-003", "Celana Chino", "Celana chino slim-fit berbahan twill yang rapi.", 189000, "28,30,32,34", "Khaki,Navy,Hitam", "Cotton Twill", "Pria", 20}, seedProductImages[1]},
+	{seedProduct{"Celana", "CL-004", "Celana Kulot", "Celana kulot high-waist loose fit untuk tampilan feminin.", 169000, "XS,S,M,L", "Krem,Hitam,Coklat", "Linen", "Wanita", 22}, seedProductImages[0]},
+	{seedProduct{"Celana", "CL-005", "Celana Pendek", "Celana pendek cargo dengan banyak kantung samping.", 139000, "S,M,L,XL", "Hitam,Khaki,Abu-abu", "Cotton Ripstop", "Pria", 30}, seedProductImages[1]},
+}
+
 var initialCategories = []models.ProductCategory{
 	{Name: "Kaos", Description: "Kaos lengan pendek berbagai motif"},
 	{Name: "Hoodie", Description: "Hoodie dan sweater berbahan tebal"},
@@ -167,6 +185,44 @@ func BackfillProductImages() error {
 	return nil
 }
 
+// SeedMoreProducts inserts additional products idempotently (skips existing codes)
+func SeedMoreProducts() error {
+	var categories []models.ProductCategory
+	if err := DB.Find(&categories).Error; err != nil {
+		return err
+	}
+	categoryIDByName := make(map[string]uint, len(categories))
+	for _, cat := range categories {
+		categoryIDByName[cat.Name] = cat.ID
+	}
+
+	for _, p := range additionalProducts {
+		var count int64
+		DB.Model(&models.Product{}).Where("code = ?", p.Code).Count(&count)
+		if count > 0 {
+			continue
+		}
+		product := models.Product{
+			CategoryID:  categoryIDByName[p.CategoryName],
+			Code:        p.Code,
+			Name:        p.Name,
+			Description: p.Description,
+			Price:       p.Price,
+			Sizes:       p.Sizes,
+			Colors:      p.Colors,
+			Material:    p.Material,
+			Gender:      p.Gender,
+			Stock:       p.Stock,
+			Active:      true,
+			ImageURL:    p.ImageURL,
+		}
+		if err := DB.Create(&product).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // SeedPromotions seeds initial promo/event entries if none exist yet
 func SeedPromotions() error {
 	var count int64
@@ -192,5 +248,31 @@ func SeedPromotions() error {
 		}
 	}
 
+	return nil
+}
+
+// SeedProductDiscounts sets initial discount_pct on select products — only touches rows where discount_pct is still 0
+func SeedProductDiscounts() error {
+	discounts := map[string]int{
+		"KS-001": 20,
+		"KS-002": 15,
+		"KS-003": 25,
+		"HD-001": 30,
+		"HD-002": 20,
+		"JK-001": 15,
+		"JK-002": 25,
+		"CL-001": 10,
+		"CL-002": 20,
+		"HD-003": 30,
+		"JK-003": 15,
+		"CL-004": 20,
+	}
+	for code, pct := range discounts {
+		if err := DB.Model(&models.Product{}).
+			Where("code = ? AND discount_pct = 0", code).
+			Update("discount_pct", pct).Error; err != nil {
+			return err
+		}
+	}
 	return nil
 }

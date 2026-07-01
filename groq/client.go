@@ -156,6 +156,41 @@ func Summarize(history []Message) (string, error) {
 	return chatCompletion(messages, false)
 }
 
+// TranslateFilterValue uses the LLM to translate an English clothing filter value
+// to Indonesian and Mandarin. Returns (id, zh, error).
+func TranslateFilterValue(english, filterType string) (string, string, error) {
+	prompt := fmt.Sprintf(`Translate this clothing/apparel filter value to Indonesian and Mandarin Chinese.
+
+Filter type: %s
+English value: %s
+
+Rules:
+- Well-known international terms (Navy, Olive, Charcoal, Khaki, Fleece, Denim, Polyester, Flannel, Linen, Unisex, etc.) stay the same in Indonesian.
+- Reply ONLY with valid JSON, no markdown, no explanation: {"id": "...", "zh": "..."}`, filterType, english)
+
+	messages := []Message{
+		{Role: "system", Content: "You are a precise translator for fashion filter values. Output only valid JSON."},
+		{Role: "user", Content: prompt},
+	}
+
+	raw, err := chatCompletion(messages, true)
+	if err != nil {
+		return "", "", err
+	}
+
+	var out struct {
+		ID string `json:"id"`
+		ZH string `json:"zh"`
+	}
+	if err := json.Unmarshal([]byte(raw), &out); err != nil {
+		return "", "", fmt.Errorf("parse translation: %w", err)
+	}
+	if out.ID == "" || out.ZH == "" {
+		return "", "", fmt.Errorf("empty translation result")
+	}
+	return out.ID, out.ZH, nil
+}
+
 // ExtractOrderUpdate asks the LLM to merge a customer's latest message into
 // the current order draft, returning the updated draft as a raw JSON string.
 // Callers must validate the result (product/size/color) against the real
