@@ -26,9 +26,9 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="admin-theme min-h-screen flex" style={{ background: "#4B1D24" }}>
+    <div className="admin-theme min-h-screen flex" style={{ background: "#321318" }}>
       {/* Left decorative panel — Garnet */}
-      <div className="hidden md:flex w-1/2 items-center justify-center" style={{ background: "#4B1D24" }}>
+      <div className="hidden md:flex w-1/2 items-center justify-center" style={{ background: "#321318" }}>
         <div className="text-center">
           <p className="font-serif text-4xl tracking-[0.15em]" style={{ color: "#FCFAF6" }}>BRAND</p>
           <p className="text-xs tracking-[0.2em] uppercase mt-2" style={{ color: "#A89A8C" }}>Admin Panel</p>
@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
                 autoFocus
               />
             </div>
-            {error && <p className="text-sm" style={{ color: "#4B1D24" }}>{error}</p>}
+            {error && <p className="text-sm" style={{ color: "#321318" }}>{error}</p>}
             <button type="submit" disabled={loading || !token} className="admin-btn w-full disabled:opacity-50">
               {loading ? "Memeriksa..." : "Masuk"}
             </button>

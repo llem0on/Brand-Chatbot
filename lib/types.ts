@@ -1,3 +1,9 @@
+export type FilterValue = {
+  id: number;
+  type: string;   // color | gender | category | material | size
+  value: string;  // "English,Indonesian,Mandarin"
+};
+
 export type FAQ = {
   id: number;
   question: string;
@@ -37,6 +43,7 @@ export type Product = {
   stock: number;
   image_url: string;
   active: boolean;
+  discount_pct?: number;
   variants?: ProductVariant[];
 };
 

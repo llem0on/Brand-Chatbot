@@ -3,13 +3,41 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import MarqueeStrip from "@/components/MarqueeStrip";
+import DiscountSidebar from "./DiscountSidebar";
 import { useTilt } from "@/hooks/useTilt";
-import type { Product } from "@/lib/types";
+import type { Product, FilterValue } from "@/lib/types";
+import type { Locale } from "@/lib/locale";
 import ProductCinema from "./ProductCinema";
 import CartModal from "./CartModal";
 import { useTheme } from "@/lib/theme";
+import { useLocale } from "@/lib/locale";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
+
+// ── filter value helpers ───────────────────────────────────────────────────
+
+const FV_TYPE_FOR_FILTER: Record<string, string> = {
+  genders: "gender",
+  colors: "color",
+  categories: "category",
+  materials: "material",
+  sizes: "size",
+};
+
+function fvLabel(filterValues: FilterValue[], filterKey: string, dbValue: string, locale: Locale): string {
+  const type = FV_TYPE_FOR_FILTER[filterKey];
+  if (!type) return dbValue;
+  const match = filterValues.find((fv) => {
+    if (fv.type !== type) return false;
+    const parts = fv.value.split(",");
+    return parts[1]?.trim() === dbValue; // match against Indonesian (index 1)
+  });
+  if (!match) return dbValue;
+  const parts = match.value.split(",");
+  const idx = locale === "en" ? 0 : locale === "id" ? 1 : 2;
+  return parts[idx]?.trim() ?? dbValue;
+}
 
 // ── helpers ────────────────────────────────────────────────────────────────
 
@@ -68,6 +96,7 @@ function HeroCard({
   const { ref, onMouseMove, onMouseLeave } = useTilt<HTMLDivElement>();
   const [hovered, setHovered] = useState(false);
   const { theme } = useTheme();
+  const { t } = useLocale();
   const isLight = theme === "light";
   const image = parseImages(product.image_url)[0] ?? null;
   const colors = splitCSV(product.colors);
@@ -98,7 +127,7 @@ function HeroCard({
         {/* selected badge */}
         {highlighted && (
           <div className="absolute top-0 left-0 right-0 z-20 flex justify-center">
-            <span className="bg-accent-strong text-ink text-[8px] tracking-[0.28em] uppercase px-3 py-0.5">
+            <span className="bg-accent-strong text-[8px] tracking-[0.28em] uppercase px-3 py-0.5" style={{ color: isLight ? "#2A2422" : "#FCFAF6" }}>
               SELECTED
             </span>
           </div>
@@ -119,9 +148,7 @@ function HeroCard({
                 filter:
                   highlighted
                     ? "brightness(1.1) saturate(1.15)"
-                    : hovered
-                    ? "brightness(0.98)"
-                    : "brightness(0.82)",
+                    : "brightness(0.98)",
               }}
             />
           ) : (
@@ -145,123 +172,118 @@ function HeroCard({
             style={{
               background: isLight
                 ? "linear-gradient(to top,rgba(239,228,220,0.92) 0%,rgba(239,228,220,0.2) 22%,transparent 48%)"
-                : "linear-gradient(to top,rgba(75,29,36,0.92) 0%,rgba(75,29,36,0.18) 22%,transparent 48%)",
+                : "linear-gradient(to top,rgba(75,29,36,0.75) 0%,rgba(75,29,36,0.14) 22%,transparent 44%)",
               opacity: hovered || highlighted ? 1 : 0.75,
               transition: "opacity 0.35s ease",
             }}
           />
 
-          {/* info strip */}
-          <div className="absolute bottom-0 left-0 right-0 p-3">
+          {/* info overlay — pure translateY, no layout-based transitions */}
+          <div className="absolute inset-0 pointer-events-none">
+
+            {/* code */}
             <div
+              className="absolute left-3 right-3"
               style={{
+                bottom: 70,
                 opacity: hovered || highlighted ? 1 : 0,
-                transform: hovered || highlighted ? "translateY(0)" : "translateY(4px)",
-                transition: "opacity 0.3s ease, transform 0.3s ease",
+                transform: hovered || highlighted ? "translateY(0)" : "translateY(10px)",
+                transition: "opacity 0.3s ease, transform 0.44s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
-              <div
-                className="text-[7px] tracking-[0.25em] uppercase mb-0.5"
-                style={{ color: isLight ? "rgba(42,36,34,0.6)" : "rgba(200,183,158,0.8)" }}
-              >
+              <div className="text-[7px] tracking-[0.25em] uppercase" style={{ color: "rgba(20,16,14,0.75)" }}>
                 {product.code}
               </div>
             </div>
-            <div className="font-serif text-[15px] leading-snug text-ink">{product.name}</div>
-            <div className="text-accent text-xs mt-1 font-medium tracking-wide">
-              {rupiah(product.price)}
-            </div>
+
+            {/* name + price — slide up on hover */}
             <div
-              className="flex flex-wrap gap-1 mt-1.5"
+              className="absolute left-3 right-3"
               style={{
-                opacity: hovered || highlighted ? 1 : 0,
-                transition: "opacity 0.3s ease 0.05s",
+                bottom: 30,
+                transform: hovered || highlighted ? "translateY(0)" : "translateY(20px)",
+                transition: "transform 0.44s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
-              {colors.slice(0, 3).map((c) => (
-                <span
-                  key={c}
-                  className="text-[7px] tracking-widest uppercase border px-1.5 py-0.5"
-                  style={{
-                    color: isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.65)",
-                    borderColor: isLight ? "rgba(42,36,34,0.25)" : "rgba(252,250,246,0.2)",
-                  }}
-                >
-                  {c}
-                </span>
-              ))}
+              <div
+                className="font-serif text-[15px] leading-snug"
+                style={{
+                  color: isLight ? "#2A2422" : "#FCFAF6",
+                  textShadow: isLight ? "0 1px 6px rgba(239,228,220,0.9)" : "0 1px 10px rgba(0,0,0,0.7)",
+                }}
+              >{product.name}</div>
+              <div
+                className="text-xs mt-0.5 tracking-wide"
+                style={{ color: isLight ? "#706560" : "#FCFAF6", fontWeight: 600 }}
+              >{rupiah(product.price)}</div>
             </div>
+
+            {/* chips — slide up from below */}
+            <div
+              className="absolute left-3 right-3"
+              style={{
+                bottom: 10,
+                opacity: hovered || highlighted ? 1 : 0,
+                transform: hovered || highlighted ? "translateY(0)" : "translateY(22px)",
+                transition: "opacity 0.28s 0.06s ease, transform 0.44s 0.03s cubic-bezier(0.16,1,0.3,1)",
+              }}
+            >
+              <div className="flex flex-wrap gap-1">
+                {colors.slice(0, 3).map((c) => (
+                  <span
+                    key={c}
+                    className="text-[7px] tracking-widest uppercase border px-1.5 py-0.5"
+                    style={{
+                      color: isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.65)",
+                      borderColor: isLight ? "rgba(42,36,34,0.25)" : "rgba(252,250,246,0.2)",
+                    }}
+                  >
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
+
           </div>
 
-          {/* BUY button (hover only) */}
+          {/* Beli — fixed bottom-right, independent from slide */}
           <div
-            className="absolute left-0 right-0 flex gap-2 px-3"
+            className="absolute bottom-3 right-3 pointer-events-none"
             style={{
-              bottom: hovered ? 108 : 80,
               opacity: hovered ? 1 : 0,
-              transition: "opacity 0.25s ease, bottom 0.3s ease",
+              transition: "opacity 0.25s ease",
               pointerEvents: hovered ? "auto" : "none",
             }}
           >
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onBuy(e);
-              }}
-              className="flex-1 text-center text-[8px] tracking-[0.25em] uppercase py-2"
+              onClick={(e) => { e.stopPropagation(); onBuy(e); }}
+              className="text-[8px] uppercase"
               style={{
-                border: isLight ? "1px solid rgba(42,36,34,0.5)" : "1px solid rgba(168,154,140,0.55)",
-                color: isLight ? "#4B1D24" : "#FCFAF6",
-                background: isLight ? "rgba(75,29,36,0.1)" : "rgba(168,154,140,0.25)",
-                backdropFilter: "blur(6px)",
-                transition: "background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
+                padding: "8px 14px",
+                letterSpacing: "0.28em",
+                background: "transparent",
+                backdropFilter: "blur(14px)",
+                WebkitBackdropFilter: "blur(14px)",
+                border: `1px solid ${isLight ? "rgba(90,80,75,0.35)" : "rgba(252,250,246,0.45)"}`,
+                color: isLight ? "rgba(90,80,75,0.75)" : "rgba(252,250,246,0.88)",
+                transition: "background 0.35s ease, color 0.25s ease, box-shadow 0.3s ease, border-color 0.28s ease",
               }}
               onMouseEnter={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(124,42,53,0.85)" : "rgba(124,42,53,0.9)";
-                t.style.borderColor = isLight ? "rgba(42,36,34,1)" : "rgba(168,154,140,1)";
-                t.style.color = "#FCFAF6";
-                t.style.boxShadow = "0 0 18px rgba(168,154,140,0.5)";
+                t.style.background = isLight ? "linear-gradient(135deg,#706560 0%,#504540 100%)" : "linear-gradient(135deg,#FCFAF6 0%,#EFE4DC 100%)";
+                t.style.color = isLight ? "#FCFAF6" : "#2A2422";
+                t.style.borderColor = "transparent";
+                t.style.boxShadow = isLight ? "0 2px 18px rgba(80,69,64,0.25)" : "0 2px 18px rgba(252,250,246,0.16)";
               }}
               onMouseLeave={(e) => {
                 const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(75,29,36,0.1)" : "rgba(168,154,140,0.25)";
-                t.style.borderColor = isLight ? "rgba(42,36,34,0.5)" : "rgba(168,154,140,0.55)";
-                t.style.color = isLight ? "#4B1D24" : "#FCFAF6";
+                t.style.background = "transparent";
+                t.style.color = isLight ? "rgba(90,80,75,0.75)" : "rgba(252,250,246,0.88)";
+                t.style.borderColor = isLight ? "rgba(90,80,75,0.35)" : "rgba(252,250,246,0.45)";
                 t.style.boxShadow = "none";
               }}
             >
-              Beli
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDetail();
-              }}
-              className="flex-1 text-center text-[8px] tracking-[0.25em] uppercase py-2"
-              style={{
-                border: isLight ? "1px solid rgba(42,36,34,0.25)" : "1px solid rgba(200,183,158,0.25)",
-                color: isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.72)",
-                background: isLight ? "rgba(239,228,220,0.6)" : "rgba(75,29,36,0.55)",
-                backdropFilter: "blur(6px)",
-                transition: "background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(42,36,34,0.88)" : "rgba(75,29,36,0.92)";
-                t.style.borderColor = isLight ? "rgba(42,36,34,0.7)" : "rgba(200,183,158,0.7)";
-                t.style.color = "#FCFAF6";
-                t.style.boxShadow = isLight ? "0 0 14px rgba(42,36,34,0.6)" : "0 0 14px rgba(75,29,36,0.6)";
-              }}
-              onMouseLeave={(e) => {
-                const t = e.currentTarget as HTMLButtonElement;
-                t.style.background = isLight ? "rgba(239,228,220,0.6)" : "rgba(75,29,36,0.55)";
-                t.style.borderColor = isLight ? "rgba(42,36,34,0.25)" : "rgba(200,183,158,0.25)";
-                t.style.color = isLight ? "rgba(42,36,34,0.72)" : "rgba(252,250,246,0.72)";
-                t.style.boxShadow = "none";
-              }}
-            >
-              Detail
+              {t.buy}
             </button>
           </div>
         </div>
@@ -277,10 +299,12 @@ function FilterSidebar({
   products,
   filters,
   onChange,
+  filterValues,
 }: {
   products: Product[];
   filters: Filters;
   onChange: (f: Filters) => void;
+  filterValues: FilterValue[];
 }) {
   const allGenders = [...new Set(products.map((p) => p.gender).filter(Boolean))];
   const allMaterials = [...new Set(products.map((p) => p.material).filter(Boolean))];
@@ -291,23 +315,22 @@ function FilterSidebar({
   ] as string[];
 
   const { theme } = useTheme();
+  const { t, locale } = useLocale();
   const isLight = theme === "light";
   const hasActive = Object.values(filters).some((s) => s.size > 0);
 
   function toggle(field: keyof Filters, value: string) {
-    const next = new Set(filters[field]);
-    if (next.has(value)) next.delete(value);
-    else next.add(value);
-    onChange({ ...filters, [field]: next });
+    const already = filters[field].has(value);
+    onChange({ ...filters, [field]: already ? new Set() : new Set([value]) });
   }
 
   const sections = (
     [
-      { key: "categories" as const, label: "Kategori", options: allCategories },
-      { key: "genders" as const, label: "Gender", options: allGenders },
-      { key: "materials" as const, label: "Material", options: allMaterials },
-      { key: "sizes" as const, label: "Ukuran", options: allSizes },
-      { key: "colors" as const, label: "Warna", options: allColors },
+      { key: "categories" as const, label: t.filterCategory, options: allCategories },
+      { key: "genders" as const, label: t.filterGender, options: allGenders },
+      { key: "materials" as const, label: t.filterMaterial, options: allMaterials },
+      { key: "sizes" as const, label: t.filterSize, options: allSizes },
+      { key: "colors" as const, label: t.filterColor, options: allColors },
     ] as { key: keyof Filters; label: string; options: string[] }[]
   ).filter((s) => s.options.length > 0);
 
@@ -318,7 +341,7 @@ function FilterSidebar({
           className="text-[9px] tracking-[0.38em] uppercase font-semibold"
           style={{ color: isLight ? "var(--color-ink)" : "#C8B79E" }}
         >
-          Filter
+          {t.filter}
         </span>
         {hasActive && (
           <button
@@ -326,7 +349,7 @@ function FilterSidebar({
             className="text-[8px] tracking-wider uppercase transition-colors"
             style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(200,183,158,0.7)" }}
           >
-            Reset
+            {t.reset}
           </button>
         )}
       </div>
@@ -348,34 +371,35 @@ function FilterSidebar({
               return (
                 <label key={opt} className="flex items-center gap-2.5 cursor-pointer">
                   <div
-                    className="w-3.5 h-3.5 flex-shrink-0 flex items-center justify-center transition-all duration-200"
+                    className="w-3.5 h-3.5 flex-shrink-0 flex items-center justify-center rounded-full transition-all duration-200"
                     style={{
                       border: checked
                         ? isLight ? "1px solid rgba(42,36,34,0.8)" : "1px solid rgba(200,183,158,0.85)"
                         : isLight ? "1px solid rgba(42,36,34,0.3)" : "1px solid rgba(200,183,158,0.5)",
-                      background: checked ? (isLight ? "rgba(42,36,34,0.12)" : "rgba(200,183,158,0.18)") : "transparent",
+                      background: checked ? (isLight ? "rgba(42,36,34,0.08)" : "rgba(200,183,158,0.12)") : "transparent",
                       boxShadow: checked ? "0 0 6px rgba(168,154,140,0.25)" : "none",
                     }}
                   >
                     {checked && (
-                      <div className="w-1.5 h-1.5" style={{ background: isLight ? "#4B1D24" : "#C8B79E" }} />
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: isLight ? "#321318" : "#C8B79E" }} />
                     )}
                   </div>
                   <input
-                    type="checkbox"
+                    type="radio"
                     className="hidden"
                     checked={checked}
-                    onChange={() => toggle(key, opt)}
+                    onChange={() => {}}
+                    onClick={() => toggle(key, opt)}
                   />
                   <span
                     className="text-[13px] tracking-wide transition-colors duration-200"
                     style={{
                       color: checked
-                        ? isLight ? "#4B1D24" : "#C8B79E"
+                        ? isLight ? "#321318" : "#C8B79E"
                         : isLight ? "rgba(42,36,34,0.75)" : "rgba(252,250,246,0.82)",
                     }}
                   >
-                    {opt}
+                    {fvLabel(filterValues, key, opt, locale)}
                   </span>
                 </label>
               );
@@ -391,8 +415,10 @@ function FilterSidebar({
 
 export default function KoleksiPage() {
   const { theme } = useTheme();
+  const { t } = useLocale();
   const isLight = theme === "light";
   const [products, setProducts] = useState<Product[]>([]);
+  const [filterValues, setFilterValues] = useState<FilterValue[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [cinemaProduct, setCinemaProduct] = useState<Product | null>(null);
@@ -402,12 +428,15 @@ export default function KoleksiPage() {
   const [filters, setFilters] = useState<Filters>(emptyFilters());
 
   useEffect(() => {
-    fetch(`${API}/api/products`)
-      .then((r) => r.json())
-      .then((data: unknown) => {
-        setProducts(Array.isArray(data) ? (data as Product[]) : []);
+    Promise.all([
+      fetch(`${API}/api/products`).then((r) => r.json()),
+      fetch(`${API}/api/filter-values`).then((r) => r.json()),
+    ])
+      .then(([products, fvs]) => {
+        setProducts(Array.isArray(products) ? (products as Product[]) : []);
+        setFilterValues(Array.isArray(fvs) ? (fvs as FilterValue[]) : []);
       })
-      .catch(() => setProducts([]))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -439,33 +468,40 @@ export default function KoleksiPage() {
 
   return (
     <>
+      <div style={{ height: "100svh", overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <Navbar />
 
       <main
-        className="min-h-screen pt-28 pb-24 px-5 md:px-8"
+        className="pt-28 pb-8"
         style={{
+          flex: 1,
+          minHeight: 0,
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "row",
           backgroundImage: "radial-gradient(var(--color-border) 0.5px, transparent 0.5px)",
           backgroundSize: "36px 36px",
         }}
       >
-        <div className="mx-auto max-w-7xl">
+        {/* left: header + filter + grid */}
+        <div className="flex-1 min-w-0 px-5 md:px-8" style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
           {/* header */}
           <div className="mb-10">
             <div
               className="text-[8px] tracking-[0.45em] uppercase mb-3"
               style={{ color: "var(--color-muted)" }}
             >
-              {loading ? "Memuat koleksi..." : `${filteredProducts.length} item tersedia`}
+              {loading ? t.loading : t.itemsAvailable(filteredProducts.length)}
             </div>
             <div className="flex items-end gap-4">
               <h1 className="font-serif text-4xl md:text-5xl text-ink leading-none">
-                Pilih Koleksi
+                {t.selectCollection}
               </h1>
               <div
                 className="mb-1 text-[8px] tracking-[0.3em] uppercase hidden md:block"
                 style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(252,250,246,0.72)" }}
               >
-                — select your character
+                {t.koleksiSub}
               </div>
             </div>
             <div
@@ -478,27 +514,34 @@ export default function KoleksiPage() {
             />
           </div>
 
-          <div className="flex gap-8 md:gap-12 items-start">
+          <div
+            className="flex gap-8 md:gap-12"
+            style={{ flex: 1, minHeight: 0, overflow: "hidden", alignItems: "stretch" }}
+          >
             {/* filter sidebar */}
             {!loading && products.length > 0 && (
-              <div className="hidden lg:block sticky top-24">
+              <div
+                className="hidden lg:block theme-scrollbar"
+                style={{ overflowY: "auto", height: "100%", flexShrink: 0 }}
+              >
                 <FilterSidebar
-                  products={products}
-                  filters={filters}
-                  onChange={setFilters}
-                />
+                    products={products}
+                    filters={filters}
+                    onChange={setFilters}
+                    filterValues={filterValues}
+                  />
               </div>
             )}
 
             {/* product grid */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0 theme-scrollbar" style={{ overflowY: "auto", overflowX: "hidden", height: "100%" }}>
               {loading ? (
                 <div className="flex items-center justify-center h-72">
                   <div
                     className="text-[9px] tracking-[0.38em] uppercase animate-pulse"
                     style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(200,183,158,0.7)" }}
                   >
-                    Memuat...
+                    {t.loading}
                   </div>
                 </div>
               ) : filteredProducts.length === 0 ? (
@@ -507,7 +550,7 @@ export default function KoleksiPage() {
                     className="text-[9px] tracking-[0.3em] uppercase"
                     style={{ color: isLight ? "rgba(42,36,34,0.55)" : "rgba(252,250,246,0.65)" }}
                   >
-                    Tidak ada produk ditemukan
+                    {t.noProducts}
                   </div>
                   {Object.values(filters).some((s) => s.size > 0) && (
                     <button
@@ -515,7 +558,7 @@ export default function KoleksiPage() {
                       className="text-[9px] tracking-widest uppercase hover:text-accent transition-colors"
                       style={{ color: isLight ? "rgba(42,36,34,0.38)" : "rgba(200,183,158,0.4)" }}
                     >
-                      Reset Filter
+                      {t.resetFilter}
                     </button>
                   )}
                 </div>
@@ -539,7 +582,12 @@ export default function KoleksiPage() {
             </div>
           </div>
         </div>
+
+        {/* right: discount sidebar */}
+        <DiscountSidebar products={products} />
       </main>
+      <MarqueeStrip />
+      </div>
 
       {/* cinema overlay */}
       {cinemaProduct && (

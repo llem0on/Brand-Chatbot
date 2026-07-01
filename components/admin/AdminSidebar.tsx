@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { label: "Produk", href: "/admin/products" },
   { label: "Kategori", href: "/admin/categories" },
   { label: "Promosi", href: "/admin/promotions" },
+  { label: "Filter Values", href: "/admin/filter-values" },
   { label: "Pesanan", href: "/admin/orders" },
   { label: "Pelanggan", href: "/admin/customers" },
   { label: "Pengaturan", href: "/admin/settings" },
@@ -22,7 +23,7 @@ export default function AdminSidebar() {
   return (
     <aside
       className="w-60 shrink-0 h-screen sticky top-0 flex flex-col"
-      style={{ background: "#4B1D24", borderRight: "1px solid rgba(200,183,158,0.12)" }}
+      style={{ background: "#321318", borderRight: "1px solid rgba(200,183,158,0.12)" }}
     >
       <div className="px-6 py-7">
         <p className="font-serif text-xl tracking-[0.1em]" style={{ color: "#FCFAF6" }}>BRAND</p>

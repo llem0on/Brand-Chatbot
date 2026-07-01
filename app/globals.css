@@ -2,10 +2,10 @@
 
 @theme {
   /* Dark defaults (Garnet base) */
-  --color-bg: #4B1D24;
+  --color-bg: #321318;
   --color-ink: #FCFAF6;
   --color-accent: #C8B79E;
-  --color-accent-strong: #C8B79E;
+  --color-accent-strong: #9B4558;
   --color-surface: #5C2530;
   --color-section: #3A1520;
   --color-muted: #B0A090;
@@ -16,8 +16,8 @@
   --font-sans: var(--font-inter);
 }
 
-/* ── Admin theme — Palette: #4B1D24 · #7C2A35 · #A56A6C · #CBB4A7 · #EFE4DC
-   Sidebar uses the dark end (#4B1D24); content area uses the light end (#EFE4DC).
+/* ── Admin theme — Palette: #321318 · #7C2A35 · #A56A6C · #CBB4A7 · #EFE4DC
+   Sidebar uses the dark end (#321318); content area uses the light end (#EFE4DC).
    Uses @theme (no inline) so Tailwind emits var() references that cascade.
    ----------------------------------------------------------------------- */
 .admin-theme {
@@ -26,15 +26,15 @@
   --color-ink:           #2A2422;   /* Espresso — text */
   --color-section:       #EDE6DA;   /* Oat — dividers / rows */
   --color-accent:        #C8B79E;   /* Champagne — muted accent */
-  --color-accent-strong: #4B1D24;   /* Garnet — primary CTA */
+  --color-accent-strong: #321318;   /* Garnet — primary CTA */
   --color-border:        #D8CFC4;   /* Greige — borders */
   --color-muted:         #A89A8C;   /* Taupe — labels / captions */
 }
 
 /* ── Admin buttons ── */
 .admin-theme .admin-btn {
-  background: #4B1D24;
-  border-color: #4B1D24;
+  background: #321318;
+  border-color: #321318;
   color: #FCFAF6;
 }
 .admin-theme .admin-btn:hover {
@@ -44,7 +44,7 @@
 
 .admin-theme .admin-btn-outline {
   border-color: rgba(75, 29, 36, 0.35);
-  color: #4B1D24;
+  color: #321318;
 }
 .admin-theme .admin-btn-outline:hover {
   background: rgba(75, 29, 36, 0.07);
@@ -52,7 +52,7 @@
 
 /* Danger button */
 .admin-theme .admin-btn-danger {
-  color: #4B1D24;
+  color: #321318;
   border-color: rgba(75, 29, 36, 0.35);
 }
 .admin-theme .admin-btn-danger:hover {
@@ -66,7 +66,7 @@
   color: #2A2422;
 }
 .admin-theme .admin-input:focus {
-  border-color: #4B1D24;
+  border-color: #321318;
 }
 .admin-theme select.admin-input option {
   background: #F7F3EC;
@@ -87,11 +87,16 @@
   background: #EFE4DC !important;
 }
 [data-theme="dark"] .cinema-base {
-  background: #4B1D24 !important;
+  background: #321318 !important;
 }
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 button,
@@ -120,6 +125,11 @@ body::before {
   filter: blur(0.7px);
   pointer-events: none;
   z-index: -1;
+}
+
+/* Hide grid dots on the homepage — BgCanvas toggles .no-page-dots on body */
+body.no-page-dots::before {
+  display: none;
 }
 
 @layer components {
@@ -294,6 +304,26 @@ body::before {
   100% { transform: translateX(300%); }
 }
 
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes tick {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes tickV {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+@keyframes tickRight {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
 @layer utilities {
   .fade-in-up {
     opacity: 0;
@@ -311,4 +341,37 @@ body::before {
   .no-scrollbar {
     scrollbar-width: none;
   }
+
+  .theme-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-ink) 14%, transparent) transparent;
+  }
+}
+
+/* discount rail */
+@keyframes pl { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(1.6); opacity: 0; } }
+.sale-pulse { position: relative; }
+.sale-pulse::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid var(--color-accent); opacity: .5; animation: pl 2s ease-out infinite; }
+.sale-item { position: relative; transition: background .3s; cursor: pointer; }
+.sale-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--color-accent); transform: scaleY(0); transform-origin: top; transition: transform .3s; }
+.sale-item:hover::before { transform: scaleY(1); }
+.sale-item:hover { background: color-mix(in srgb, var(--color-ink) 5%, transparent); }
+.sale-ghost { opacity: .28; transition: opacity .3s, transform .3s; }
+.sale-item:hover .sale-ghost { opacity: .65; }
+.sale-thumb img { transition: transform .6s cubic-bezier(.2,.7,.2,1) !important; }
+.sale-item:hover .sale-thumb img { transform: scale(1.08) !important; }
+
+/* webkit scrollbar — must live outside @layer to override browser defaults */
+.theme-scrollbar::-webkit-scrollbar {
+  width: 2px;
+}
+.theme-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+.theme-scrollbar::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 1px;
+}
+.theme-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-ink) 32%, transparent);
 }

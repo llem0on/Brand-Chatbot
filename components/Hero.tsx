@@ -1,34 +1,55 @@
-import Image from "next/image";
-import { heroImage } from "@/lib/mock-products";
+"use client";
+
+import { useTheme } from "@/lib/theme";
+import { useLocale } from "@/lib/locale";
 
 export default function Hero() {
-  return (
-    <section className="relative h-screen w-full overflow-hidden">
-      <Image
-        src={heroImage}
-        alt="Editorial fashion campaign"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-bg/30 via-bg/40 to-bg" />
+  const { theme } = useTheme();
+  const { t } = useLocale();
+  const accent = theme === "light" ? "#321318" : "#D9B88A";
+  const accentText = theme === "light" ? "#EFE4DC" : "#321318";
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
-        <p className="text-xs tracking-[0.3em] uppercase text-accent mb-6">
-          Koleksi Edisi Terbatas
-        </p>
-        <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl leading-[1.05] max-w-3xl text-ink">
-          Keberanian yang
-          <br />
-          <span className="italic">Tertenun Diam</span>
+  return (
+    <section className="hero-section relative" style={{ height: "100%", display: "flex", alignItems: "center" }}>
+      <div className="w-full mx-auto px-6 md:px-10" style={{ maxWidth: 1380, padding: "60px 40px" }}>
+
+        <div className="flex items-center gap-4" style={{ marginBottom: 40 }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: accent, flexShrink: 0 }} />
+          <span style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--color-muted)" }}>
+            {t.heroEdition}
+          </span>
+        </div>
+
+        <h1 style={{ fontFamily: "var(--font-fraunces, serif)", fontWeight: 300, lineHeight: 0.9, letterSpacing: "-0.02em", color: "var(--color-ink)" }}>
+          <span className="hero-l1" style={{ fontSize: "clamp(3rem, 11vw, 9.5rem)", display: "block" }}>the shape</span>
+          <span className="hero-l2" style={{ fontSize: "clamp(3rem, 11vw, 9.5rem)", display: "block", marginLeft: "clamp(40px, 14vw, 200px)", fontStyle: "italic", color: accent }}>before</span>
+          <span className="hero-l3" style={{ fontSize: "clamp(3rem, 11vw, 9.5rem)", display: "block", marginLeft: "clamp(20px, 6vw, 90px)" }}>the garment</span>
         </h1>
-        <a
-          href="/koleksi"
-          className="mt-10 inline-block border border-accent text-accent text-xs tracking-[0.25em] uppercase px-10 py-4 transition-colors duration-300 hover:bg-accent-strong hover:text-ink hover:border-accent-strong"
-        >
-          Jelajahi Koleksi
-        </a>
+
+        <div className="flex items-end justify-between flex-wrap" style={{ marginTop: 56, gap: 40 }}>
+          <p style={{ fontSize: 12.5, lineHeight: 1.7, color: "var(--color-muted)", maxWidth: 330, letterSpacing: "0.02em" }}>
+            {t.heroTagline}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="/koleksi"
+              style={{ fontFamily: "var(--font-space-mono, monospace)", fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", padding: "15px 26px", border: `1px solid ${accent}`, background: accent, color: accentText, transition: "all .3s ease" }}
+              onMouseEnter={e => { const t = e.currentTarget as HTMLAnchorElement; t.style.background = "transparent"; t.style.color = "var(--color-ink)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = accent; el.style.color = accentText; }}
+            >
+              {t.heroCtaShop}
+            </a>
+            <a
+              href="#atelier"
+              style={{ fontFamily: "var(--font-space-mono, monospace)", fontSize: 11, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", cursor: "pointer", padding: "15px 26px", border: `1px solid ${accent}`, background: "transparent", color: "var(--color-ink)", transition: "all .3s ease" }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = accent; el.style.color = accentText; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.background = "transparent"; el.style.color = "var(--color-ink)"; }}
+            >
+              {t.heroCtaFitting}
+            </a>
+          </div>
+        </div>
+
       </div>
     </section>
   );
