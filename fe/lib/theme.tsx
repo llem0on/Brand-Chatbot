@@ -8,10 +8,10 @@ interface ThemeCtx { theme: Theme; toggle: () => void; }
 const Ctx = createContext<ThemeCtx>({ theme: "dark", toggle: () => {} });
 
 const DARK: Record<string, string> = {
-  "--color-bg":           "#4B1D24",   // Garnet
+  "--color-bg":           "#321318",   // Garnet
   "--color-ink":          "#FCFAF6",   // Porcelain
   "--color-accent":       "#C8B79E",   // Champagne
-  "--color-accent-strong":"#C8B79E",   // Champagne — CTA on dark bg
+  "--color-accent-strong":"#9B4558",   // Rose-garnet — CTA on dark bg, high contrast with cream ink
   "--color-surface":      "#5C2530",   // wine card surface
   "--color-section":      "#3A1520",   // deep section
   "--color-muted":        "#B0A090",   // muted on garnet
@@ -23,7 +23,7 @@ const LIGHT: Record<string, string> = {
   "--color-bg":           "#EFE4DC",   // warm cream
   "--color-ink":          "#2A2422",   // Espresso
   "--color-accent":       "#C8B79E",   // Champagne
-  "--color-accent-strong":"#4B1D24",   // Garnet — CTA on light bg
+  "--color-accent-strong":"#C8B79E",   // Champagne — CTA on light bg (soft warm)
   "--color-surface":      "#E8DAD0",   // slightly deeper cream
   "--color-section":      "#DDD0C4",   // warm oat
   "--color-muted":        "#8C7B6E",   // warm muted text

@@ -83,7 +83,7 @@ export default function OrdersPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="font-serif text-3xl text-ink">Pesanan</h1>
         {needsVerify.length > 0 && (
-          <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(75,29,36,0.1)", color: "#4B1D24", border: "1px solid rgba(75,29,36,0.25)" }}>
+          <span className="text-xs px-2.5 py-1 rounded-full" style={{ background: "rgba(75,29,36,0.1)", color: "#321318", border: "1px solid rgba(75,29,36,0.25)" }}>
             {needsVerify.length} menunggu verifikasi
           </span>
         )}
@@ -98,15 +98,15 @@ export default function OrdersPage() {
             className="px-4 py-2 text-xs tracking-widest uppercase transition-colors"
             style={{
               paddingBottom: "10px",
-              borderBottom: tab === key ? "2px solid #4B1D24" : "2px solid transparent",
-              color: tab === key ? "#4B1D24" : "#A89A8C",
+              borderBottom: tab === key ? "2px solid #321318" : "2px solid transparent",
+              color: tab === key ? "#321318" : "#A89A8C",
               background: "transparent",
               cursor: "pointer",
             }}
           >
             {label}
             {key === "needs_verify" && needsVerify.length > 0 && (
-              <span className="ml-2 px-1.5 py-0.5 text-[10px] rounded-full" style={{ background: "rgba(75,29,36,0.15)", color: "#4B1D24" }}>
+              <span className="ml-2 px-1.5 py-0.5 text-[10px] rounded-full" style={{ background: "rgba(75,29,36,0.15)", color: "#321318" }}>
                 {needsVerify.length}
               </span>
             )}
@@ -148,14 +148,14 @@ export default function OrdersPage() {
                         <button
                           onClick={() => handleVerify(order.id, "approve")}
                           className="text-xs px-2.5 py-1 rounded transition-colors"
-                          style={{ background: "rgba(75,29,36,0.08)", color: "#4B1D24", border: "1px solid rgba(75,29,36,0.25)" }}
+                          style={{ background: "rgba(75,29,36,0.08)", color: "#321318", border: "1px solid rgba(75,29,36,0.25)" }}
                         >
                           ACC
                         </button>
                         <button
                           onClick={() => setRejectingId(order.id)}
                           className="text-xs px-2.5 py-1 rounded transition-colors"
-                          style={{ background: "rgba(75,29,36,0.08)", color: "#4B1D24", border: "1px solid rgba(75,29,36,0.3)" }}
+                          style={{ background: "rgba(75,29,36,0.08)", color: "#321318", border: "1px solid rgba(75,29,36,0.3)" }}
                         >
                           Tolak
                         </button>
@@ -198,7 +198,7 @@ export default function OrdersPage() {
                   <p className="text-xs text-ink/60">Pembayaran: {order.payment_method}</p>
                   <p className="text-xs text-ink/60">Ongkir: Rp{order.shipping_cost.toLocaleString("id-ID")}</p>
                   {order.rejection_reason && (
-                    <p className="text-xs mt-2" style={{ color: "#4B1D24" }}>
+                    <p className="text-xs mt-2" style={{ color: "#321318" }}>
                       Alasan penolakan: {order.rejection_reason}
                     </p>
                   )}

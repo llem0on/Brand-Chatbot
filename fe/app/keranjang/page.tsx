@@ -7,12 +7,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getCart, updateCartQty, removeFromCart, type LocalCartItem } from "@/lib/cart";
 import CheckoutModal from "./CheckoutModal";
+import { useLocale } from "@/lib/locale";
 
-function rupiah(n: number) {
-  return "Rp" + n.toLocaleString("id-ID");
+function rupiah(n: number | undefined | null) {
+  const v = Number.isFinite(n as number) ? (n as number) : 0;
+  return "Rp" + v.toLocaleString("id-ID");
 }
 
 export default function KeranjangPage() {
+  const { t } = useLocale();
   const [items, setItems] = useState<LocalCartItem[]>([]);
   const [mounted, setMounted] = useState(false);
   const [showCheckout, setShowCheckout] = useState(false);
@@ -43,11 +46,11 @@ export default function KeranjangPage() {
 
           {/* header */}
           <div className="mb-12">
-            <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-accent) 90%, transparent)", marginBottom: 10 }}>
-              Keranjang Belanja
+            <div style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 10 }}>
+              {t.cartTitle}
             </div>
             <h1 className="font-serif" style={{ fontSize: "clamp(28px,4vw,46px)", color: "var(--color-ink)", lineHeight: 1.05 }}>
-              {!mounted ? "Memuat..." : items.length === 0 ? "Keranjang Kosong" : `${items.length} Item`}
+              {!mounted ? t.loading : items.length === 0 ? t.cartEmpty : `${items.length} Item`}
             </h1>
           </div>
 
@@ -61,7 +64,7 @@ export default function KeranjangPage() {
                 </svg>
               </div>
               <p style={{ fontSize: 13, color: "color-mix(in srgb, var(--color-ink) 72%, transparent)", marginBottom: 28 }}>
-                Belum ada produk di keranjang.
+                {t.cartEmptyMsg}
               </p>
               <Link
                 href="/koleksi"
@@ -75,7 +78,7 @@ export default function KeranjangPage() {
                   transition: "all 0.2s ease",
                 }}
               >
-                Lihat Koleksi
+                {t.viewCollection}
               </Link>
             </div>
           )}
@@ -147,7 +150,7 @@ export default function KeranjangPage() {
 
                       <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: "clamp(14px,1.6vw,18px)", color: "var(--color-accent)", fontWeight: 300 }}>
+                          <div style={{ fontSize: "clamp(14px,1.6vw,18px)", color: "color-mix(in srgb, var(--color-ink) 60%, transparent)", fontWeight: 400 }}>
                             {rupiah(item.price * item.quantity)}
                           </div>
                           {item.quantity > 1 && (
@@ -180,7 +183,7 @@ export default function KeranjangPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 340, marginLeft: "auto" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                     <span style={{ fontSize: 10, letterSpacing: "0.18em", textTransform: "uppercase", color: "color-mix(in srgb, var(--color-ink) 78%, transparent)" }}>
-                      Subtotal ({totalQty} item)
+                      {t.subtotal(totalQty)}
                     </span>
                     <span style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(20px,2.4vw,28px)", color: "var(--color-ink)" }}>
                       {rupiah(total)}
@@ -190,7 +193,7 @@ export default function KeranjangPage() {
                   <div style={{ height: 1, background: "rgba(200,183,158,0.08)", margin: "8px 0" }} />
 
                   <p style={{ fontSize: 11, color: "color-mix(in srgb, var(--color-ink) 65%, transparent)", lineHeight: 1.7, marginBottom: 12 }}>
-                    Ongkos kirim dan detail pembayaran akan dikonfirmasi setelah checkout via WhatsApp.
+                    {t.shippingNote}
                   </p>
 
                   <button
@@ -207,10 +210,10 @@ export default function KeranjangPage() {
                       cursor: "pointer",
                       transition: "background 0.3s ease, box-shadow 0.3s ease",
                     }}
-                    onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "rgba(200,183,158,0.22)"; t.style.boxShadow = "0 0 28px rgba(200,183,158,0.2)"; }}
-                    onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "rgba(200,183,158,0.1)"; t.style.boxShadow = "none"; }}
+                    onMouseEnter={(e) => { const btn = e.currentTarget; btn.style.background = "rgba(200,183,158,0.22)"; btn.style.boxShadow = "0 0 28px rgba(200,183,158,0.2)"; }}
+                    onMouseLeave={(e) => { const btn = e.currentTarget; btn.style.background = "rgba(200,183,158,0.1)"; btn.style.boxShadow = "none"; }}
                   >
-                    Lanjut Checkout
+                    {t.checkout}
                   </button>
 
                   <Link
@@ -221,12 +224,12 @@ export default function KeranjangPage() {
                       fontSize: 8,
                       letterSpacing: "0.28em",
                       textTransform: "uppercase",
-                      color: "rgba(200,183,158,0.7)",
+                      color: "var(--color-muted)",
                       paddingTop: 12,
                       transition: "color 0.2s ease",
                     }}
                   >
-                    ← Lanjut Belanja
+                    {t.continueShopping}
                   </Link>
                 </div>
               </div>

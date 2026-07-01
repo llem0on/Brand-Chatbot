@@ -19,6 +19,7 @@ const EMPTY_FORM = {
   material: "",
   gender: "Unisex",
   stock: 0,
+  discount_pct: 0,
   image_url: "",
   active: true,
 };
@@ -64,6 +65,7 @@ export default function ProductsPage() {
       material: product.material || "",
       gender: product.gender || "Unisex",
       stock: product.stock,
+      discount_pct: product.discount_pct || 0,
       image_url: product.image_url || "",
       active: product.active,
     });
@@ -122,7 +124,7 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      <DataTable headers={["Foto", "Kode", "Nama", "Harga", "Stok", "Status", "Aksi"]} loading={loading} empty={!loading && products.length === 0}>
+      <DataTable headers={["Foto", "Kode", "Nama", "Harga", "Stok", "Diskon", "Status", "Aksi"]} loading={loading} empty={!loading && products.length === 0}>
         {products.map((product) => (
           <tr key={product.id}>
             <td className="px-5 py-3">
@@ -140,6 +142,15 @@ export default function ProductsPage() {
             <td className="px-5 py-3.5 text-ink">{product.name}</td>
             <td className="px-5 py-3.5 text-ink/70">Rp{product.price.toLocaleString("id-ID")}</td>
             <td className="px-5 py-3.5 text-ink/70">{product.stock}</td>
+            <td className="px-5 py-3.5">
+              {(product.discount_pct ?? 0) > 0 ? (
+                <span style={{ fontSize: 11, fontWeight: 600, color: "#9B4558", background: "rgba(155,69,88,0.1)", padding: "2px 8px", borderRadius: 4 }}>
+                  -{product.discount_pct}%
+                </span>
+              ) : (
+                <span className="text-ink/30">—</span>
+              )}
+            </td>
             <td className="px-5 py-3.5">
               <span className={product.active ? "text-accent" : "text-ink/40"}>
                 {product.active ? "Aktif" : "Nonaktif"}
@@ -199,7 +210,7 @@ export default function ProductsPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="admin-label">Harga (Rp)</label>
               <input
@@ -216,6 +227,18 @@ export default function ProductsPage() {
                 className="admin-input"
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })}
+              />
+            </div>
+            <div>
+              <label className="admin-label">Diskon (%)</label>
+              <input
+                type="number"
+                min={0}
+                max={99}
+                className="admin-input"
+                value={form.discount_pct}
+                onChange={(e) => setForm({ ...form, discount_pct: Math.min(99, Math.max(0, parseInt(e.target.value) || 0)) })}
+                placeholder="0 = tanpa diskon"
               />
             </div>
           </div>

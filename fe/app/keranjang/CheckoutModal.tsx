@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { getCart, clearCart, type LocalCartItem } from "@/lib/cart";
+import { useTheme } from "@/lib/theme";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
 
@@ -42,6 +43,8 @@ function isValidPhone(p: string) {
 export default function CheckoutModal({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const { data: session, status: sessionStatus } = useSession();
+  const { theme } = useTheme();
+  const isLight = theme === "light";
   const proofInputRef = useRef<HTMLInputElement>(null);
 
   const savedPhone = typeof window !== "undefined" ? (localStorage.getItem(PHONE_KEY) ?? "") : "";
@@ -155,9 +158,9 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    background: "rgba(252,250,246,0.05)",
-    border: "1px solid rgba(200,183,158,0.14)",
-    color: "#FCFAF6",
+    background: "color-mix(in srgb, var(--color-ink) 4%, transparent)",
+    border: "1px solid color-mix(in srgb, var(--color-border) 80%, transparent)",
+    color: "var(--color-ink)",
     padding: "11px 14px",
     fontSize: 13,
     outline: "none",
@@ -169,7 +172,7 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
     fontSize: 7,
     letterSpacing: "0.3em",
     textTransform: "uppercase",
-    color: "rgba(200,183,158,0.4)",
+    color: "var(--color-muted)",
     marginBottom: 7,
     display: "block",
   };
@@ -177,28 +180,44 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
   const btnStyle = (active: boolean): React.CSSProperties => ({
     flex: 1, padding: "11px 12px", fontSize: 10, letterSpacing: "0.14em",
     textTransform: "uppercase", cursor: "pointer", transition: "all 0.2s ease",
-    border: active ? "1px solid rgba(200,183,158,0.7)" : "1px solid rgba(200,183,158,0.13)",
-    color: active ? "#C8B79E" : "rgba(252,250,246,0.55)",
-    background: active ? "rgba(200,183,158,0.12)" : "transparent",
+    border: active ? "1px solid var(--color-accent)" : "1px solid color-mix(in srgb, var(--color-border) 80%, transparent)",
+    color: active ? "var(--color-accent)" : "var(--color-muted)",
+    background: active ? "color-mix(in srgb, var(--color-accent) 12%, transparent)" : "transparent",
   });
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[70] flex items-center justify-center p-4 md:p-8"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      style={{ animation: "hero-backdrop-in 0.2s ease both" }}
     >
-      <div className="absolute inset-0" style={{ backdropFilter: "blur(18px) brightness(0.3)", WebkitBackdropFilter: "blur(18px) brightness(0.3)", background: "rgba(42,10,16,0.55)" }} />
+      {/* backdrop — blur only, pointer-events none so clicks reach outer div */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          pointerEvents: "none",
+        }}
+      />
 
       <div
         className="relative z-10 w-full flex flex-col"
-        style={{ maxWidth: 520, maxHeight: "90vh", background: "rgba(42,10,16,0.98)", border: "1px solid rgba(200,183,158,0.13)", boxShadow: "0 0 80px rgba(200,183,158,0.12), 0 32px 80px rgba(0,0,0,0.85)" }}
+        style={{
+          maxWidth: 520,
+          maxHeight: "90vh",
+          background: "var(--color-surface)",
+          border: "1px solid color-mix(in srgb, var(--color-border) 80%, transparent)",
+          boxShadow: "0 8px 48px rgba(0,0,0,0.18), 0 32px 80px rgba(0,0,0,0.12)",
+          animation: "hero-overlay-in 0.38s cubic-bezier(0.16,1,0.3,1) both",
+        }}
       >
         {/* header */}
-        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(200,183,158,0.08)" }}>
-          <span style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "rgba(200,183,158,0.5)" }}>
+        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-border) 50%, transparent)" }}>
+          <span style={{ fontSize: 8, letterSpacing: "0.38em", textTransform: "uppercase", color: "var(--color-muted)" }}>
             {phase === "success" ? "Pesanan Diterima" : phase === "phone" ? "Nomor HP" : "Checkout"}
           </span>
-          <button onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(252,250,246,0.5)", padding: 4 }} aria-label="Tutup">
+          <button onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", color: "color-mix(in srgb, var(--color-ink) 45%, transparent)", padding: 4 }} aria-label="Tutup">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
               <line x1="1" y1="1" x2="9" y2="9" /><line x1="9" y1="1" x2="1" y2="9" />
             </svg>
@@ -239,7 +258,7 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
           <div className="px-6 py-10 flex flex-col gap-6">
             <div>
               <div style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: "var(--color-ink)", marginBottom: 8 }}>Nomor WhatsApp kamu</div>
-              <div style={{ fontSize: 11, color: "rgba(252,250,246,0.5)", lineHeight: 1.7 }}>Diperlukan untuk konfirmasi pesanan dan pengiriman.</div>
+              <div style={{ fontSize: 11, color: "var(--color-muted)", lineHeight: 1.7 }}>Diperlukan untuk konfirmasi pesanan dan pengiriman.</div>
             </div>
             <div>
               <label style={labelStyle}>No. WhatsApp / HP</label>
@@ -248,15 +267,15 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
                 onChange={(e) => { setPhoneInput(e.target.value); setErrorMsg(""); }}
                 onKeyDown={(e) => { if (e.key === "Enter") handlePhoneContinue(); }}
                 placeholder="08xxxxxxxxxx" type="tel" autoFocus style={inputStyle}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(200,183,158,0.45)"; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(200,183,158,0.14)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "var(--color-accent)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "color-mix(in srgb, var(--color-border) 80%, transparent)"; }}
               />
               {errorMsg && <div style={{ marginTop: 8, fontSize: 11, color: "rgba(210,100,100,0.85)" }}>{errorMsg}</div>}
             </div>
             <button onClick={handlePhoneContinue}
-              style={{ width: "100%", padding: "15px", border: "1px solid rgba(200,183,158,0.55)", color: "var(--color-ink)", background: "rgba(200,183,158,0.14)", fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase", cursor: "pointer" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.26)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.14)"; }}>
+              style={{ width: "100%", padding: "15px", border: "1px solid color-mix(in srgb, var(--color-ink) 38%, transparent)", color: "var(--color-ink)", background: "color-mix(in srgb, var(--color-ink) 10%, transparent)", fontSize: 9, letterSpacing: "0.32em", textTransform: "uppercase", cursor: "pointer" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--color-ink)"; (e.currentTarget as HTMLButtonElement).style.color = isLight ? "#FCFAF6" : "#2A2422"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "color-mix(in srgb, var(--color-ink) 10%, transparent)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--color-ink)"; }}>
               Lanjut
             </button>
           </div>
@@ -267,38 +286,39 @@ export default function CheckoutModal({ onClose }: { onClose: () => void }) {
           <div className="overflow-y-auto flex-1">
 
             {/* order summary */}
-            <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)" }}>
-              <div style={{ fontSize: 7, letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginBottom: 10 }}>Ringkasan ({items.length} item)</div>
+            <div className="px-6 pt-5 pb-4" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-border) 30%, transparent)" }}>
+              <div style={{ fontSize: 7, letterSpacing: "0.3em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 10 }}>Ringkasan ({items.length} item)</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 {items.map((item) => (
                   <div key={item.variantId} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                     <div>
-                      <span style={{ fontSize: 12, color: "rgba(252,250,246,0.85)" }}>{item.name}</span>
-                      {(item.size || item.color) && <span style={{ fontSize: 9, color: "rgba(252,250,246,0.5)", marginLeft: 8 }}>{[item.size, item.color].filter(Boolean).join(" / ")}</span>}
-                      <span style={{ fontSize: 9, color: "rgba(252,250,246,0.5)", marginLeft: 6 }}>×{item.quantity}</span>
+                      <span style={{ fontSize: 12, color: "var(--color-ink)" }}>{item.name}</span>
+                      {(item.size || item.color) && <span style={{ fontSize: 9, color: "var(--color-muted)", marginLeft: 8 }}>{[item.size, item.color].filter(Boolean).join(" / ")}</span>}
+                      <span style={{ fontSize: 9, color: "var(--color-muted)", marginLeft: 6 }}>×{item.quantity}</span>
                     </div>
-                    <span style={{ fontSize: 12, color: "rgba(200,183,158,0.7)", flexShrink: 0, marginLeft: 12 }}>{rupiah(item.price * item.quantity)}</span>
+                    <span style={{ fontSize: 12, color: isLight ? "#321318" : "var(--color-accent)", flexShrink: 0, marginLeft: 12 }}>{rupiah(item.price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
               {settings && (
-                <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(200,183,158,0.07)", display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(252,250,246,0.55)" }}>
+                <div style={{ marginTop: 10, paddingTop: 10, borderTop: "1px solid color-mix(in srgb, var(--color-border) 30%, transparent)", display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--color-muted)" }}>
                   <span>Ongkir</span><span>{shipping > 0 ? rupiah(shipping) : "Gratis"}</span>
                 </div>
               )}
               <div style={{ marginTop: 6, display: "flex", justifyContent: "space-between", fontSize: 14, color: "var(--color-ink)" }}>
-                <span>Total</span><span className="font-serif text-accent">{rupiah(total)}</span>
+                <span>Total</span>
+                <span style={{ fontFamily: "var(--font-serif)", color: isLight ? "#321318" : "var(--color-accent)" }}>{rupiah(total)}</span>
               </div>
             </div>
 
             {/* phone chip */}
-            <div className="px-6 py-4" style={{ borderBottom: "1px solid rgba(200,183,158,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div className="px-6 py-4" style={{ borderBottom: "1px solid color-mix(in srgb, var(--color-border) 30%, transparent)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div>
-                <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginBottom: 4 }}>No. WhatsApp</div>
+                <div style={{ fontSize: 7, letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 4 }}>No. WhatsApp</div>
                 <div style={{ fontSize: 13, color: "var(--color-ink)" }}>{phone}</div>
               </div>
               <button onClick={() => { setErrorMsg(""); setPhase("phone"); }}
-                style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(200,183,158,0.5)", background: "transparent", border: "1px solid rgba(200,183,158,0.12)", padding: "5px 12px", cursor: "pointer" }}>
+                style={{ fontSize: 8, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-muted)", background: "transparent", border: "1px solid color-mix(in srgb, var(--color-border) 80%, transparent)", padding: "5px 12px", cursor: "pointer" }}>
                 Ubah
               </button>
             </div>

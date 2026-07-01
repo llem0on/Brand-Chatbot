@@ -3,10 +3,12 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useTheme } from "@/lib/theme";
 
 export default function LoginPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { theme, toggle } = useTheme();
 
   // Already logged in → redirect home
   useEffect(() => {
@@ -26,6 +28,48 @@ export default function LoginPage() {
       className="fixed inset-0 flex flex-col items-center justify-center"
       style={{ background: "var(--color-bg)" }}
     >
+      {/* theme toggle */}
+      <button
+        onClick={toggle}
+        aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        style={{
+          position: "fixed",
+          top: 20,
+          right: 24,
+          background: "transparent",
+          border: "1px solid color-mix(in srgb, var(--color-accent) 40%, transparent)",
+          padding: "5px 10px",
+          display: "flex",
+          alignItems: "center",
+          gap: 5,
+          color: "var(--color-ink)",
+          opacity: 0.7,
+          cursor: "pointer",
+          fontSize: 9,
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          transition: "opacity 0.2s ease",
+          zIndex: 10,
+        }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.7"; }}
+      >
+        {theme === "dark" ? (
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        ) : (
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+            <circle cx="12" cy="12" r="4" />
+            <line x1="12" y1="2" x2="12" y2="5" /><line x1="12" y1="19" x2="12" y2="22" />
+            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" /><line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
+            <line x1="2" y1="12" x2="5" y2="12" /><line x1="19" y1="12" x2="22" y2="12" />
+            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" /><line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
+          </svg>
+        )}
+        <span>{theme === "dark" ? "Dark" : "Light"}</span>
+      </button>
+
       {/* scanline texture */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -140,9 +184,9 @@ export default function LoginPage() {
         {/* back link */}
         <a
           href="/"
-          style={{ fontSize: 8, letterSpacing: "0.28em", textTransform: "uppercase", color: "rgba(200,183,158,0.35)", marginTop: 28, transition: "color 0.2s ease" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(200,183,158,0.35)"; }}
+          style={{ fontSize: 8, letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--color-muted)", marginTop: 28, transition: "color 0.2s ease", opacity: 0.85 }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "1"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "0.85"; }}
         >
           ← Kembali ke Beranda
         </a>

@@ -407,7 +407,7 @@ function SceneYours({
           {product.name}
         </div>
 
-        <div style={{ fontSize: "clamp(18px,2vw,26px)", color: "#4B1D24", marginTop: 10, fontWeight: 300, ...fi(0.16) }}>
+        <div style={{ fontSize: "clamp(18px,2vw,26px)", color: "#321318", marginTop: 10, fontWeight: 300, ...fi(0.16) }}>
           {rupiah(product.price * qty)}
         </div>
 
@@ -469,7 +469,7 @@ function SceneYours({
               padding: "18px 24px",
               border: "1px solid rgba(75,29,36,0.5)",
               color: "#FCFAF6",
-              background: "#4B1D24",
+              background: "#321318",
               fontSize: 13,
               letterSpacing: "0.28em",
               textTransform: "uppercase",
@@ -477,7 +477,7 @@ function SceneYours({
               transition: "background 0.3s ease, box-shadow 0.3s ease",
             }}
             onMouseEnter={(e) => { const t = e.currentTarget; t.style.background = "#2A2422"; t.style.boxShadow = "0 4px 24px rgba(75,29,36,0.4)"; }}
-            onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "#4B1D24"; t.style.boxShadow = "none"; }}
+            onMouseLeave={(e) => { const t = e.currentTarget; t.style.background = "#321318"; t.style.boxShadow = "none"; }}
           >
             Beli Sekarang
           </button>
@@ -527,10 +527,10 @@ export default function ProductCinema({
 }) {
   // Per-scene transition config (values for the scene you're LEAVING)
   const SCENE_CONFIG = [
-    { anim: "iris-bottom",  ms: 840, ease: "cubic-bezier(0.76,0,0.24,1)", color: "radial-gradient(ellipse at 50% 110%,#4B1D24 0%,#1A0810 70%)" },
+    { anim: "iris-bottom",  ms: 840, ease: "cubic-bezier(0.76,0,0.24,1)", color: "radial-gradient(ellipse at 50% 110%,#321318 0%,#1A0810 70%)" },
     { anim: "iris-left",    ms: 760, ease: "cubic-bezier(0.4,0,0.2,1)",   color: "radial-gradient(ellipse at -5% 50%,#C8B79E 0%,#EFE4DC 100%)" },
     { anim: "iris-corner",  ms: 720, ease: "cubic-bezier(0.55,0,0.2,1)",  color: "radial-gradient(ellipse at 105% 0%,#A89A8C 0%,#C8B79E 70%,#EFE4DC 100%)" },
-    { anim: "scene-slash",  ms: 980, ease: "cubic-bezier(0.9,0,0.1,1)",   color: "linear-gradient(105deg,#0D0508 0%,#3A1520 50%,#4B1D24 100%)" },
+    { anim: "scene-slash",  ms: 980, ease: "cubic-bezier(0.9,0,0.1,1)",   color: "linear-gradient(105deg,#0D0508 0%,#3A1520 50%,#321318 100%)" },
     { anim: "iris-center",  ms: 740, ease: "cubic-bezier(0.6,0,0.3,1)",   color: "radial-gradient(ellipse at 50% 50%,#A89A8C 0%,#EFE4DC 100%)" },
   ];
 

@@ -6,16 +6,11 @@ import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { cartCount, onCartChange } from "@/lib/cart";
 import { useTheme } from "@/lib/theme";
-
-const LINKS = [
-  { label: "Beranda", href: "/" },
-  { label: "Koleksi", href: "/koleksi" },
-  { label: "Kategori", href: "/koleksi" },
-  { label: "Tentang", href: "/#statement" },
-];
+import { useLocale, LOCALES, LOCALE_LABELS } from "@/lib/locale";
 
 function UserMenu() {
   const { data: session, status } = useSession();
+  const { t } = useLocale();
   const [open, setOpen] = useState(false);
 
   if (status === "loading") return <div style={{ width: 28, height: 28 }} />;
@@ -40,7 +35,7 @@ function UserMenu() {
           (e.currentTarget as HTMLAnchorElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 70%, transparent)";
         }}
       >
-        Masuk
+        {t.signIn}
       </Link>
     );
   }
@@ -71,10 +66,7 @@ function UserMenu() {
 
       {open && (
         <>
-          {/* backdrop */}
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-
-          {/* dropdown */}
           <div
             style={{
               position: "absolute",
@@ -88,17 +80,10 @@ function UserMenu() {
               boxShadow: "0 16px 48px rgba(0,0,0,0.6)",
             }}
           >
-            {/* user info */}
             <div style={{ padding: "14px 16px", borderBottom: "1px solid rgba(200,183,158,0.08)" }}>
-              <div style={{ fontSize: 12, color: "#FCFAF6", fontWeight: 500, marginBottom: 2 }}>
-                {session.user?.name}
-              </div>
-              <div style={{ fontSize: 10, color: "rgba(252,250,246,0.55)" }}>
-                {session.user?.email}
-              </div>
+              <div style={{ fontSize: 12, color: "#FCFAF6", fontWeight: 500, marginBottom: 2 }}>{session.user?.name}</div>
+              <div style={{ fontSize: 10, color: "rgba(252,250,246,0.55)" }}>{session.user?.email}</div>
             </div>
-
-            {/* links */}
             <div style={{ padding: "6px 0" }}>
               <Link
                 href="/pesanan"
@@ -107,7 +92,7 @@ function UserMenu() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
-                Pesanan Saya
+                {t.myOrders}
               </Link>
               <Link
                 href="/keranjang"
@@ -116,7 +101,7 @@ function UserMenu() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#C8B79E"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
-                Keranjang
+                {t.cart}
               </Link>
               <button
                 onClick={() => { setOpen(false); signOut({ callbackUrl: "/" }); }}
@@ -124,7 +109,7 @@ function UserMenu() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(210,100,100,0.85)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(252,250,246,0.75)"; }}
               >
-                Keluar
+                {t.signOut}
               </button>
             </div>
           </div>
@@ -136,55 +121,165 @@ function UserMenu() {
 
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
+  const isLight = theme === "light";
+
   return (
     <button
       onClick={toggle}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
       style={{
+        width: 44,
+        height: 24,
+        borderRadius: 12,
+        border: "1px solid color-mix(in srgb, var(--color-accent) 45%, transparent)",
         background: "transparent",
-        border: "1px solid color-mix(in srgb, var(--color-accent) 40%, transparent)",
-        padding: "5px 10px",
+        position: "relative",
+        cursor: "pointer",
+        flexShrink: 0,
+        padding: 0,
+        transition: "border-color 0.3s",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 80%, transparent)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 45%, transparent)";
+      }}
+    >
+      <span
+        style={{
+          position: "absolute",
+          inset: 2,
+          borderRadius: 10,
+          background: isLight
+            ? "color-mix(in srgb, var(--color-accent) 22%, transparent)"
+            : "color-mix(in srgb, var(--color-ink) 6%, transparent)",
+          transition: "background 0.3s",
+          pointerEvents: "none",
+        }}
+      />
+      <span
+        style={{
+          position: "absolute",
+          top: 3,
+          left: isLight ? 22 : 3,
+          width: 16,
+          height: 16,
+          borderRadius: "50%",
+          background: "var(--color-accent)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          transition: "left 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+          pointerEvents: "none",
+        }}
+      >
+        {isLight ? (
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#321318" strokeWidth="2.5" strokeLinecap="round">
+            <circle cx="12" cy="12" r="4" />
+            <line x1="12" y1="2" x2="12" y2="5" />
+            <line x1="12" y1="19" x2="12" y2="22" />
+            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
+            <line x1="19.78" y1="19.78" x2="17.66" y2="17.66" />
+            <line x1="2" y1="12" x2="5" y2="12" />
+            <line x1="19" y1="12" x2="22" y2="12" />
+          </svg>
+        ) : (
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#321318" strokeWidth="2.5">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        )}
+      </span>
+    </button>
+  );
+}
+
+// 3-position sliding pill: ID → EN → 中 → ID
+function LocaleSwitch() {
+  const { locale, cycle } = useLocale();
+  const idx = LOCALES.indexOf(locale);
+
+  // thumb left positions for 3 slots inside a 72px pill (1px border each side)
+  // inner width = 70px; slot = 70/3 ≈ 23px; thumb = 20px
+  const SLOT = 70 / 3;
+  const thumbLeft = 2 + idx * SLOT;
+
+  return (
+    <button
+      onClick={cycle}
+      aria-label={`Language: ${LOCALE_LABELS[locale]}`}
+      style={{
+        width: 72,
+        height: 24,
+        borderRadius: 12,
+        border: "1px solid color-mix(in srgb, var(--color-accent) 45%, transparent)",
+        background: "transparent",
+        position: "relative",
+        cursor: "pointer",
+        flexShrink: 0,
+        padding: 0,
         display: "flex",
         alignItems: "center",
-        gap: 5,
-        color: "var(--color-ink)",
-        opacity: 0.75,
-        transition: "opacity 0.2s ease, border-color 0.2s ease",
-        fontSize: 9,
-        letterSpacing: "0.18em",
-        textTransform: "uppercase",
+        transition: "border-color 0.3s",
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "1"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = "0.75"; }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 80%, transparent)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.borderColor = "color-mix(in srgb, var(--color-accent) 45%, transparent)";
+      }}
     >
-      {theme === "dark" ? (
-        /* Sun icon */
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-          <circle cx="12" cy="12" r="4" />
-          <line x1="12" y1="2" x2="12" y2="5" /><line x1="12" y1="19" x2="12" y2="22" />
-          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" /><line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
-          <line x1="2" y1="12" x2="5" y2="12" /><line x1="19" y1="12" x2="22" y2="12" />
-          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" /><line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
-        </svg>
-      ) : (
-        /* Moon icon */
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-      )}
-      <span className="hidden md:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+      {/* sliding highlight */}
+      <span
+        style={{
+          position: "absolute",
+          top: 2,
+          left: thumbLeft,
+          width: SLOT - 2,
+          height: 18,
+          borderRadius: 9,
+          background: "var(--color-accent)",
+          transition: "left 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+          pointerEvents: "none",
+        }}
+      />
+      {/* labels */}
+      {LOCALES.map((l, i) => (
+        <span
+          key={l}
+          style={{
+            flex: 1,
+            textAlign: "center",
+            fontSize: l === "zh" ? 11 : 8,
+            fontWeight: i === idx ? 700 : 400,
+            color: i === idx ? "#321318" : "color-mix(in srgb, var(--color-ink) 55%, transparent)",
+            letterSpacing: l === "zh" ? 0 : "0.06em",
+            position: "relative",
+            zIndex: 1,
+            transition: "color 0.3s, font-weight 0.1s",
+            lineHeight: 1,
+            userSelect: "none",
+          }}
+        >
+          {LOCALE_LABELS[l]}
+        </span>
+      ))}
     </button>
   );
 }
 
 export default function Navbar() {
+  const { t } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [count, setCount] = useState(0);
 
+  const LINKS = [
+    { label: t.home, href: "/" },
+    { label: t.collection, href: "/koleksi" },
+  ];
+
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 64);
-    }
+    function onScroll() { setScrolled(window.scrollY > 64); }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -203,9 +298,10 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto max-w-7xl px-6 grid grid-cols-3 items-center">
+        {/* left: nav links */}
         <ul className="hidden md:flex items-center gap-8 text-xs tracking-[0.2em] uppercase text-ink/80">
-          {LINKS.slice(0, 2).map((link) => (
-            <li key={link.label}>
+          {LINKS.map((link) => (
+            <li key={link.href}>
               <Link href={link.href} className="hover:text-accent transition-colors">
                 {link.label}
               </Link>
@@ -213,27 +309,18 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <Link
-          href="/"
-          className="font-serif text-2xl tracking-[0.15em] text-center text-ink"
-        >
+        {/* center: brand */}
+        <Link href="/" className="font-serif text-2xl tracking-[0.15em] text-center text-ink">
           BRAND
         </Link>
 
-        <div className="flex items-center justify-end gap-6 text-xs tracking-[0.2em] uppercase text-ink/80">
-          <ul className="hidden md:flex items-center gap-8">
-            {LINKS.slice(2).map((link) => (
-              <li key={link.label}>
-                <Link href={link.href} className="hover:text-accent transition-colors">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
+        {/* right: switches + icons */}
+        <div className="flex items-center justify-end gap-4">
+          <LocaleSwitch />
           <ThemeToggle />
 
-          <Link href="/keranjang" aria-label="Keranjang" className="text-ink hover:text-accent transition-colors" style={{ position: "relative" }}>
+          {/* cart */}
+          <Link href="/keranjang" aria-label={t.cart} className="text-ink hover:text-accent transition-colors" style={{ position: "relative" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path d="M6 7h12l-1 13H7L6 7Z" strokeLinejoin="round" />
               <path d="M9 7a3 3 0 0 1 6 0" strokeLinecap="round" />
@@ -247,7 +334,7 @@ export default function Navbar() {
                 height: 14,
                 borderRadius: 99,
                 background: "var(--color-accent)",
-                color: "#4B1D24",
+                color: "#321318",
                 fontSize: 8,
                 fontWeight: 600,
                 display: "flex",
@@ -259,6 +346,16 @@ export default function Navbar() {
                 {count > 99 ? "99+" : count}
               </span>
             )}
+          </Link>
+
+          {/* pesanan */}
+          <Link href="/pesanan" aria-label={t.orders} className="text-ink hover:text-accent transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+              <rect x="9" y="3" width="6" height="4" rx="1" />
+              <line x1="9" y1="12" x2="15" y2="12" />
+              <line x1="9" y1="16" x2="13" y2="16" />
+            </svg>
           </Link>
 
           <UserMenu />

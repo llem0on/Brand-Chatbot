@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useLocale } from "@/lib/locale";
 
 function rupiah(n: number) {
   return "Rp" + n.toLocaleString("id-ID");
@@ -25,14 +26,6 @@ function formatDate(iso: string) {
     day: "numeric", month: "short", year: "numeric",
   });
 }
-
-const STATUS_LABEL: Record<string, string> = {
-  menunggu_pembayaran: "Menunggu Pembayaran",
-  sudah_bayar:         "Sudah Dibayar",
-  dikirim:             "Dalam Pengiriman",
-  selesai:             "Selesai",
-  dibatalkan:          "Dibatalkan",
-};
 
 const STATUS_COLOR: Record<string, string> = {
   menunggu_pembayaran: "rgba(228,175,70,0.9)",
@@ -74,6 +67,7 @@ function groupOrders(orders: Order[]): Record<Tab, Order[]> {
 // Shows proof status on the order card. Upload now happens during checkout.
 
 function PaymentSection({ order }: { order: Order }) {
+  const { t } = useLocale();
   if (order.status !== "menunggu_pembayaran") return null;
 
   const hasProof   = !!order.payment_proof_url;
@@ -83,24 +77,24 @@ function PaymentSection({ order }: { order: Order }) {
     <div style={{ borderTop: "1px solid rgba(200,183,158,0.08)", padding: "12px 20px", background: "rgba(200,183,158,0.03)" }}>
       {isRejected ? (
         <div style={{ padding: "10px 14px", border: "1px solid rgba(210,80,80,0.25)", background: "rgba(210,80,80,0.06)" }}>
-          <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(210,80,80,0.8)", marginBottom: 4 }}>Bukti Pembayaran Ditolak</div>
+          <div style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(210,80,80,0.8)", marginBottom: 4 }}>{t.paymentRejected}</div>
           <div style={{ fontSize: 12, color: "var(--color-muted)", lineHeight: 1.6 }}>{order.rejection_reason}</div>
         </div>
       ) : hasProof ? (
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(228,175,70,0.9)", flexShrink: 0 }} />
           <div>
-            <div style={{ fontSize: 11, color: "rgba(228,175,70,0.9)" }}>Bukti dikirim — menunggu verifikasi admin</div>
+            <div style={{ fontSize: 11, color: "rgba(228,175,70,0.9)" }}>{t.proofSent}</div>
             <button onClick={() => window.open(order.payment_proof_url, "_blank")}
               style={{ marginTop: 3, fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--color-muted)", background: "transparent", border: "none", cursor: "pointer", padding: 0, textDecoration: "underline" }}>
-              Lihat bukti
+              {t.viewProof}
             </button>
           </div>
         </div>
       ) : (
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: "rgba(228,175,70,0.5)", flexShrink: 0 }} />
-          <div style={{ fontSize: 11, color: "rgba(228,175,70,0.6)" }}>Menunggu pembayaran</div>
+          <div style={{ fontSize: 11, color: "rgba(228,175,70,0.6)" }}>{t.awaitingPayment}</div>
         </div>
       )}
     </div>
@@ -111,8 +105,16 @@ function PaymentSection({ order }: { order: Order }) {
 // ── Order Card ─────────────────────────────────────────────────────────────
 
 function OrderCard({ order }: { order: Order }) {
+  const { t } = useLocale();
   const [open, setOpen] = useState(false);
   const statusColor = STATUS_COLOR[order.status] ?? "rgba(200,183,158,0.5)";
+  const STATUS_LABEL: Record<string, string> = {
+    menunggu_pembayaran: t.statusPending,
+    sudah_bayar:         t.statusPaid,
+    dikirim:             t.statusShipped,
+    selesai:             t.statusDone,
+    dibatalkan:          t.statusCancelled,
+  };
 
   return (
     <div
@@ -199,10 +201,10 @@ function OrderCard({ order }: { order: Order }) {
 
           <div style={{ borderTop: "1px solid rgba(200,183,158,0.07)", paddingTop: 12, display: "flex", flexDirection: "column", gap: 5 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "var(--color-muted)" }}>
-              <span>Ongkir</span><span>{rupiah(order.shipping_cost)}</span>
+              <span>{t.shipping}</span><span>{rupiah(order.shipping_cost)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, color: "var(--color-ink)" }}>
-              <span>Total</span><span style={{ fontFamily: "var(--font-serif)" }}>{rupiah(order.total_amount)}</span>
+              <span>{t.total}</span><span style={{ fontFamily: "var(--font-serif)" }}>{rupiah(order.total_amount)}</span>
             </div>
             <div style={{ marginTop: 6, fontSize: 10, color: "color-mix(in srgb, var(--color-ink) 65%, transparent)", display: "flex", gap: 10 }}>
               <span>{order.payment_method === "transfer_bank" ? "Transfer Bank" : "QRIS"}</span>
@@ -222,6 +224,7 @@ function OrderCard({ order }: { order: Order }) {
 // ── Page ───────────────────────────────────────────────────────────────────
 
 export default function PesananPage() {
+  const { t } = useLocale();
   const { data: session, status } = useSession();
   const [orders, setOrders]   = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -244,9 +247,9 @@ export default function PesananPage() {
   const grouped = groupOrders(orders);
 
   const TABS: { key: Tab; label: string }[] = [
-    { key: "berlangsung", label: "Berlangsung" },
-    { key: "selesai",     label: "Selesai"     },
-    { key: "dibatalkan",  label: "Dibatalkan"  },
+    { key: "berlangsung", label: t.tabOngoing   },
+    { key: "selesai",     label: t.tabCompleted },
+    { key: "dibatalkan",  label: t.tabCancelled },
   ];
 
   return (
@@ -258,10 +261,10 @@ export default function PesananPage() {
           {/* header */}
           <div className="mb-10">
             <div style={{ fontSize: 8, letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(200,183,158,0.85)", marginBottom: 10 }}>
-              Akun
+              {t.account}
             </div>
             <h1 className="font-serif" style={{ fontSize: "clamp(26px,4vw,42px)", color: "var(--color-ink)", lineHeight: 1.05 }}>
-              Pesanan Saya
+              {t.myOrdersTitle}
             </h1>
             {session?.user?.email && (
               <div style={{ marginTop: 8, fontSize: 11, color: "var(--color-muted)" }}>
@@ -275,10 +278,10 @@ export default function PesananPage() {
           {status !== "loading" && !session && (
             <div style={{ textAlign: "center", paddingTop: 56, paddingBottom: 56 }}>
               <div style={{ marginBottom: 8, fontFamily: "var(--font-serif)", fontSize: 20, color: "var(--color-muted)" }}>
-                Belum login
+                {t.notLoggedIn}
               </div>
               <div style={{ fontSize: 12, color: "rgba(200,183,158,0.35)", marginBottom: 28 }}>
-                Login untuk melihat pesanan kamu.
+                {t.notLoggedInMsg}
               </div>
               <button
                 onClick={() => signIn("google")}
@@ -286,7 +289,7 @@ export default function PesananPage() {
                 onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(200,183,158,0.1)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
               >
-                Masuk dengan Google
+                {t.signInGoogle}
               </button>
             </div>
           )}
@@ -339,11 +342,11 @@ export default function PesananPage() {
               {grouped[tab].length === 0 ? (
                 <div style={{ textAlign: "center", paddingTop: 48, paddingBottom: 48 }}>
                   <div style={{ fontSize: 12, color: "color-mix(in srgb, var(--color-ink) 65%, transparent)", marginBottom: orders.length === 0 ? 20 : 0 }}>
-                    {orders.length === 0 ? "Belum ada pesanan." : "Tidak ada pesanan di kategori ini."}
+                    {orders.length === 0 ? t.noOrders : t.noOrdersInTab}
                   </div>
                   {orders.length === 0 && (
                     <Link href="/koleksi" style={{ fontSize: 9, letterSpacing: "0.26em", textTransform: "uppercase", color: "var(--color-accent)", border: "1px solid rgba(200,183,158,0.28)", padding: "10px 24px" }}>
-                      Mulai Belanja
+                      {t.startShopping}
                     </Link>
                   )}
                 </div>

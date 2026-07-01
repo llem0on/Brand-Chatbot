@@ -1,58 +1,88 @@
+"use client";
+
+import { useLocale } from "@/lib/locale";
+
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
-    <footer className="bg-bg border-t border-accent/10 px-6 md:px-12 py-16">
-      <div className="mx-auto max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12">
-        <div>
-          <p className="font-serif text-2xl tracking-[0.15em] mb-4">BRAND</p>
-          <p className="text-sm text-ink/60 max-w-xs">
-            Editorial fashion untuk yang berani tampil beda. Dibuat dengan
-            detail, dipakai dengan percaya diri.
-          </p>
-        </div>
+    <footer
+      style={{
+        borderTop: "0.5px solid var(--color-border)",
+        padding: "60px 0 40px",
+        background: "var(--color-surface)",
+      }}
+    >
+      <div style={{ maxWidth: 1380, margin: "0 auto", padding: "0 40px" }}>
 
-        <div>
-          <p className="text-xs tracking-[0.25em] uppercase text-accent mb-4">
-            Newsletter
-          </p>
-          <p className="text-sm text-ink/60 mb-4">
-            Jadi yang pertama tahu soal koleksi & acara terbatas kami.
-          </p>
-          <form className="flex border-b border-accent/40 focus-within:border-accent transition-colors">
-            <input
-              type="email"
-              placeholder="Alamat email"
-              className="flex-1 bg-transparent py-3 text-sm placeholder:text-ink/40 outline-none"
-            />
-            <button
-              type="submit"
-              className="text-xs tracking-[0.2em] uppercase text-accent hover:text-accent-strong transition-colors"
-            >
-              Kirim
-            </button>
-          </form>
-        </div>
+        <div
+          style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 30, paddingBottom: 50 }}
+          className="footer-top-grid"
+        >
+          {/* Brand */}
+          <div>
+            <div style={{ fontFamily: "var(--font-fraunces, serif)", fontWeight: 300, fontSize: 40, letterSpacing: "0.12em", color: "var(--color-ink)" }}>
+              brand
+            </div>
+            <p style={{ marginTop: 16, fontSize: 12, lineHeight: 1.7, color: "var(--color-muted)", maxWidth: 280, letterSpacing: "0.02em" }}>
+              {t.footerTagline}
+            </p>
+          </div>
 
-        <div>
-          <p className="text-xs tracking-[0.25em] uppercase text-accent mb-4">
-            Ikuti Kami
-          </p>
-          <div className="flex gap-5">
-            {["Instagram", "TikTok", "Pinterest"].map((label) => (
-              <a
-                key={label}
-                href="#"
-                className="text-sm text-ink/70 hover:text-accent transition-colors"
-              >
-                {label}
-              </a>
+          {/* Shop */}
+          <div>
+            <h4 style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 16 }}>{t.footerShop}</h4>
+            {["Édition 04", "Archive", "Lookbook"].map(label => (
+              <a key={label} href="/koleksi"
+                style={{ display: "block", fontSize: 12, color: "var(--color-muted)", padding: "6px 0", letterSpacing: "0.03em", transition: "color .2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-ink)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-muted)"; }}
+              >{label}</a>
+            ))}
+          </div>
+
+          {/* Atelier */}
+          <div>
+            <h4 style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 16 }}>{t.footerAtelier}</h4>
+            {["Fittings", "Care", "Shipping", "Returns"].map(label => (
+              <a key={label} href="#atelier"
+                style={{ display: "block", fontSize: 12, color: "var(--color-muted)", padding: "6px 0", letterSpacing: "0.03em", transition: "color .2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-ink)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-muted)"; }}
+              >{label}</a>
+            ))}
+          </div>
+
+          {/* Reach */}
+          <div>
+            <h4 style={{ fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--color-muted)", marginBottom: 16 }}>{t.footerReach}</h4>
+            {["Instagram", "Contact", "Studio"].map(label => (
+              <a key={label} href="#"
+                style={{ display: "block", fontSize: 12, color: "var(--color-muted)", padding: "6px 0", letterSpacing: "0.03em", transition: "color .2s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-ink)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--color-muted)"; }}
+              >{label}</a>
             ))}
           </div>
         </div>
+
+        <div
+          className="flex flex-wrap items-center justify-between"
+          style={{ gap: 16, paddingTop: 26, borderTop: "0.5px solid var(--color-border)" }}
+        >
+          <span style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--color-muted)", textTransform: "uppercase" }}>
+            © {new Date().getFullYear()} brand — atelier des hauts
+          </span>
+          <span style={{ fontSize: 11, letterSpacing: "0.08em", color: "var(--color-muted)", textTransform: "uppercase" }}>
+            6.2088° S · 106.8456° E
+          </span>
+        </div>
       </div>
 
-      <div className="mx-auto max-w-7xl mt-14 pt-6 border-t border-accent/10 text-xs text-ink/40 tracking-wide">
-        © {new Date().getFullYear()} brand. Seluruh hak cipta dilindungi.
-      </div>
+      <style>{`
+        @media (max-width: 980px) { .footer-top-grid { grid-template-columns: 1fr 1fr !important; } }
+        @media (max-width: 620px) { .footer-top-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </footer>
   );
 }
