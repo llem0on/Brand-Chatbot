@@ -49,6 +49,7 @@ func Init() error {
 		&models.OrderItem{},
 		&models.CartItem{},
 		&models.PurchaseSettings{},
+		&models.FilterValue{},
 	)
 	if err != nil {
 		return err
@@ -75,6 +76,9 @@ func Init() error {
 	}
 	if err := SeedPurchaseSettings(); err != nil {
 		log.Printf("Warning: Failed to seed purchase settings: %v", err)
+	}
+	if err := SeedFilterValues(); err != nil {
+		log.Printf("Warning: Failed to seed filter values: %v", err)
 	}
 
 	log.Println("Database initialized successfully")
