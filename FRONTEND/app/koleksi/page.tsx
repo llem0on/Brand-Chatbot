@@ -212,10 +212,27 @@ function HeroCard({
                   textShadow: isLight ? "0 1px 6px rgba(239,228,220,0.9)" : "0 1px 10px rgba(0,0,0,0.7)",
                 }}
               >{product.name}</div>
-              <div
-                className="text-xs mt-0.5 tracking-wide"
-                style={{ color: isLight ? "#706560" : "#FCFAF6", fontWeight: 600 }}
-              >{rupiah(product.price)}</div>
+              {(product.discount_pct ?? 0) > 0 ? (
+                <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                  <span
+                    className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+                    style={{ background: isLight ? "#321318" : "#D9B88A", color: isLight ? "#FCFAF6" : "#1A0D0F" }}
+                  >-{product.discount_pct}%</span>
+                  <span
+                    className="text-[11px] line-through"
+                    style={{ color: isLight ? "#9C8E89" : "#4A3A35" }}
+                  >{rupiah(product.price)}</span>
+                  <span
+                    className="text-xs tracking-wide"
+                    style={{ color: isLight ? "#706560" : "#FCFAF6", fontWeight: 700 }}
+                  >{rupiah(Math.round(product.price * (1 - (product.discount_pct ?? 0) / 100)))}</span>
+                </div>
+              ) : (
+                <div
+                  className="text-xs mt-0.5 tracking-wide"
+                  style={{ color: isLight ? "#706560" : "#FCFAF6", fontWeight: 600 }}
+                >{rupiah(product.price)}</div>
+              )}
             </div>
 
             {/* chips — slide up from below */}

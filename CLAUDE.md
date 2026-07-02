@@ -12,18 +12,19 @@ Baca file yang relevan dari `truth/` **secara proaktif** sebelum mengerjakan tas
 | `truth/payment-system.md` | menyentuh payment proof, upload bukti, admin verify, CheckoutModal payment section |
 | `truth/otp-phone-verification.md` | menyentuh OTP, verifikasi HP, checkout phone step |
 | `truth/admin-panel.md` | menyentuh admin dashboard, auth ADMIN_TOKEN, apiFetch, routes admin |
-| `truth/local-dev-setup.md` | user minta run server, ada error MySQL/port/NextAuth, setup environment, path be/ dan fe/ |
-| `truth/railway-deployment.md` | deploy ke Railway, env vars DB_*, port config, ADMIN_ORIGIN, NEXTAUTH_URL |
+| `truth/local-dev-setup.md` | user minta run server, ada error MySQL/port/NextAuth, setup environment, path BACKEND/ dan FRONTEND/ |
+| `truth/railway-deployment.md` | deploy ke Railway, env vars DB_*, port config, ADMIN_ORIGIN, NEXTAUTH_URL, root directory Railway |
 | `truth/react-nextjs-gotchas.md` | infinite loop di admin panel, useEffect deps, SessionProvider polling, .next cache |
 | `truth/cloudinary-client.md` | menyentuh upload gambar atau Cloudinary |
 | `truth/conversation-state-machine.md` | menyentuh flow chat, escalation, dispatch webhook |
 | `truth/order-flow-state-machine.md` | menyentuh order flow, slot-filling, OrderStep, mergeExtraction |
 | `truth/cart-flow.md` | menyentuh cart, keranjang, localStorage, CartModal, checkout flow |
-| `truth/git-push-workflow.md` | user minta push, deploy, atau tanya cara push fe/be ke branch |
+| `truth/git-push-workflow.md` | user minta push, deploy, atau tanya cara push ke branch Development |
 | `truth/localization-system.md` | menyentuh bahasa/locale, terjemahan UI, LocaleProvider, switch bahasa, 3-position pill |
 | `truth/filter-values-db.md` | menyentuh filter koleksi (warna/gender/kategori/material/ukuran), FilterValue model, Groq translate |
 | `truth/koleksi-discount-sidebar.md` | menyentuh DiscountSidebar, discount_pct, animasi scroll, CSS .sale-* |
 | `truth/biteship-integration.md` | menyentuh ongkir, kurir, shipment, Biteship API, webhook pengiriman |
+| `truth/session-gotchas-2026-07-02.md` | nested .git bug, filter-values 404, discount_pct tidak tersimpan, push workflow change |
 <!-- TRUTH_INDEX_END -->
 
 ## Architecture Overview

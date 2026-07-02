@@ -1,17 +1,23 @@
 ---
 type: ops
 created: 2026-06-30
-sources: [be/.env, be/database/db.go, fe/.env.local]
+updated: 2026-07-02
+sources: [BACKEND/.env, BACKEND/database/db.go, FRONTEND/.env.local]
 tags: [railway, deployment, mysql, env-vars, cors]
 ---
 
 # Railway Deployment
 
-## Service structure
+## Service structure (sejak 2026-07-02)
 
-Dua service terpisah di Railway:
-- **Brand-Chatbot** — Go backend, port 8080 → `https://carin.up.railway.app`
-- **Frontend** (opsional) — Next.js, port 3000
+Dua service di Railway, keduanya deploy dari branch `Development` monorepo:
+
+| Service | URL | Branch | Root Directory |
+|---|---|---|---|
+| Backend (Go) | `https://carin-be.up.railway.app` | `Development` | `/BACKEND` |
+| Frontend (Next.js) | `https://carin.up.railway.app` | `Development` | `/FRONTEND` |
+
+**Catatan:** Folder dulu bernama `be/` dan `fe/`, sekarang `BACKEND/` dan `FRONTEND/` (rename 2026-07-02). Railway sudah diupdate root directory-nya.
 
 ## Go backend — env vars yang wajib diset di Railway Variables
 
@@ -60,5 +66,10 @@ Lihat [[biteship-integration]] untuk detail setup webhook.
 
 ## Railway build/start commands
 
-Backend: `cd be && go run main.go` (atau `go build -o app && ./app`)
-Frontend: `cd fe && npm run build && npm run start`
+Railway pakai Railpack (auto-detect). Tidak perlu custom build command karena:
+- Root directory `/BACKEND` → Railpack detect Go, jalankan `go run main.go`
+- Root directory `/FRONTEND` → Railpack detect Next.js, jalankan `npm run build && npm start`
+
+Watch Paths di Railway (supaya hanya redeploy kalau folder yang relevan berubah):
+- Backend: `/BACKEND/**`
+- Frontend: `/FRONTEND/**`

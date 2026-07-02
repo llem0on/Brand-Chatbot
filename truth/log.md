@@ -1,5 +1,12 @@
 # Log
 
+## [2026-07-02] store-session | Folder rename, Railway migration, discount_pct fix, filter-values 404, push workflow update
+Created: truth/session-gotchas-2026-07-02.md — nested .git bug, filter-values missing from Development, discount_pct field fix, DiscountSidebar conditional render, push confirmation rule
+Updated: truth/railway-deployment.md — folder rename be/→BACKEND/ fe/→FRONTEND/, kedua service dari Development branch, root dir /BACKEND & /FRONTEND
+Updated: truth/local-dev-setup.md — folder rename, path commands updated
+Updated: truth/git-push-workflow.md — single branch Development, no more subtree split, konfirmasi sebelum push
+Updated: truth/index.md — tambah entry session-gotchas, update deskripsi
+
 ## [2026-07-02] store-session | Biteship webhook security + Railway URL + payment-system update
 Updated: truth/biteship-integration.md — webhook security (Headers Signature Key/Secret), Railway webhook URL, ngrok gotcha untuk local testing
 Updated: truth/railway-deployment.md — URL backend carin.up.railway.app, env vars Biteship

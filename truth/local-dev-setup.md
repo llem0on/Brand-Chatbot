@@ -8,27 +8,29 @@ tags: [local-dev, mysql, nextauth, turbopack, google-oauth, folder-structure]
 
 # Local Development Setup
 
-## Folder structure (sejak 2026-06-30)
+## Folder structure (sejak 2026-07-02)
 
 Project dipecah jadi dua subfolder:
-- `be/` — Go backend (main.go, handler/, models/, database/, dll)
-- `fe/` — Next.js frontend (app/, components/, lib/, dll)
+- `BACKEND/` — Go backend (main.go, handler/, models/, database/, dll)
+- `FRONTEND/` — Next.js frontend (app/, components/, lib/, dll)
 
-File `.env` ada di `be/.env` (dibaca `godotenv.Load()` dari working dir).
-File `fe/.env.local` untuk Next.js frontend.
+> Sebelumnya bernama `be/` dan `fe/` — di-rename 2026-07-02. Semua referensi ke `be/` / `fe/` di docs lama harus dibaca sebagai `BACKEND/` / `FRONTEND/`.
+
+File `.env` ada di `BACKEND/.env` (dibaca `godotenv.Load()` dari working dir).
+File `FRONTEND/.env.local` untuk Next.js frontend.
 
 ## Dua proses yang harus jalan bersamaan
 
 | Proses | Dir | Command | Port |
 |---|---|---|---|
-| Backend (Go/Gin) | `be/` | `go run main.go` | 8080 |
-| Frontend (Next.js) | `fe/` | `npm run dev` | 3000 |
+| Backend (Go/Gin) | `BACKEND/` | `go run main.go` | 8080 |
+| Frontend (Next.js) | `FRONTEND/` | `npm run dev` | 3000 |
 
 ## .next cache
 
 Kalau Next.js berperilaku aneh (Turbopack panic, infinite loop, stale build), hapus dulu:
 ```bash
-rm -rf fe/.next
+rm -rf FRONTEND/.next
 ```
 Wajib dilakukan setelah rename/pindah folder — `.next` berisi path lama yang di-hardcode.
 

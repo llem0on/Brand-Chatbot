@@ -8,10 +8,11 @@
 - [Admin Panel](admin-panel.md) — pages, auth (ADMIN_TOKEN Bearer), API layer (apiFetch), ports :3000/:8080
 
 ## Dev & Ops
-- [Local Dev Setup](local-dev-setup.md) — cara run be/ dan fe/, MySQL port gotcha, .next cache gotcha, Google OAuth setup
-- [Railway Deployment](railway-deployment.md) — env vars mapping Railway MySQL → DB_*, port 8080 backend, CORS/ADMIN_ORIGIN, build commands
+- [Local Dev Setup](local-dev-setup.md) — cara run BACKEND/ dan FRONTEND/, MySQL port gotcha, .next cache gotcha, Google OAuth setup
+- [Railway Deployment](railway-deployment.md) — env vars MySQL, CORS, kedua service di branch Development dengan root /BACKEND & /FRONTEND
 - [React / Next.js Gotchas](react-nextjs-gotchas.md) — useEffect [router] infinite loop, SessionProvider polling fix, .next cache setelah rename
-- [Git Push Workflow](git-push-workflow.md) — push fe/ → Frontend-dev, be/ → Backend-dev pakai git subtree; root branch untuk Railway/Vercel deploy
+- [Git Push Workflow](git-push-workflow.md) — semua push ke Development branch; Railway pakai root /BACKEND & /FRONTEND; selalu konfirmasi sebelum push
+- [Session Gotchas 2026-07-02](session-gotchas-2026-07-02.md) — nested .git bug, filter-values 404, discount_pct field missing, DiscountSidebar invisible, push workflow baru
 
 ## Infrastructure & Integrations
 - [Cloudinary Client](cloudinary-client.md) — signed server-side image upload, returns HTTPS URL

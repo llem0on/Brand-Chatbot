@@ -35,10 +35,15 @@ export default function DiscountSidebar({ products }: { products: Product[] }) {
 
   if (items.length === 0) return null;
 
+  const ITEM_H = 141; // 14px pad-top + 112px img + 14px pad-bottom + 1px border
+  const sidebarH = items.length * ITEM_H;
+
   return (
     <div
       style={{
         width: 300,
+        height: sidebarH,
+        maxHeight: "calc(100vh - 200px)",
         flexShrink: 0,
         borderLeft: "0.5px solid var(--color-border)",
         borderTop: "0.5px solid var(--color-border)",
@@ -59,7 +64,7 @@ export default function DiscountSidebar({ products }: { products: Product[] }) {
       >
         <div
           style={{
-            animation: "tickV 44s linear infinite",
+            animation: "tickV 20s linear infinite",
             animationPlayState: paused ? "paused" : "running",
           }}
         >

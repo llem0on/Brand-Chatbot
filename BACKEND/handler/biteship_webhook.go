@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -23,6 +25,14 @@ type biteshipWebhookPayload struct {
 // syncs them to the corresponding Order row. Register your server's
 // /webhook/biteship URL in the Biteship dashboard.
 func HandleBiteshipWebhook(c *gin.Context) {
+	// Biteship sends an empty body during installation to verify the URL is reachable.
+	// Return 200 immediately so the dashboard installation succeeds.
+	body, _ := io.ReadAll(c.Request.Body)
+	if len(body) == 0 {
+		c.JSON(http.StatusOK, gin.H{"ok": true})
+		return
+	}
+
 	// Verify signature header if BITESHIP_WEBHOOK_SECRET is configured
 	if secret := os.Getenv("BITESHIP_WEBHOOK_SECRET"); secret != "" {
 		headerKey := os.Getenv("BITESHIP_WEBHOOK_HEADER")
@@ -36,7 +46,7 @@ func HandleBiteshipWebhook(c *gin.Context) {
 	}
 
 	var payload biteshipWebhookPayload
-	if err := c.ShouldBindJSON(&payload); err != nil {
+	if err := json.Unmarshal(body, &payload); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
