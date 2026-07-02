@@ -1,0 +1,7 @@
+.env
+data/
+uploads/
+*.db
+.claude/
+.agents/
+skills-lock.json

@@ -14,11 +14,19 @@ type Order struct {
 	TotalAmount   int         `json:"total_amount"`
 	PaymentMethod string      `gorm:"size:30" json:"payment_method"` // transfer_bank, qris
 	Address       string      `gorm:"type:text" json:"address"`
-	Status           string    `gorm:"default:'menunggu_pembayaran';size:30" json:"status"`
-	PaymentProofURL  string    `gorm:"type:text" json:"payment_proof_url"`
-	RejectionReason  string    `gorm:"type:text" json:"rejection_reason"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
+	Status          string    `gorm:"default:'menunggu_pembayaran';size:30" json:"status"`
+	PaymentProofURL string    `gorm:"type:text" json:"payment_proof_url"`
+	RejectionReason string    `gorm:"type:text" json:"rejection_reason"`
+	// Biteship shipping fields
+	PostalCode      string    `gorm:"size:10" json:"postal_code"`
+	CourierCode     string    `gorm:"size:50" json:"courier_code"`
+	CourierService  string    `gorm:"size:50" json:"courier_service"`
+	CourierName     string    `gorm:"size:150" json:"courier_name"`
+	BiteshipOrderID string    `gorm:"size:100" json:"biteship_order_id"`
+	WaybillID       string    `gorm:"size:100" json:"waybill_id"`
+	ShippingStatus  string    `gorm:"size:50" json:"shipping_status"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
 }
 
 // OrderItem is a single product+variant line within an Order.

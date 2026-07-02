@@ -28,7 +28,7 @@ const LIGHT: Record<string, string> = {
   "--color-section":      "#DDD0C4",   // warm oat
   "--color-muted":        "#8C7B6E",   // warm muted text
   "--color-border":       "#D0C3B5",   // warm border
-  "--dot-color":          "#D4909E",   // rose pink dots on cream
+  "--dot-color":          "rgba(160,150,142,0.28)", // grey dots on cream
 };
 
 function apply(theme: Theme) {

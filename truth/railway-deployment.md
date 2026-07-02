@@ -10,7 +10,7 @@ tags: [railway, deployment, mysql, env-vars, cors]
 ## Service structure
 
 Dua service terpisah di Railway:
-- **Brand-Chatbot** — Go backend, port 8080
+- **Brand-Chatbot** — Go backend, port 8080 → `https://carin.up.railway.app`
 - **Frontend** (opsional) — Next.js, port 3000
 
 ## Go backend — env vars yang wajib diset di Railway Variables
@@ -48,6 +48,15 @@ Di service Next.js:
 ## Port di Railway Networking
 
 Backend Go service harus pakai port **8080** di Railway Networking settings (bukan 3000). Port 3000 adalah Next.js frontend (service terpisah).
+
+## Biteship env vars (tambahan setelah integrasi 2026-07-02)
+
+| Var | Nilai |
+|---|---|
+| `BITESHIP_API_KEY` | API key dari Biteship dashboard |
+| `BITESHIP_WEBHOOK_SECRET` | Secret bebas, harus sama dengan isian di Biteship dashboard Headers |
+
+Lihat [[biteship-integration]] untuk detail setup webhook.
 
 ## Railway build/start commands
 

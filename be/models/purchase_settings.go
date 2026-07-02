@@ -15,5 +15,12 @@ type PurchaseSettings struct {
 	ShippingCost         int       `gorm:"default:0" json:"shipping_cost"`
 	PaymentDeadlineHours int       `gorm:"default:24" json:"payment_deadline_hours"`
 	ClosingMessage       string    `gorm:"type:text" json:"closing_message"`
-	UpdatedAt            time.Time `json:"updated_at"`
+	// Biteship shipping configuration
+	OriginPostalCode      string `gorm:"size:10" json:"origin_postal_code"`
+	OriginAddress         string `gorm:"type:text" json:"origin_address"`
+	OriginContactName     string `gorm:"size:100" json:"origin_contact_name"`
+	OriginContactPhone    string `gorm:"size:30" json:"origin_contact_phone"`
+	DefaultItemWeightGram int    `gorm:"default:300" json:"default_item_weight_gram"`
+	BiteshipCouriers      string `gorm:"default:'jne,sicepat,j&t,anteraja'" json:"biteship_couriers"`
+	UpdatedAt             time.Time `json:"updated_at"`
 }

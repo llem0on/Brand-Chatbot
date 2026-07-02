@@ -88,6 +88,13 @@ export type Order = {
   total_amount: number;
   payment_method: string;
   address: string;
+  postal_code: string;
+  courier_code: string;
+  courier_service: string;
+  courier_name: string;
+  biteship_order_id: string;
+  waybill_id: string;
+  shipping_status: string;
   status: string;
   payment_proof_url: string;
   rejection_reason: string;
@@ -105,7 +112,15 @@ export type PurchaseSettings = {
   shipping_cost: number;
   payment_deadline_hours: number;
   closing_message: string;
+  // Biteship shipping configuration
+  origin_postal_code: string;
+  origin_address: string;
+  origin_contact_name: string;
+  origin_contact_phone: string;
+  default_item_weight_gram: number;
+  biteship_couriers: string;
 };
+
 
 export type ConversationState = {
   id: number;

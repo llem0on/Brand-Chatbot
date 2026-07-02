@@ -11,6 +11,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type bulkSyncRequest struct {
+	Email string `json:"email" binding:"required"`
+	Items []struct {
+		ProductVariantID uint `json:"product_variant_id"`
+		Quantity         int  `json:"quantity"`
+	} `json:"items"`
+}
+
+// BulkSyncCart replaces the backend cart for a Google-authenticated user (keyed
+// by email as session_id). Called on login (merge) and logout (save-then-clear).
+func BulkSyncCart(c *gin.Context) {
+	var req bulkSyncRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "email wajib diisi"})
+		return
+	}
+
+	database.DB.Where("user_id = ? AND account_id IS NULL", req.Email).Delete(&models.CartItem{})
+	for _, it := range req.Items {
+		if it.Quantity <= 0 {
+			continue
+		}
+		var variant models.ProductVariant
+		if err := database.DB.First(&variant, it.ProductVariantID).Error; err != nil {
+			continue
+		}
+		database.DB.Create(&models.CartItem{
+			UserID:           req.Email,
+			ProductID:        variant.ProductID,
+			ProductVariantID: variant.ID,
+			Quantity:         it.Quantity,
+		})
+	}
+
+	items, _ := service.NewCartService().GetCart(req.Email, nil)
+	c.JSON(http.StatusOK, gin.H{"ok": true, "items": items})
+}
+
 // resolveCartIdentity returns the account ID to scope the cart by, if logged in.
 func resolveCartIdentity(c *gin.Context) *uint {
 	if user := CurrentUser(c); user != nil {
@@ -110,12 +148,17 @@ type checkoutLineReq struct {
 }
 
 type checkoutRequest struct {
-	Name          string            `json:"name" binding:"required"`
-	Phone         string            `json:"phone" binding:"required"`
-	Address       string            `json:"address" binding:"required"`
-	PaymentMethod string            `json:"payment_method" binding:"required"`
-	Items         []checkoutLineReq `json:"items" binding:"required,min=1"`
-	Email         string            `json:"email"` // optional — set when user is logged in via Google
+	Name           string            `json:"name" binding:"required"`
+	Phone          string            `json:"phone" binding:"required"`
+	Address        string            `json:"address" binding:"required"`
+	PostalCode     string            `json:"postal_code"`
+	CourierCode    string            `json:"courier_code"`
+	CourierService string            `json:"courier_service"`
+	CourierName    string            `json:"courier_name"`
+	ShippingCost   *int              `json:"shipping_cost"` // pointer: nil = use settings default
+	PaymentMethod  string            `json:"payment_method" binding:"required"`
+	Items          []checkoutLineReq `json:"items" binding:"required,min=1"`
+	Email          string            `json:"email"`
 }
 
 // Checkout accepts cart items from the request body (stored client-side in localStorage),
@@ -175,14 +218,23 @@ func Checkout(c *gin.Context) {
 		database.DB.Model(customer).Update("email", req.Email)
 	}
 
+	shippingCost := settings.ShippingCost
+	if req.ShippingCost != nil {
+		shippingCost = *req.ShippingCost
+	}
+
 	orderSvc := service.NewOrderService()
 	order, err := orderSvc.CreateOrder(service.CreateOrderInput{
-		UserID:        customerUserID,
-		CustomerID:    customer.ID,
-		Items:         lines,
-		ShippingCost:  settings.ShippingCost,
-		PaymentMethod: req.PaymentMethod,
-		Address:       req.Address,
+		UserID:         customerUserID,
+		CustomerID:     customer.ID,
+		Items:          lines,
+		ShippingCost:   shippingCost,
+		PaymentMethod:  req.PaymentMethod,
+		Address:        req.Address,
+		PostalCode:     req.PostalCode,
+		CourierCode:    req.CourierCode,
+		CourierService: req.CourierService,
+		CourierName:    req.CourierName,
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -19,11 +19,6 @@ Baca file yang relevan dari `truth/` **secara proaktif** sebelum mengerjakan tas
 | `truth/conversation-state-machine.md` | menyentuh flow chat, escalation, dispatch webhook |
 | `truth/order-flow-state-machine.md` | menyentuh order flow, slot-filling, OrderStep, mergeExtraction |
 | `truth/cart-flow.md` | menyentuh cart, keranjang, localStorage, CartModal, checkout flow |
-| `truth/git-push-workflow.md` | user minta push, deploy, atau tanya cara push fe/be ke branch |
-| `truth/localization-system.md` | menyentuh bahasa/locale, terjemahan UI, LocaleProvider, switch bahasa, 3-position pill |
-| `truth/filter-values-db.md` | menyentuh filter koleksi (warna/gender/kategori/material/ukuran), FilterValue model, Groq translate |
-| `truth/koleksi-discount-sidebar.md` | menyentuh DiscountSidebar, discount_pct, animasi scroll, CSS .sale-* |
-| `truth/biteship-integration.md` | menyentuh ongkir, kurir, shipment, Biteship API, webhook pengiriman |
 <!-- TRUTH_INDEX_END -->
 
 ## Architecture Overview
@@ -125,12 +120,6 @@ Knowledge base di `truth/` — dikelola oleh Claude, diupdate saat ada perubahan
 - Setiap page pakai YAML frontmatter: type, created, sources, tags
 - Gunakan `[[wikilinks]]` ke konsep terkait
 - Update index.md dan log.md setiap kali buat atau edit halaman
-
-### Custom slash commands (Claude Code)
-
-- Project-level: `.claude/commands/<name>.md` → hanya aktif di project ini
-- Global: `~/.claude/commands/<name>.md` → aktif di semua project di mesin ini
-- `.agents/skills/` adalah sistem berbeda (skills-lock.json) — jangan taruh slash commands di sana, akan muncul duplikat
 
 ### End-of-session knowledge extraction: `/store-session`
 

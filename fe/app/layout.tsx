@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ThemeProvider } from "@/lib/theme";
 import { LocaleProvider } from "@/lib/locale";
+import CartSync from "@/components/CartSync";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -49,7 +50,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-bg text-ink">
         <SessionProvider>
           <ThemeProvider>
-            <LocaleProvider>{children}</LocaleProvider>
+            <LocaleProvider>
+              <CartSync />
+              {children}
+            </LocaleProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>

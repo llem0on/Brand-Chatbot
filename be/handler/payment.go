@@ -1,10 +1,15 @@
 package handler
 
 import (
+	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"wa-ai-bot/biteship"
 	"wa-ai-bot/cloudinary"
 	"wa-ai-bot/database"
 	"wa-ai-bot/models"
+	"wa-ai-bot/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -50,7 +55,7 @@ func UploadPaymentProof(c *gin.Context) {
 }
 
 // VerifyPayment is the admin action to approve or reject an uploaded payment proof.
-// approve → status = sudah_bayar
+// approve → status = sudah_bayar (or dikirim if Biteship shipment created)
 // reject  → status = menunggu_pembayaran, proof cleared, rejection_reason set
 func VerifyPayment(c *gin.Context) {
 	id := c.Param("id")
@@ -65,7 +70,7 @@ func VerifyPayment(c *gin.Context) {
 	}
 
 	var order models.Order
-	if err := database.DB.First(&order, id).Error; err != nil {
+	if err := database.DB.Preload("Customer").Preload("Items.Product").First(&order, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Order tidak ditemukan"})
 		return
 	}
@@ -76,10 +81,27 @@ func VerifyPayment(c *gin.Context) {
 
 	switch req.Action {
 	case "approve":
-		database.DB.Model(&order).Updates(map[string]interface{}{
+		updates := map[string]interface{}{
 			"status":           models.OrderStatusPaid,
 			"rejection_reason": "",
-		})
+		}
+
+		// Auto-create Biteship shipment when courier was selected at checkout
+		if order.CourierCode != "" {
+			settings, _ := service.NewSettingsService().GetSettings()
+			if settings != nil {
+				biteshipID, waybillID, err := submitBiteshipOrder(&order, settings)
+				if err != nil {
+					log.Printf("biteship: create order failed for %s: %v", order.OrderNumber, err)
+				} else if biteshipID != "" {
+					updates["biteship_order_id"] = biteshipID
+					updates["waybill_id"] = waybillID
+					updates["status"] = models.OrderStatusShipped
+				}
+			}
+		}
+
+		database.DB.Model(&order).Updates(updates)
 	case "reject":
 		if req.Reason == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Alasan penolakan wajib diisi"})
@@ -96,4 +118,59 @@ func VerifyPayment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+}
+
+// submitBiteshipOrder creates a Biteship shipment order after payment is approved.
+// Returns ("", "", nil) when Biteship is not configured — caller treats that as a no-op.
+func submitBiteshipOrder(order *models.Order, settings *models.PurchaseSettings) (string, string, error) {
+	client := biteship.NewClient()
+	if !client.Enabled() || settings.OriginPostalCode == "" {
+		return "", "", nil
+	}
+
+	weightGram := settings.DefaultItemWeightGram
+	if weightGram <= 0 {
+		weightGram = 300
+	}
+
+	var items []biteship.OrderItem
+	for _, item := range order.Items {
+		items = append(items, biteship.OrderItem{
+			Name:     item.Product.Name,
+			Value:    item.UnitPrice,
+			Weight:   weightGram,
+			Quantity: item.Quantity,
+		})
+	}
+
+	brandName := os.Getenv("BRAND_NAME")
+	if brandName == "" {
+		brandName = "Toko"
+	}
+
+	resp, err := client.CreateOrder(biteship.CreateOrderRequest{
+		ShipperContactName:      settings.OriginContactName,
+		ShipperContactPhone:     settings.OriginContactPhone,
+		ShipperOrganization:     brandName,
+		OriginContactName:       settings.OriginContactName,
+		OriginContactPhone:      settings.OriginContactPhone,
+		OriginAddress:           settings.OriginAddress,
+		OriginPostalCode:        settings.OriginPostalCode,
+		DestinationContactName:  order.Customer.Name,
+		DestinationContactPhone: order.Customer.Phone,
+		DestinationAddress:      order.Address,
+		DestinationPostalCode:   order.PostalCode,
+		CourierCompany:          order.CourierCode,
+		CourierType:             order.CourierService,
+		DeliveryType:            "now",
+		OrderNote:               order.OrderNumber,
+		Items:                   items,
+	})
+	if err != nil {
+		return "", "", err
+	}
+	if !resp.Success {
+		return "", "", fmt.Errorf("%s", resp.Message)
+	}
+	return resp.ID, resp.WaybillID, nil
 }

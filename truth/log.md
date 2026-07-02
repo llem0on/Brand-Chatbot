@@ -1,5 +1,27 @@
 # Log
 
+## [2026-07-02] store-session | Biteship webhook security + Railway URL + payment-system update
+Updated: truth/biteship-integration.md — webhook security (Headers Signature Key/Secret), Railway webhook URL, ngrok gotcha untuk local testing
+Updated: truth/railway-deployment.md — URL backend carin.up.railway.app, env vars Biteship
+Updated: truth/payment-system.md — checkout phase flow berubah (loading → address → courier → form), bug fix GET /api/settings/public tidak return bank details, approve flow sekarang auto-create Biteship shipment
+
+## [2026-07-02] implement | Biteship shipment integration
+Created: truth/biteship-integration.md — Biteship rate API (checkout courier selection), auto-create shipment on payment approve, webhook status tracking, new Order fields, admin settings UI
+
+## [2026-07-01] store-session | Localization system + Filter Values DB
+Created: truth/localization-system.md — React Context ID/EN/ZH, LocaleProvider, 3-position switch, 70+ keys, split-key highlight pattern, all pages localized
+Created: truth/filter-values-db.md — FilterValue model "EN,ID,ZH" format, Groq TranslateFilterValue(), admin CRUD, seed 40 values, fvLabel() helper
+Updated: truth/koleksi-discount-sidebar.md — replaced stale "fake discount" with real discount_pct DB field info
+
+## [2026-07-01] store-session | Claude Code slash command locations
+Updated: CLAUDE.md — project commands di .claude/commands/, global di ~/.claude/commands/, jangan taruh di .agents/skills/
+
+## [2026-07-01] store-session | Koleksi Discount Sidebar
+Created: truth/koleksi-discount-sidebar.md — arsitektur DiscountSidebar: auto-scroll via tickV keyframe, fake discount logic, ghost % absolute positioning, CSS hover effects (.sale-*), translucent backdrop
+
+## [2026-07-01] store-session | Git Push Workflow
+Created: truth/git-push-workflow.md — push fe/ → Frontend-dev, be/ → Backend-dev via git subtree; kenapa root branch penting untuk Railway deploy
+
 ## [2026-06-30] store-session | Folder restructure, Railway deployment, React gotchas
 Updated: local-dev-setup.md, admin-panel.md (path frontend/ → be/ dan fe/)
 Created: railway-deployment.md — Railway MySQL env mapping, port config, CORS vars

@@ -27,12 +27,16 @@ type OrderLineInput struct {
 }
 
 type CreateOrderInput struct {
-	UserID        string
-	CustomerID    uint
-	Items         []OrderLineInput
-	ShippingCost  int
-	PaymentMethod string
-	Address       string
+	UserID         string
+	CustomerID     uint
+	Items          []OrderLineInput
+	ShippingCost   int
+	PaymentMethod  string
+	Address        string
+	PostalCode     string
+	CourierCode    string
+	CourierService string
+	CourierName    string
 }
 
 // CreateOrder persists a confirmed multi-item order and decrements the
@@ -48,14 +52,18 @@ func (s *OrderService) CreateOrder(input CreateOrderInput) (*models.Order, error
 	}
 
 	order := models.Order{
-		OrderNumber:   generateOrderNumber(),
-		UserID:        input.UserID,
-		CustomerID:    input.CustomerID,
-		ShippingCost:  input.ShippingCost,
-		TotalAmount:   itemsTotal + input.ShippingCost,
-		PaymentMethod: input.PaymentMethod,
-		Address:       input.Address,
-		Status:        models.OrderStatusAwaitingPayment,
+		OrderNumber:    generateOrderNumber(),
+		UserID:         input.UserID,
+		CustomerID:     input.CustomerID,
+		ShippingCost:   input.ShippingCost,
+		TotalAmount:    itemsTotal + input.ShippingCost,
+		PaymentMethod:  input.PaymentMethod,
+		Address:        input.Address,
+		PostalCode:     input.PostalCode,
+		CourierCode:    input.CourierCode,
+		CourierService: input.CourierService,
+		CourierName:    input.CourierName,
+		Status:         models.OrderStatusAwaitingPayment,
 	}
 
 	if err := database.DB.Omit("Customer").Create(&order).Error; err != nil {

@@ -24,27 +24,43 @@ Live. Akan dimodifikasi lagi ke depannya.
 
 ### User Side (Storefront)
 
-**CheckoutModal** (`frontend/app/keranjang/CheckoutModal.tsx`):
+**CheckoutModal** (`fe/app/keranjang/CheckoutModal.tsx`):
+
+Phase flow tergantung `biteship_enabled` dari `GET /api/settings/public`:
 
 ```
-Phase "phone" → Phase "form" → Phase "submitting" → Phase "success"
+# Biteship aktif:
+loading → phone? → address → courier → form → submitting → success/error
+
+# Biteship tidak aktif (legacy):
+loading → phone? → form → submitting → success/error
 ```
+
+`loading` phase muncul sebentar saat settings di-fetch — ini pola untuk handle conditional flow yang ditentukan server. Setelah settings loaded, `setPhase()` dipanggil ke phase yang tepat.
 
 Di phase "form":
-1. **Ringkasan order** (items, ongkir, total)
-2. **Chip nomor HP** (bisa diubah → balik ke phase "phone")
-3. **Pilihan metode pembayaran** — Transfer Bank atau QRIS (dari `settings.enable_bank_transfer` / `settings.enable_qris`)
-4. **Instruksi pembayaran** — muncul otomatis di bawah metode yang dipilih:
-   - Transfer Bank: nama bank, nomor rekening, nama pemilik, nominal
-   - QRIS: gambar QR (`settings.qris_image_url`), nominal
-5. **Upload bukti pembayaran** — wajib (`*`), file input image
-6. Submit button: **"Pesan & Kirim Bukti · Rpxxx"**
+1. **Ringkasan order** (items, ongkir dinamis jika kurir dipilih, total)
+2. **Chip nomor HP** (bisa diubah → balik ke "phone")
+3. **Chip alamat + kurir** (jika Biteship aktif — bisa diubah)
+4. **Pilihan metode pembayaran** — Transfer Bank atau QRIS
+5. **Instruksi pembayaran** inline (bank details sekarang dikirim dari backend via `GET /api/settings/public`)
+6. **Upload bukti pembayaran** — wajib
+7. Submit button: **"Pesan & Kirim Bukti · Rpxxx"**
 
 **Pada submit** — dua API call sequential:
 ```ts
 // 1. buat order
 POST /api/cart/checkout
-body: { name, phone, address: "-", payment_method, email, items[] }
+body: {
+  name, phone,
+  address: "<alamat asli atau '-'>",
+  postal_code,         // ada jika Biteship aktif
+  courier_code,        // ada jika Biteship aktif
+  courier_service,     // ada jika Biteship aktif
+  courier_name,        // ada jika Biteship aktif
+  shipping_cost,       // dari kurir yang dipilih (atau undefined → pakai settings)
+  payment_method, email, items[]
+}
 → response: { order_number, total_amount, shipping_cost }
 
 // 2. upload bukti ke order yang baru dibuat
@@ -96,7 +112,7 @@ Handler: `handler/payment.go`
 
 ### Verify Payment Logic (`VerifyPayment`)
 - Guard: order harus punya `payment_proof_url` (sudah ada bukti)
-- `approve`: set `status = "sudah_bayar"`, clear `rejection_reason`
+- `approve`: set `status = "sudah_bayar"`, clear `rejection_reason` — lalu jika `order.courier_code != ""`, otomatis create Biteship shipment (lihat [[biteship-integration]]). Jika Biteship sukses, status langsung → `"dikirim"`
 - `reject`: clear `payment_proof_url`, set `rejection_reason`, status tetap `"menunggu_pembayaran"` (user bisa submit ulang)
 
 ## Data Model
@@ -113,16 +129,19 @@ Auto-migrated saat server start.
 
 Dari `GET /api/settings/public` → `models.PurchaseSettings`:
 ```go
-EnableBankTransfer   bool   // toggle tampil metode transfer
+EnableBankTransfer   bool
 BankName             string
 BankAccountNumber    string
 BankAccountHolder    string
-EnableQRIS           bool   // toggle tampil metode QRIS
+EnableQRIS           bool
 QRISImageURL         string
-ShippingCost         int
+ShippingCost         int    // dipakai jika Biteship tidak aktif
+BiteshipEnabled      bool   // computed: BITESHIP_API_KEY set + origin_postal_code diisi
 ```
 
-Frontend type: `PublicSettings` di `CheckoutModal.tsx`
+**Bug yang sudah diperbaiki (2026-07-02)**: sebelumnya `GetPublicCheckoutSettings` hanya return `shipping_cost`, `enable_bank_transfer`, `enable_qris` — bank details tidak dikirim sehingga instruksi transfer tidak muncul di modal. Sekarang semua field termasuk bank details dan `biteship_enabled` di-return.
+
+Frontend type: `PublicSettings` di `fe/app/keranjang/CheckoutModal.tsx`
 
 ## Cloudinary
 
@@ -134,8 +153,11 @@ Butuh `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` di 
 ```
 menunggu_pembayaran (no proof)
   → user checkout + upload → menunggu_pembayaran + payment_proof_url set
-  → admin approve → sudah_bayar
+  → admin approve (no Biteship) → sudah_bayar
+  → admin approve (+ Biteship)  → dikirim  (biteship_order_id + waybill_id set)
   → admin reject → menunggu_pembayaran + rejection_reason set + proof cleared
+  → Biteship webhook "delivered" → selesai
+  → Biteship webhook "cancelled" → dibatalkan
 ```
 
 ## Hal yang Mungkin Dimodifikasi
