@@ -123,6 +123,9 @@ func doPost[T any](c *Client, path string, body any) (*T, error) {
 	defer resp.Body.Close()
 
 	raw, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("biteship: HTTP %d on %s: %s", resp.StatusCode, path, string(raw))
+	}
 	var result T
 	if err := json.Unmarshal(raw, &result); err != nil {
 		return nil, fmt.Errorf("biteship: parse error on %s: %s", path, string(raw))
