@@ -23,6 +23,10 @@ export default function KeranjangPage() {
   useEffect(() => {
     setItems(getCart());
     setMounted(true);
+    if (sessionStorage.getItem("wb_checkout_reopen") === "1") {
+      sessionStorage.removeItem("wb_checkout_reopen");
+      setShowCheckout(true);
+    }
   }, []);
 
   function handleUpdateQty(variantId: number, quantity: number) {

@@ -123,7 +123,7 @@ export default function FeaturedCollection() {
             const { Svg } = p;
             const sub = subKeys[p.subKey - 1];
             return (
-              <article key={p.name} style={{ transform: p.offset ? "translateY(46px)" : undefined, cursor: "pointer" }}>
+              <article key={p.name} style={{ cursor: "pointer" }}>
                 <div
                   style={{ position: "relative", aspectRatio: "3/4", overflow: "hidden", border: "0.5px solid var(--color-border)", background: p.invert ? accent : undefined, display: "grid", placeItems: "center" }}
                   onMouseEnter={e => { const inner = e.currentTarget.querySelector(".card-img") as HTMLDivElement; if (inner) inner.style.transform = "scale(1.045)"; }}

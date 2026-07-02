@@ -115,6 +115,79 @@ export default function SettingsPage() {
           />
         </div>
 
+        {/* ── Biteship Shipping Configuration ── */}
+        <div className="border-t border-accent/10 pt-5 mt-2">
+          <p className="text-xs text-ink/40 uppercase tracking-widest mb-4">Pengiriman Biteship</p>
+          <p className="text-xs text-ink/50 mb-4">
+            Set <code className="bg-ink/5 px-1">BITESHIP_API_KEY</code> di environment variable backend.
+            Isi kode pos asal untuk mengaktifkan penghitungan ongkir dinamis.
+          </p>
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="admin-label">Kode Pos Asal</label>
+                <input
+                  className="admin-input"
+                  placeholder="12345"
+                  value={form.origin_postal_code ?? ""}
+                  onChange={(e) => setForm({ ...form, origin_postal_code: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="admin-label">Berat Default per Item (gram)</label>
+                <input
+                  type="number"
+                  className="admin-input"
+                  value={form.default_item_weight_gram ?? 300}
+                  onChange={(e) => setForm({ ...form, default_item_weight_gram: parseInt(e.target.value) || 300 })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="admin-label">Alamat Asal (Gudang/Toko)</label>
+              <textarea
+                className="admin-input"
+                rows={2}
+                value={form.origin_address ?? ""}
+                onChange={(e) => setForm({ ...form, origin_address: e.target.value })}
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="admin-label">Nama Kontak Pengirim</label>
+                <input
+                  className="admin-input"
+                  value={form.origin_contact_name ?? ""}
+                  onChange={(e) => setForm({ ...form, origin_contact_name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="admin-label">HP Kontak Pengirim</label>
+                <input
+                  className="admin-input"
+                  placeholder="08xxxxxxxxxx"
+                  value={form.origin_contact_phone ?? ""}
+                  onChange={(e) => setForm({ ...form, origin_contact_phone: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="admin-label">Kurir Aktif (pisah koma)</label>
+              <input
+                className="admin-input"
+                placeholder="jne,sicepat,j&t,anteraja"
+                value={form.biteship_couriers ?? ""}
+                onChange={(e) => setForm({ ...form, biteship_couriers: e.target.value })}
+              />
+              <p className="text-xs text-ink/40 mt-1">Contoh: jne,sicepat,j&amp;t,anteraja,gosend</p>
+            </div>
+          </div>
+        </div>
+
         <button type="submit" disabled={saving} className="admin-btn w-full disabled:opacity-50">
           {saving ? "Menyimpan..." : "Simpan Pengaturan"}
         </button>
