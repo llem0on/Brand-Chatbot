@@ -27,6 +27,9 @@ func main() {
 	r.GET("/webhook", handler.Verify)
 	r.POST("/webhook", handler.Handle)
 
+	// Biteship shipment status webhook
+	r.POST("/webhook/biteship", handler.HandleBiteshipWebhook)
+
 	// Web chat endpoint
 	r.POST("/chat", handler.HandleChat)
 	r.GET("/chat/:sessionId/admin-messages", handler.GetAdminMessages)
@@ -46,6 +49,8 @@ func main() {
 	r.PUT("/api/cart/items/:id", handler.UpdateCartItem)
 	r.DELETE("/api/cart/items/:id", handler.RemoveCartItem)
 	r.POST("/api/cart/checkout", handler.Checkout)
+	r.POST("/api/shipping/rates", handler.GetShippingRates)
+	r.POST("/api/cart/bulk-sync", handler.BulkSyncCart)
 	r.GET("/api/orders/by-phone", handler.GetOrdersByPhone)
 	r.GET("/api/orders/by-email", handler.GetOrdersByEmail)
 	r.POST("/api/orders/:orderNumber/payment-proof", handler.UploadPaymentProof)
